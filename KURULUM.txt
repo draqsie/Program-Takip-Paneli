@@ -1,0 +1,19 @@
+TYT TAKIP PANELI - GITHUB PAGES
+================================
+
+1) Depo sayfasinda: Settings -> Pages
+2) Source: "Deploy from a branch"
+3) Branch: main  /  (root)   -> Save
+4) 1-2 dakika sonra adres hazir:
+
+      https://draqsie.github.io/Program-Takip-Paneli/
+
+5) iPad'de Safari'de bu adresi ac
+6) Paylas dugmesi -> "Ana Ekrana Ekle"
+
+Simge ana ekrana duser, dokununca tam ekran acilir.
+Ilk acilistan sonra internetsiz de calisir.
+
+VERILER: iPad'in kendi tarayicisinda saklanir, sunucuya gitmez.
+Cihazlar arasi otomatik esitleme yoktur.
+Aktarmak icin: bir cihazda "Yedekle" -> digerinde "Geri yukle".
