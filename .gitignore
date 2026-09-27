@@ -1,0 +1,16 @@
+# isletim sistemi artiklari
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# yedekler ve gecici dosyalar
+tyt-takip-yedek-*.json
+*.log
+node_modules/
