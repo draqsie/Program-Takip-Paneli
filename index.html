@@ -401,6 +401,21 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 .srcline.w{color:var(--warn)}
 
 .empty{padding:52px 20px;text-align:center;color:var(--faint);font-size:13px}
+.build{text-align:center;font-family:var(--fm);font-size:10px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--faint);margin-top:34px;opacity:.65}
+
+/* ---- yedek hatirlaticisi ---- */
+.bkup{background:var(--warn-wash);border-bottom:1px solid var(--hair)}
+.bkup .wrap{display:flex;align-items:center;gap:12px;padding-top:10px;padding-bottom:10px}
+.bkup .bi{flex:0 0 auto;width:19px;height:19px;border-radius:99px;background:var(--warn);color:var(--bg);
+  display:grid;place-items:center;font-family:var(--fm);font-size:12px;font-weight:700}
+.bkup .bt{flex:1;min-width:0;font-size:13px;color:var(--ink-2)}
+.bkup .bt b{color:var(--ink);font-weight:700}
+.bkup .go{border-color:var(--warn);color:var(--warn)}
+.bkup .go:hover{background:var(--warn);color:var(--bg);border-color:var(--warn)}
+.bkup .bx{background:transparent;border:0;color:var(--faint);cursor:pointer;font-size:13px;
+  padding:6px 8px;border-radius:6px;line-height:1}
+.bkup .bx:hover{color:var(--ink)}
 
 /* ============ YAPILACAKLAR ÇEKMECESİ ============ */
 .tdtab{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:55;
@@ -545,6 +560,13 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
     <button class="gh" id="prt">Yazdır</button>
     <input type="file" id="file" accept="application/json,.json" hidden>
   </div>
+</div></div>
+
+<div class="bkup hide" id="bkup"><div class="wrap">
+  <span class="bi">!</span>
+  <span class="bt" id="bkupTxt"></span>
+  <button class="gh go" id="bkupGo" type="button">Şimdi yedekle</button>
+  <button class="bx" id="bkupHide" type="button" title="Bugünlük gizle">&#10005;</button>
 </div></div>
 
 <header class="hero"><div class="wrap">
@@ -769,6 +791,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   <p class="pfoot" style="border:1px solid var(--hair);border-radius:11px;margin-top:4px">Konuya bir kez tıkla &rarr; <b>yarım</b> (çalıştın, eksik var). İki kez &rarr; <b>bitti</b>. Üç kez &rarr; sıfırlanır. Müfredat yüzdesi yarımları 0,5 sayar.</p>
 </div>
 
+  <p class="build">sürüm <span id="bld">yerel kopya</span></p>
 </div></main>
 
 <button class="tdtab" id="tdTab" type="button" aria-label="Yapılacaklar listesini aç">
@@ -953,11 +976,11 @@ function net(d,y){return (+d||0)-(+y||0)/4;}
 function clamp(v,a,b){return v<a?a:(v>b?b:v);}
 
 /* ---------- durum ---------- */
-var DB={q:{},k:{},d:[],r:{},rc:{},t:{},fb:{},st:{}};
+var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0};
 try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&typeof o==="object"){
   DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
   DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{};
-  DB.t=o.t||{};DB.fb=o.fb||{};DB.st=o.st||{};}}}catch(e){}
+  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;}}}catch(e){}
 if(!(+DB.rc.total>0))DB.rc.total=8000;
 var pT=null,RDB=null,syncT=null,syncing=false,applying=false;
 function save(){
@@ -1737,10 +1760,10 @@ $("exp").onclick=function(){
   var use=window.claude&&window.claude.use;
   if(use){
     Promise.resolve(use("downloads")).then(function(dl){
-      if(dl)return dl.save({filename:name,data:data});
-      localDownload(name,data);
-    }).catch(function(){localDownload(name,data);});
-  }else localDownload(name,data);
+      if(dl)return dl.save({filename:name,data:data}).then(bkDone);
+      localDownload(name,data);bkDone();
+    }).catch(function(){localDownload(name,data);bkDone();});
+  }else{localDownload(name,data);bkDone();}
 };
 function localDownload(name,data){
   var blob=new Blob([data],{type:"application/json"});
@@ -1763,7 +1786,6 @@ $("file").onchange=function(){
         DB.d.sort(function(x,y){return x.date===y.date?x.id-y.id:(x.date<y.date?-1:1);});}
       if(o.r)for(var c in o.r)DB.r[c]=o.r[c];
       if(o.t)for(var e1 in o.t)DB.t[e1]=o.t[e1];
-      if(o.fb)for(var e2 in o.fb)DB.fb[e2]=o.fb[e2];
       if(o.st)for(var e3 in o.st)DB.st[e3]=o.st[e3];
       if(o.rc&&typeof o.rc==="object"){if(+o.rc.total>0)DB.rc.total=+o.rc.total;if(o.rc.target)DB.rc.target=o.rc.target;}
       save();buildKonu();qRefresh();dRefresh();rRefresh();
@@ -1785,7 +1807,38 @@ if(window.matchMedia)try{window.matchMedia("(prefers-color-scheme: dark)")
 /* ---------- başlat ---------- */
 buildQ();buildD();buildKonu();
 $("dDate").value=iso(new Date());
-qRefresh();dRefresh();dCalc();rRefresh();tPaint();
+qRefresh();dRefresh();dCalc();rRefresh();tPaint();bkCheck();
+
+/* ================== YEDEK HATIRLATICISI ==================
+   iOS, uzun süre açılmayan sitelerin yerel verisini silebiliyor.
+   Aylarca biriken takip verisi için tek gerçek koruma dışa aktarım. */
+var BKGIZ="tyt-yedek-gizle";
+function veriGunleri(){
+  var g={};
+  [DB.q,DB.r,DB.st,DB.t].forEach(function(o){for(var k in o)g[k]=1;});
+  return Object.keys(g).length;
+}
+function bkDone(){DB.bk=Date.now();save();bkCheck();}
+function bkCheck(){
+  var el=$("bkup"),gun=veriGunleri();
+  if(gun<3){el.classList.add("hide");return;}                 /* yeni kullanıcıyı rahatsız etme */
+  var gizli=0;try{gizli=+localStorage.getItem(BKGIZ)||0;}catch(e){}
+  if(gizli&&(Date.now()-gizli)<864e5){el.classList.add("hide");return;}
+  var gecen=DB.bk?Math.floor((Date.now()-DB.bk)/864e5):null;
+  if(DB.bk&&gecen<7){el.classList.add("hide");return;}
+  $("bkupTxt").innerHTML=DB.bk
+    ? "Verilerini <b>"+gecen+" gündür</b> yedeklemedin. "+gun+" günlük kayıt birikti."
+    : "<b>"+gun+" günlük kaydın var ve hiç yedek almadın.</b> Tarayıcı verisi silinirse hepsi gider.";
+  el.classList.remove("hide");
+}
+$("bkupGo").onclick=function(){$("exp").click();};
+$("bkupHide").onclick=function(){
+  try{localStorage.setItem(BKGIZ,String(Date.now()));}catch(e){}
+  $("bkup").classList.add("hide");
+};
+
+/* sürüm damgası — hangi kopyanın yüklü olduğunu görebilmek için */
+$("bld").textContent=window.BUILD||"yerel kopya";
 
 /* ---------- cihazlar arası eşitleme (yayınlanmış sürümde) ---------- */
 (function(){
@@ -1804,7 +1857,7 @@ qRefresh();dRefresh();dCalc();rRefresh();tPaint();
         applying=true;
         DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
         DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{total:8000};
-        DB.t=o.t||{};DB.fb=o.fb||{};DB.st=o.st||{};
+        DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||DB.bk;
         if(!(+DB.rc.total>0))DB.rc.total=8000;
         try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}
         redrawAll();
@@ -1817,9 +1870,22 @@ qRefresh();dRefresh();dCalc();rRefresh();tPaint();
 })();
 </script>
 <script>
-if("serviceWorker" in navigator)addEventListener("load",function(){
-  navigator.serviceWorker.register("sw.js").catch(function(){});
-});
+window.BUILD="2026-09-27 · 41744a7";
+try{document.getElementById("bld").textContent=window.BUILD;}catch(e){}
+if("serviceWorker" in navigator){
+  var swReg=null,swReloaded=false;
+  addEventListener("load",function(){
+    navigator.serviceWorker.register("sw.js").then(function(r){swReg=r;r.update();}).catch(function(){});
+  });
+  /* yeni servis calisani devralinca sayfayi bir kez yenile */
+  navigator.serviceWorker.addEventListener("controllerchange",function(){
+    if(swReloaded)return;swReloaded=true;location.reload();
+  });
+  /* uygulama one gelince guncelleme kontrolu yap */
+  document.addEventListener("visibilitychange",function(){
+    if(!document.hidden&&swReg)try{swReg.update();}catch(e){}
+  });
+}
 </script>
 </body>
 </html>

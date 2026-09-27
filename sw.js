@@ -1,4 +1,4 @@
-var V="tyt-panel-v4";
+var V="tyt-panel-v5";
 var CORE=["./","index.html","manifest.webmanifest","icon-180.png","icon-192.png","icon-512.png"];
 self.addEventListener("install",function(e){
   e.waitUntil(caches.open(V).then(function(c){return c.addAll(CORE);})
@@ -13,7 +13,7 @@ self.addEventListener("fetch",function(e){
   var req=e.request;if(req.method!=="GET")return;
   var url=new URL(req.url);
   if(req.mode==="navigate"){            /* sayfa: once ag, kopamazsa onbellek */
-    e.respondWith(fetch(req).then(function(r){
+    e.respondWith(fetch(req,{cache:"no-store"}).then(function(r){
       var c=r.clone();caches.open(V).then(function(x){x.put("index.html",c);});return r;
     }).catch(function(){
       return caches.match("index.html").then(function(m){return m||caches.match("./");});
