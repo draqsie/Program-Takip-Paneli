@@ -395,6 +395,64 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 
 .empty{padding:52px 20px;text-align:center;color:var(--faint);font-size:13px}
 
+/* ============ YAPILACAKLAR ============ */
+.tdadd{display:flex;gap:9px;margin-bottom:13px}
+.tdadd input{flex:1;min-width:0;background:var(--panel-2);border:1px solid var(--hair);border-radius:9px;
+  padding:10px 13px;font-size:14.5px}
+.tdadd input:focus{border-color:var(--brand);outline:none;background:var(--panel)}
+.tdadd .btn{padding:10px 18px;font-size:13.5px}
+.tdrow{display:flex;align-items:flex-start;gap:12px;padding:10px 2px;border-bottom:1px solid var(--hair)}
+.tdrow:last-child{border-bottom:none}
+.tdrow .ck{width:19px;height:19px;border:1.5px solid var(--hair-2);border-radius:6px;background:var(--panel);
+  flex:0 0 auto;margin-top:2px;cursor:pointer;padding:0;position:relative;transition:all .15s}
+.tdrow .ck::after{content:"";position:absolute;left:4px;top:5px;width:8px;height:4px;
+  border-left:2px solid var(--panel);border-bottom:2px solid var(--panel);transform:rotate(-45deg);opacity:0}
+:root[data-theme="dark"] .tdrow .ck::after,:root:not([data-theme="light"]) .tdrow .ck::after{border-color:#06110C}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .tdrow .ck::after{border-color:#fff}}
+.tdrow.done .ck{background:var(--brand);border-color:var(--brand)}
+.tdrow.done .ck::after{opacity:1}
+.tdrow .tt{flex:1;min-width:0;font-size:14px;line-height:1.45;word-break:break-word}
+.tdrow.done .tt{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--hair-2)}
+.tdrow .rm{background:transparent;border:0;color:var(--faint);cursor:pointer;font-size:15px;line-height:1;
+  padding:2px 6px;border-radius:5px;opacity:0;transition:opacity .15s}
+.tdrow:hover .rm,.tdrow:focus-within .rm{opacity:1}
+@media (hover:none),(pointer:coarse){.tdrow .rm{opacity:.6;padding:6px 10px}}
+.tdrow .rm:hover{color:var(--bad)}
+
+/* ============ KRONOMETRE ============ */
+.tmr{position:fixed;z-index:60;font-family:var(--fm);
+  right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom))}
+.tmr .pill{display:flex;align-items:center;gap:10px;background:var(--hero);color:var(--hero-ink);
+  border:1px solid var(--hero-hair);border-radius:99px;padding:12px 19px;cursor:pointer;
+  box-shadow:0 12px 34px -12px rgba(0,0,0,.6);font-size:15.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.tmr .pill .dotr{width:8px;height:8px;border-radius:99px;background:var(--hero-dim);flex:0 0 auto}
+.tmr .pill.run .dotr{background:var(--ok);animation:bl 1.6s ease-in-out infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.25}}
+.tmr .card{display:none;width:280px;max-width:calc(100vw - 36px);background:var(--panel);
+  border:1px solid var(--hair);border-radius:16px;overflow:hidden;box-shadow:0 22px 54px -20px rgba(0,0,0,.5)}
+.tmr.open .card{display:block}
+.tmr.open .pill{display:none}
+.tmr .th{display:flex;align-items:center;padding:12px 14px 10px;border-bottom:1px solid var(--hair);background:var(--panel-2)}
+.tmr .th b{font-family:var(--fh);font-size:14px;font-weight:600}
+.tmr .th button{margin-left:auto;background:transparent;border:0;color:var(--faint);cursor:pointer;
+  font-size:16px;line-height:1;padding:4px 7px;border-radius:6px}
+.tmr .th button:hover{color:var(--ink)}
+.tmr .modes{display:flex;gap:5px;flex-wrap:wrap;padding:12px 14px 0}
+.tmr .modes .chip{font-size:10.5px;padding:5px 9px;border-radius:7px}
+@media (hover:none),(pointer:coarse){.tmr .modes .chip{padding:8px 11px;font-size:11.5px}}
+.tmr .big{font-size:50px;font-weight:700;text-align:center;letter-spacing:-.045em;padding:14px 0 4px;
+  font-variant-numeric:tabular-nums;line-height:1}
+.tmr .big.fin{color:var(--ok)}
+.tmr .bar{height:4px;background:var(--sunk);margin:8px 14px 0;border-radius:99px;overflow:hidden}
+.tmr .bar i{display:block;height:100%;width:0;background:var(--brand);border-radius:99px}
+.tmr .bar i.br{background:var(--s3)}
+.tmr .btns{display:flex;gap:8px;padding:13px 14px}
+.tmr .btns .btn{flex:1;padding:11px 0;font-size:14px;text-align:center}
+.tmr .tf{padding:10px 14px;border-top:1px solid var(--hair);background:var(--panel-2);
+  font-size:11px;color:var(--dim);display:flex;align-items:center;gap:7px}
+.tmr .tf b{font-size:14px;font-weight:700;color:var(--brand-ink)}
+@media print{.tmr{display:none!important}}
+
 /* ============ OKUMA ============ */
 .book{display:grid;grid-template-columns:minmax(200px,250px) minmax(0,1fr);gap:26px;align-items:center}
 @media (max-width:720px){.book{grid-template-columns:1fr}}
@@ -484,6 +542,20 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 
 <!-- ======== SORU ======== -->
 <div id="p-soru" class="stack">
+  <section class="panel">
+    <div class="phead">
+      <h3>Bugün Ne Yapacağım</h3>
+      <span class="sub" id="tdCount"></span>
+    </div>
+    <div class="pbody">
+      <form class="tdadd" id="tdForm" autocomplete="off">
+        <input id="tdIn" maxlength="160" placeholder="Bir iş yaz, Enter'a bas…">
+        <button class="btn" type="submit">Ekle</button>
+      </form>
+      <div id="tdList"></div>
+    </div>
+  </section>
+
   <section class="panel">
     <div class="phead">
       <h3>Günlük Soru Girişi</h3>
@@ -660,6 +732,27 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 
 </div></main>
 
+<div class="tmr" id="tmr">
+  <button class="pill" id="tmrPill" type="button" title="Kronometre"><span class="dotr"></span><span id="pillT">50:00</span></button>
+  <div class="card">
+    <div class="th"><b>Kronometre</b><button id="tmrClose" type="button" title="Kapat">&#10005;</button></div>
+    <div class="modes chips" id="tmrModes">
+      <button class="chip" data-d="3000" aria-pressed="true">Odak 50</button>
+      <button class="chip" data-d="600" aria-pressed="false">Mola 10</button>
+      <button class="chip" data-d="1200" aria-pressed="false">Uzun 20</button>
+      <button class="chip" data-d="9900" aria-pressed="false">Deneme 165</button>
+      <button class="chip" data-d="0" aria-pressed="false">Serbest</button>
+    </div>
+    <div class="big" id="tmrTime">50:00</div>
+    <div class="bar"><i id="tmrBar"></i></div>
+    <div class="btns">
+      <button class="btn" id="tmrGo" type="button">Başlat</button>
+      <button class="btn q" id="tmrRst" type="button">Sıfırla</button>
+    </div>
+    <div class="tf">Bugün tamamlanan odak bloğu: <b id="tmrN">0</b></div>
+  </div>
+</div>
+
 <script>
 "use strict";
 var $=function(i){return document.getElementById(i);};
@@ -805,10 +898,11 @@ function net(d,y){return (+d||0)-(+y||0)/4;}
 function clamp(v,a,b){return v<a?a:(v>b?b:v);}
 
 /* ---------- durum ---------- */
-var DB={q:{},k:{},d:[],r:{},rc:{}};
+var DB={q:{},k:{},d:[],r:{},rc:{},t:{},fb:{}};
 try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&typeof o==="object"){
   DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
-  DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{};}}}catch(e){}
+  DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{};
+  DB.t=o.t||{};DB.fb=o.fb||{};}}}catch(e){}
 if(!(+DB.rc.total>0))DB.rc.total=8000;
 var pT=null,RDB=null,syncT=null,syncing=false,applying=false;
 function save(){
@@ -826,7 +920,7 @@ function push(){
       .catch(function(){}).then(function(){syncing=false;});
   },700);
 }
-function redrawAll(){buildKonu();qRefresh();dRefresh();rRefresh();}
+function redrawAll(){buildKonu();qRefresh();dRefresh();rRefresh();tPaint();}
 
 /* ================== GRAFİK MOTORU ================== */
 function setup(cv){
@@ -1070,7 +1164,7 @@ function qRefresh(){
   var pct=Math.round(wk.t/HW_TOPLAM*100);
   $("tGoal").textContent=pct+"%";
   $("tGoalBox").className="tile "+(pct>=100?"ok":pct>=70?"warn":"bad");
-  qChart();qTable();head();
+  tdRender();qChart();qTable();head();
 }
 function qAgg(mode){
   var labels=[],keys=[],now=new Date();
@@ -1398,6 +1492,111 @@ hover($("rBox"),$("rTip"),function(){return rF;},function(i){
   return "<b>"+rD.labels[i]+"</b>"+(v?tn(v)+" sayfa":"<u>okuma yok</u>");
 });
 
+/* ================== YAPILACAKLAR ================== */
+function tdRender(){
+  var k=iso(qCur),list=DB.t[k]||[],host=$("tdList");host.textContent="";
+  var done=0;
+  list.forEach(function(it){if(it.d)done++;});
+  $("tdCount").textContent=list.length?done+" / "+list.length+" tamam":"";
+  if(!list.length){
+    var e=document.createElement("p");e.className="empty";e.style.padding="26px 10px";
+    e.textContent="Bugün için henüz bir iş yazmadın.";host.appendChild(e);return;
+  }
+  list.forEach(function(it,ix){
+    var row=document.createElement("div");row.className="tdrow"+(it.d?" done":"");
+    var ck=document.createElement("button");ck.type="button";ck.className="ck";
+    ck.setAttribute("aria-pressed",it.d?"true":"false");ck.title="Tamamlandı işaretle";
+    ck.onclick=function(){it.d=it.d?0:1;tdRender();save();};
+    var tt=document.createElement("span");tt.className="tt";tt.textContent=it.x;
+    var rm=document.createElement("button");rm.type="button";rm.className="rm";
+    rm.innerHTML="&#10005;";rm.title="Sil";
+    rm.onclick=function(){list.splice(ix,1);if(!list.length)delete DB.t[k];tdRender();save();};
+    row.appendChild(ck);row.appendChild(tt);row.appendChild(rm);host.appendChild(row);
+  });
+}
+$("tdForm").onsubmit=function(e){
+  e.preventDefault();
+  var v=$("tdIn").value.trim();if(!v)return;
+  var k=iso(qCur);if(!DB.t[k])DB.t[k]=[];
+  DB.t[k].push({i:Date.now(),x:v,d:0});
+  $("tdIn").value="";tdRender();save();
+};
+
+/* ================== KRONOMETRE ================== */
+var TK="tyt-kronometre",AC=null;
+var T={dur:3000,mode:3000,run:false,endsAt:0,acc:0,from:0,fin:false};
+try{var ts=JSON.parse(localStorage.getItem(TK)||"null");
+  if(ts&&typeof ts==="object"){T.dur=+ts.dur||3000;T.mode=+ts.mode||0;T.run=!!ts.run;
+    T.endsAt=+ts.endsAt||0;T.acc=+ts.acc||0;T.from=+ts.from||0;}}catch(e){}
+function tSave(){try{localStorage.setItem(TK,JSON.stringify(T));}catch(e){}}
+function mmss(s){s=Math.max(0,Math.round(s));
+  var h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;
+  return (h?h+":"+String(m).padStart(2,"0"):String(m))+":"+String(x).padStart(2,"0");}
+function tLeft(){
+  if(T.mode===0)return T.acc+(T.run?(Date.now()-T.from)/1000:0);        /* serbest: yukarı sayar */
+  return T.run?Math.max(0,(T.endsAt-Date.now())/1000):T.dur;            /* geri sayım */
+}
+function beep(){
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==="suspended")AC.resume();
+    [0,.32,.64].forEach(function(t){
+      var o=AC.createOscillator(),g=AC.createGain(),n=AC.currentTime+t;
+      o.type="sine";o.frequency.value=880;
+      g.gain.setValueAtTime(.0001,n);
+      g.gain.exponentialRampToValueAtTime(.3,n+.02);
+      g.gain.exponentialRampToValueAtTime(.0001,n+.24);
+      o.connect(g);g.connect(AC.destination);o.start(n);o.stop(n+.26);
+    });
+  }catch(e){}
+}
+function tPaint(){
+  var v=tLeft(),txt=mmss(v);
+  $("tmrTime").textContent=txt;$("pillT").textContent=txt;
+  $("tmrTime").classList.toggle("fin",T.fin);
+  $("tmrPill").classList.toggle("run",T.run);
+  $("tmrGo").textContent=T.run?"Duraklat":"Başlat";
+  var p=T.mode===0?0:clamp((1-v/T.dur)*100,0,100);
+  $("tmrBar").style.width=p+"%";
+  $("tmrBar").className=(T.mode===600||T.mode===1200)?"br":"";
+  $("tmrN").textContent=+DB.fb[iso(new Date())]||0;
+}
+function tTick(){
+  if(T.run&&T.mode!==0&&Date.now()>=T.endsAt){
+    T.run=false;T.fin=true;T.endsAt=0;tSave();beep();
+    if(T.mode===3000){                                   /* odak bloğu bitti → say */
+      var k=iso(new Date());DB.fb[k]=(+DB.fb[k]||0)+1;save();
+    }
+  }
+  tPaint();
+}
+setInterval(tTick,250);
+$("tmrPill").onclick=function(){$("tmr").classList.add("open");};
+$("tmrClose").onclick=function(){$("tmr").classList.remove("open");};
+$("tmrModes").onclick=function(e){
+  var b=e.target.closest(".chip");if(!b)return;
+  var d=+b.dataset.d;
+  $("tmrModes").querySelectorAll(".chip").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});
+  T.mode=d;T.dur=d||0;T.run=false;T.fin=false;T.endsAt=0;T.acc=0;T.from=0;
+  tSave();tPaint();
+};
+$("tmrGo").onclick=function(){
+  if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}  /* iOS sesi aç */
+  if(T.run){
+    if(T.mode===0)T.acc+=(Date.now()-T.from)/1000;else T.dur=Math.max(0,(T.endsAt-Date.now())/1000);
+    T.run=false;
+  }else{
+    T.fin=false;
+    if(T.mode===0)T.from=Date.now();
+    else{if(T.dur<=0)T.dur=T.mode;T.endsAt=Date.now()+T.dur*1000;}
+    T.run=true;
+  }
+  tSave();tPaint();
+};
+$("tmrRst").onclick=function(){
+  T.run=false;T.fin=false;T.endsAt=0;T.acc=0;T.from=0;T.dur=T.mode||0;tSave();tPaint();
+};
+
 /* ================== BAŞLIK ================== */
 function head(){
   var left=Math.ceil((HEDEF_TARIH-utc(new Date()))/864e5);
@@ -1486,6 +1685,8 @@ $("file").onchange=function(){
         o.d.forEach(function(x){if(!have[x.id])DB.d.push(x);});
         DB.d.sort(function(x,y){return x.date===y.date?x.id-y.id:(x.date<y.date?-1:1);});}
       if(o.r)for(var c in o.r)DB.r[c]=o.r[c];
+      if(o.t)for(var e1 in o.t)DB.t[e1]=o.t[e1];
+      if(o.fb)for(var e2 in o.fb)DB.fb[e2]=o.fb[e2];
       if(o.rc&&typeof o.rc==="object"){if(+o.rc.total>0)DB.rc.total=+o.rc.total;if(o.rc.target)DB.rc.target=o.rc.target;}
       save();buildKonu();qRefresh();dRefresh();rRefresh();
     }catch(e){alert("Dosya okunamadı — geçerli bir yedek dosyası seç.");}
@@ -1505,7 +1706,7 @@ if(window.matchMedia)try{window.matchMedia("(prefers-color-scheme: dark)")
 /* ---------- başlat ---------- */
 buildQ();buildD();buildKonu();
 $("dDate").value=iso(new Date());
-qRefresh();dRefresh();dCalc();rRefresh();
+qRefresh();dRefresh();dCalc();rRefresh();tPaint();
 
 /* ---------- cihazlar arası eşitleme (yayınlanmış sürümde) ---------- */
 (function(){
@@ -1524,6 +1725,7 @@ qRefresh();dRefresh();dCalc();rRefresh();
         applying=true;
         DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
         DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{total:8000};
+        DB.t=o.t||{};DB.fb=o.fb||{};
         if(!(+DB.rc.total>0))DB.rc.total=8000;
         try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}
         redrawAll();

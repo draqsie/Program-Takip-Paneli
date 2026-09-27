@@ -1,4 +1,4 @@
-var V="tyt-panel-v1";
+var V="tyt-panel-v2";
 var CORE=["./","index.html","manifest.webmanifest","icon-180.png","icon-192.png","icon-512.png"];
 self.addEventListener("install",function(e){
   e.waitUntil(caches.open(V).then(function(c){return c.addAll(CORE);})
