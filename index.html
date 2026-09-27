@@ -99,8 +99,8 @@ a{color:var(--brand-ink)}
   padding-left:max(24px,env(safe-area-inset-left));padding-right:max(24px,env(safe-area-inset-right))}
 .hide{display:none!important}
 /* sağ kenardaki sabit "Yapılacaklar" sekmesi içeriğin üstüne binmesin */
-@media (max-width:1430px) and (min-width:901px){
-  .wrap{padding-right:calc(max(24px,env(safe-area-inset-right)) + 34px)}
+@media (max-width:1460px) and (min-width:901px){
+  .wrap{padding-right:calc(max(24px,env(safe-area-inset-right)) + 52px)}
 }
 
 /* ---- ana ekrana eklenince: durum çubuğu ve alt çizgi payı ---- */
@@ -413,15 +413,21 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 .bkup .bt b{color:var(--ink);font-weight:700}
 .bkup .go{border-color:var(--warn);color:var(--warn)}
 .bkup .go:hover{background:var(--warn);color:var(--bg);border-color:var(--warn)}
+.bkup .bnv{background:transparent;border:0;color:var(--faint);cursor:pointer;font-size:11.5px;
+  text-decoration:underline;text-underline-offset:3px;padding:6px 4px;white-space:nowrap}
+.bkup .bnv:hover{color:var(--ink-2)}
 .bkup .bx{background:transparent;border:0;color:var(--faint);cursor:pointer;font-size:13px;
   padding:6px 8px;border-radius:6px;line-height:1}
 .bkup .bx:hover{color:var(--ink)}
 
 /* ============ YAPILACAKLAR ÇEKMECESİ ============ */
-.tdtab{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:55;
-  background:var(--hero);color:var(--hero-ink);border:1px solid var(--hero-hair);border-right:0;
-  border-radius:11px 0 0 11px;padding:0;cursor:pointer;box-shadow:-6px 0 22px -12px rgba(0,0,0,.55);
-  transition:padding .18s,background .18s}
+/* ekranin tam kenari iOS-ta sistem kaydirma bolgesi — sekmeyi iceri aliyoruz */
+.tdtab{position:fixed;top:50%;transform:translateY(-50%);z-index:55;
+  right:calc(max(12px,env(safe-area-inset-right)));
+  background:var(--hero);color:var(--hero-ink);border:1px solid var(--hero-hair);
+  border-radius:12px;padding:0;cursor:pointer;box-shadow:0 8px 26px -12px rgba(0,0,0,.6);
+  transition:right .18s,background .18s}
+.tdtab:active{right:calc(max(12px,env(safe-area-inset-right)) + 2px)}
 .tdtab:hover{background:var(--hero-2)}
 .tdtab-in{display:block;writing-mode:vertical-rl;transform:rotate(180deg);
   padding:19px 11px;font-family:var(--fm);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
@@ -566,6 +572,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   <span class="bi">!</span>
   <span class="bt" id="bkupTxt"></span>
   <button class="gh go" id="bkupGo" type="button">Şimdi yedekle</button>
+  <button class="bnv" id="bkupNever" type="button">bir daha gösterme</button>
   <button class="bx" id="bkupHide" type="button" title="Bugünlük gizle">&#10005;</button>
 </div></div>
 
@@ -1812,26 +1819,37 @@ qRefresh();dRefresh();dCalc();rRefresh();tPaint();bkCheck();
 /* ================== YEDEK HATIRLATICISI ==================
    iOS, uzun süre açılmayan sitelerin yerel verisini silebiliyor.
    Aylarca biriken takip verisi için tek gerçek koruma dışa aktarım. */
-var BKGIZ="tyt-yedek-gizle";
+var BKGIZ="tyt-yedek-gizle",BKKAPA="tyt-yedek-kapali";
 function veriGunleri(){
   var g={};
   [DB.q,DB.r,DB.st,DB.t].forEach(function(o){for(var k in o)g[k]=1;});
   return Object.keys(g).length;
 }
 function bkDone(){DB.bk=Date.now();save();bkCheck();}
+function bkBoyut(){
+  try{var n=new Blob([JSON.stringify(DB)]).size;return (n/1024).toFixed(0)+" KB";}catch(e){return "";}
+}
 function bkCheck(){
   var el=$("bkup"),gun=veriGunleri();
   if(gun<3){el.classList.add("hide");return;}                 /* yeni kullanıcıyı rahatsız etme */
-  var gizli=0;try{gizli=+localStorage.getItem(BKGIZ)||0;}catch(e){}
+  var kapali=0,gizli=0;
+  try{kapali=+localStorage.getItem(BKKAPA)||0;gizli=+localStorage.getItem(BKGIZ)||0;}catch(e){}
+  if(kapali){el.classList.add("hide");return;}                /* bir daha gösterme */
   if(gizli&&(Date.now()-gizli)<864e5){el.classList.add("hide");return;}
   var gecen=DB.bk?Math.floor((Date.now()-DB.bk)/864e5):null;
   if(DB.bk&&gecen<7){el.classList.add("hide");return;}
-  $("bkupTxt").innerHTML=DB.bk
+  var boy=bkBoyut();
+  $("bkupTxt").innerHTML=(DB.bk
     ? "Verilerini <b>"+gecen+" gündür</b> yedeklemedin. "+gun+" günlük kayıt birikti."
-    : "<b>"+gun+" günlük kaydın var ve hiç yedek almadın.</b> Tarayıcı verisi silinirse hepsi gider.";
+    : "<b>"+gun+" günlük kaydın var ve hiç yedek almadın.</b> Tarayıcı verisi silinirse hepsi gider.")
+    +(boy?" <span style=\"opacity:.7\">Yedek dosyası yaklaşık "+boy+".</span>":"");
   el.classList.remove("hide");
 }
 $("bkupGo").onclick=function(){$("exp").click();};
+$("bkupNever").onclick=function(){
+  try{localStorage.setItem(BKKAPA,"1");}catch(e){}
+  $("bkup").classList.add("hide");
+};
 $("bkupHide").onclick=function(){
   try{localStorage.setItem(BKGIZ,String(Date.now()));}catch(e){}
   $("bkup").classList.add("hide");
@@ -1870,7 +1888,7 @@ $("bld").textContent=window.BUILD||"yerel kopya";
 })();
 </script>
 <script>
-window.BUILD="2026-09-27 · 41744a7";
+window.BUILD="2026-09-27 · d904902";
 try{document.getElementById("bld").textContent=window.BUILD;}catch(e){}
 if("serviceWorker" in navigator){
   var swReg=null,swReloaded=false;
