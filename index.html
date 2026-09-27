@@ -98,6 +98,10 @@ a{color:var(--brand-ink)}
 .wrap{max-width:1320px;margin:0 auto;
   padding-left:max(24px,env(safe-area-inset-left));padding-right:max(24px,env(safe-area-inset-right))}
 .hide{display:none!important}
+/* sağ kenardaki sabit "Yapılacaklar" sekmesi içeriğin üstüne binmesin */
+@media (max-width:1430px) and (min-width:901px){
+  .wrap{padding-right:calc(max(24px,env(safe-area-inset-right)) + 34px)}
+}
 
 /* ---- ana ekrana eklenince: durum çubuğu ve alt çizgi payı ---- */
 @media (display-mode:standalone),(display-mode:fullscreen){
@@ -168,15 +172,18 @@ a{color:var(--brand-ink)}
 .cd .when{font-size:13px;color:var(--hero-dim);margin-top:7px}
 .cd .when b{color:var(--hero-ink);font-weight:700}
 
-.gauges{display:flex;flex-wrap:wrap;margin-left:auto;border-left:1px solid var(--hero-hair)}
-.gauge{padding:2px 24px;border-right:1px solid var(--hero-hair);min-width:118px}
+.gauges{display:flex;flex-wrap:wrap;margin-left:auto;flex:1 1 540px;border-left:1px solid var(--hero-hair)}
+.gauge{flex:1 1 118px;min-width:0;padding:2px 22px;border-right:1px solid var(--hero-hair)}
 .gauge:last-child{border-right:none}
 .gauge .lbl{color:var(--hero-dim);font-size:9px}
 .gauge .v{font-family:var(--fm);font-size:27px;font-weight:600;color:#fff;line-height:1.2;margin-top:6px;
-  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em;white-space:nowrap}
 .gauge .v small{font-size:13px;font-weight:400;color:var(--hero-dim);margin-left:1px}
-.gauge .meter{height:3px;background:var(--hero-hair);border-radius:99px;margin-top:8px;overflow:hidden}
-.gauge .meter i{display:block;height:100%;background:var(--brand);width:0;transition:width .5s cubic-bezier(.4,0,.2,1)}
+/* kap bir <span> — satır içi elemanda height/overflow çalışmaz, display:block şart */
+.gauge .meter{display:block;width:100%;height:3px;background:var(--hero-hair);
+  border-radius:99px;margin-top:9px;overflow:hidden}
+.gauge .meter i{display:block;height:3px;width:0;background:var(--brand);border-radius:99px;
+  transition:width .5s cubic-bezier(.4,0,.2,1)}
 .gauge .meter i.w{background:var(--warn)} .gauge .meter i.b{background:var(--bad)}
 
 /* trajectory */
