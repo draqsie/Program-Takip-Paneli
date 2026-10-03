@@ -505,6 +505,34 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 
 /* ============ KRONOMETRE ============ */
 
+/* ---- kitaplik ---- */
+.ktadd{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.ktadd #ktAd{flex:1;min-width:170px;background:var(--panel-2);border:1px solid var(--hair);
+  border-radius:9px;padding:10px 13px;font-size:14.5px}
+.ktadd #ktSy{width:92px;background:var(--panel-2);border:1px solid var(--hair);border-radius:9px;
+  padding:10px 9px;font-family:var(--fm);font-size:14.5px;text-align:center}
+.ktadd input:focus{border-color:var(--s4);outline:none;background:var(--panel)}
+.ktadd .btn{padding:10px 20px;font-size:13.5px}
+.ktrow{display:flex;align-items:center;gap:12px;padding:11px 2px;border-bottom:1px solid var(--hair)}
+.ktrow:last-child{border-bottom:none}
+.ktrow .ck{width:19px;height:19px;border:1.5px solid var(--hair-2);border-radius:6px;background:var(--panel);
+  flex:0 0 auto;cursor:pointer;padding:0;position:relative;transition:all .15s}
+.ktrow .ck::after{content:"";position:absolute;left:4px;top:5px;width:8px;height:4px;
+  border-left:2px solid var(--panel);border-bottom:2px solid var(--panel);transform:rotate(-45deg);opacity:0}
+:root[data-theme="dark"] .ktrow .ck::after,:root:not([data-theme="light"]) .ktrow .ck::after{border-color:#06110C}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .ktrow .ck::after{border-color:#fff}}
+.ktrow.bitti .ck{background:var(--s4);border-color:var(--s4)}
+.ktrow.bitti .ck::after{opacity:1}
+.ktrow .ad{flex:1;min-width:0;font-size:14px;line-height:1.4;word-break:break-word}
+.ktrow.bitti .ad{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--hair-2)}
+.ktrow .sy{font-family:var(--fm);font-size:11.5px;color:var(--dim);white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+.ktrow .tar{font-family:var(--fm);font-size:10.5px;color:var(--s4);white-space:nowrap}
+.ktrow .rm{flex:0 0 auto;background:transparent;border:1px solid transparent;color:var(--faint);
+  cursor:pointer;font-size:12.5px;padding:6px 9px;border-radius:7px;transition:all .15s}
+.ktrow .rm:hover{color:var(--bad);border-color:var(--bad);background:var(--bad-wash)}
+@media (hover:none),(pointer:coarse){.ktrow .rm{padding:9px 12px;border-color:var(--hair)}}
+
 /* ---- elle sure girisi ---- */
 .stadd{display:grid;grid-template-columns:repeat(auto-fit,minmax(214px,1fr));gap:14px;
   padding:14px 16px;margin-bottom:17px;background:var(--panel-2);border:1px solid var(--hair);border-radius:11px}
@@ -846,6 +874,20 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   </section>
 
   <section class="panel">
+    <div class="phead"><h3>Kitaplığım</h3>
+      <span class="sub" id="ktSub"></span>
+    </div>
+    <div class="pbody">
+      <form class="ktadd" id="ktForm" autocomplete="off">
+        <input id="ktAd" maxlength="90" placeholder="Kitap adı">
+        <input id="ktSy" type="number" min="0" max="5000" placeholder="sayfa" inputmode="numeric">
+        <button class="btn" type="submit">Ekle</button>
+      </form>
+      <div id="ktList"></div>
+    </div>
+  </section>
+
+  <section class="panel">
     <div class="phead"><h3>Okuma Grafiği</h3><span class="sub">son 30 gün</span></div>
     <div class="pbody">
       <div class="cbox" id="rBox"><canvas id="rCan"></canvas><div class="tip" id="rTip"></div></div>
@@ -861,7 +903,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
     <div>
       <p><b>Bu liste neye dayanıyor?</b> Tema ve ünite adları <b>MEB Türkiye Yüzyılı Maarif Modeli 9 ve 10. sınıf öğretim programlarından</b> alındı (<a href="https://tymm.meb.gov.tr/ogretim-programlari" target="_blank" rel="noopener">tymm.meb.gov.tr</a>). Altlarındaki satırlar o temanın TYT'deki karşılığıdır &mdash; çalışma amaçlı eşleme, MEB'in resmî alt başlıkları değil.</p>
       <p><b>ÖSYM henüz resmî 2028 TYT kapsamını açıklamadı.</b> Sen 2024-25'te 9. sınıfa başlayan ilk Maarif kuşağısın; TYT'n 9 ve 10. sınıf Maarif müfredatından gelecek. Kesin dağılım açıklandığında bu listeyi karşılaştır. Din Kültürü üniteleri MEB sayfasından çekilemedi &mdash; okul kitabından doğrula.</p>
-      <p><b>AYT bölümü 11. sınıf Maarif programlarından</b> alındı. Sen 11. sınıftayken hem okul konunu hem AYT karşılığını buradan takip edebilir, aynı anda TYT listesine bakabilirsin. AYT alt başlıkları da aynı şekilde çalışma amaçlı eşlemedir.</p>
+      <p><b>AYT bölümü sayısal alana göre</b> kuruldu — Matematik, Fizik, Kimya, Biyoloji (80 soru). Tema adları 11. sınıf Maarif programlarından alındı. Sen 11. sınıftayken hem okul konunu hem AYT karşılığını buradan takip edebilir, aynı anda TYT listesine bakabilirsin. AYT alt başlıkları da aynı şekilde çalışma amaçlı eşlemedir.</p>
     </div>
   </div>
   <div class="kbar">
@@ -1065,38 +1107,7 @@ var KONU=[
 
 {k:"abiy",n:"Biyoloji",w:"AYT 13 soru",sinav:"AYT",src:"MEB · Biyoloji 11",tm:[
  {g:"11",n:"1. Tema: Tepki",t:["Sinir sistemi","Duyu organları","Endokrin sistem","Destek ve hareket sistemi"]},
- {g:"11",n:"2. Tema: Homeostazi",t:["Sindirim sistemi","Dolaşım sistemi","Bağışıklık","Solunum sistemi","Boşaltım sistemi"]}]},
-
-{k:"aede",n:"Edebiyat",w:"AYT 24 soru",sinav:"AYT",src:"MEB · Türk Dili ve Edebiyatı 11",tm:[
- {g:"11",n:"Bir Diyeceğim Var!",t:["Hikâye: dönem ve yapı","Şiir: Tanzimat ve Servetifünun"]},
- {g:"11",n:"Kültür Yolculuğu",t:["Roman","Tiyatro"]},
- {g:"11",n:"Yaşamın İzinde",t:["Biyografi ve otobiyografi","Deneme","Gezi yazısı"]},
- {g:"11",n:"Hayatın Aynası",t:["Edebî akımlar","Dönem ve topluluk özellikleri","Metin karşılaştırma"]}]},
-
-{k:"atar",n:"Tarih",w:"AYT Tarih-1 / -2",sinav:"AYT",src:"MEB · Tarih 11",tm:[
- {g:"11",n:"1. Ünite: Değişen Dünyada Osmanlı (1683–1789)",t:["Gerileme dönemi siyaseti","Islahat hareketleri","Avrupa'daki gelişmeler"]},
- {g:"11",n:"2. Ünite: Dönüşüm Sürecinde Osmanlı (1789–1908)",t:["III. Selim ve II. Mahmut","Tanzimat ve Islahat fermanları","I. ve II. Meşrutiyet"]},
- {g:"11",n:"3. Ünite: Savaşlar Sarmalında Osmanlı (1908–1918)",t:["Trablusgarp ve Balkan savaşları","I. Dünya Savaşı","Cepheler ve sonuçları"]}]},
-
-{k:"acog",n:"Coğrafya",w:"AYT Coğrafya-1 / -2",sinav:"AYT",src:"MEB · Coğrafya 11 (sarmal: aynı 7 ünite)",tm:[
- {g:"11",n:"1. Ünite: Coğrafyanın Doğası",t:["Coğrafi sorgulama ve analiz"]},
- {g:"11",n:"2. Ünite: Mekânsal Bilgi Teknolojileri",t:["CBS uygulamaları","Mekânsal veri analizi"]},
- {g:"11",n:"3. Ünite: Doğal Sistemler ve Süreçler",t:["Ekosistem ve biyoçeşitlilik","Su kaynakları yönetimi","Doğal sistemlerde değişim"]},
- {g:"11",n:"4. Ünite: Beşerî Sistemler ve Süreçler",t:["Nüfus politikaları","Şehirleşme ve etkileri","Kültür bölgeleri"]},
- {g:"11",n:"5. Ünite: Ekonomik Faaliyetler ve Etkileri",t:["Türkiye ekonomisi","Doğal kaynak ve enerji","Küresel ticaret"]},
- {g:"11",n:"6. Ünite: Afetler ve Sürdürülebilir Çevre",t:["Afet yönetimi","Çevre politikaları"]},
- {g:"11",n:"7. Ünite: Bölgeler, Ülkeler ve Küresel Bağlantılar",t:["Bölgesel kalkınma","Jeopolitik konum","Küresel örgütler"]}]},
-
-{k:"afel",n:"Felsefe",w:"AYT Felsefe grubu",sinav:"AYT",src:"MEB · Felsefe 11 — 6 ünite",tm:[
- {g:"11",n:"1. Ünite: Çevre Sorunları ve Felsefe",t:["Doğa – insan ilişkisi","Çevre etiği"]},
- {g:"11",n:"2. Ünite: Teknoloji ve Hayat",t:["Teknoloji felsefesi","Yapay zekâ ve etik"]},
- {g:"11",n:"3. Ünite: Akıl ve İnanç",t:["Akıl – inanç ilişkisi","Din felsefesi tartışmaları"]},
- {g:"11",n:"4. Ünite: Edebiyat ve Felsefe",t:["Edebî metinde felsefi sorun"]},
- {g:"11",n:"5. Ünite: Hayatın Anlamı",t:["Varoluş ve anlam","Mutluluk öğretileri"]},
- {g:"11",n:"6. Ünite: Hukuk ve Felsefe",t:["Adalet kavramı","Hukuk felsefesi"]}]},
-
-{k:"adin",n:"Din Kültürü",w:"AYT 6 soru",sinav:"AYT",src:"⚠ MEB sayfası çekilemedi — okul kitabından doğrula",tm:[
- {g:"11",n:"11. Sınıf Üniteleri",t:["Dünya ve ahiret","Kur'an'a göre Hz. Muhammed","Kur'an'dan mesajlar","İslam ve bilim","Anadolu'da İslam"]}]}
+ {g:"11",n:"2. Tema: Homeostazi",t:["Sindirim sistemi","Dolaşım sistemi","Bağışıklık","Solunum sistemi","Boşaltım sistemi"]}]}
 ];
 KONU.forEach(function(d){if(!d.sinav)d.sinav="TYT";});
 function eachKonu(fn){
@@ -1120,11 +1131,11 @@ function net(d,y){return (+d||0)-(+y||0)/4;}
 function clamp(v,a,b){return v<a?a:(v>b?b:v);}
 
 /* ---------- durum ---------- */
-var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0,sg:36000,kb:{}};
+var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0,sg:36000,kb:{},kt:[]};
 try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&typeof o==="object"){
   DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
   DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{};
-  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;DB.sg=+o.sg>0?+o.sg:36000;DB.kb=o.kb||{};}}}catch(e){}
+  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;DB.sg=+o.sg>0?+o.sg:36000;DB.kb=o.kb||{};DB.kt=Array.isArray(o.kt)?o.kt:[];}}}catch(e){}
 if(!(+DB.rc.total>0))DB.rc.total=8000;
 var pT=null,RDB=null,syncT=null,syncing=false,applying=false;
 function save(){
@@ -1672,6 +1683,49 @@ function kApply(){
 }
 
 /* ================== OKUMA ================== */
+/* ---------- kitaplık ---------- */
+function ktRender(){
+  var host=$("ktList");host.textContent="";
+  var bitti=DB.kt.filter(function(x){return x.b;});
+  var sayfa=bitti.reduce(function(a,x){return a+(+x.sy||0);},0);
+  $("ktSub").textContent=DB.kt.length
+    ? bitti.length+" / "+DB.kt.length+" kitap bitti"+(sayfa?"  ·  "+tn(sayfa)+" sayfa":"")
+    : "";
+  if(!DB.kt.length){
+    var e=document.createElement("p");e.className="empty";e.style.padding="30px 10px";
+    e.textContent="Henüz kitap eklemedin. Okuduğun kitabı yukarıdan ekle.";
+    host.appendChild(e);return;
+  }
+  /* bitmeyenler üstte, bitenler altta */
+  var sirali=DB.kt.slice().sort(function(a,b){return (a.b?1:0)-(b.b?1:0);});
+  sirali.forEach(function(k){
+    var row=document.createElement("div");row.className="ktrow"+(k.b?" bitti":"");
+    var ck=document.createElement("button");ck.type="button";ck.className="ck";
+    ck.setAttribute("aria-pressed",k.b?"true":"false");ck.title="Bitti olarak işaretle";
+    ck.onclick=function(){
+      k.b=k.b?0:1;
+      if(k.b)k.t=iso(new Date());else delete k.t;
+      ktRender();save();
+    };
+    var ad=document.createElement("span");ad.className="ad";ad.textContent=k.ad;
+    row.appendChild(ck);row.appendChild(ad);
+    if(k.sy){var sy=document.createElement("span");sy.className="sy";sy.textContent=k.sy+" syf";row.appendChild(sy);}
+    if(k.b&&k.t){var d=parse(k.t);var tr=document.createElement("span");tr.className="tar";
+      tr.textContent=d.getDate()+" "+AYK[d.getMonth()];row.appendChild(tr);}
+    var rm=document.createElement("button");rm.type="button";rm.className="rm";
+    rm.textContent="Sil";rm.title="Kitabı listeden çıkar";
+    rm.onclick=function(){
+      DB.kt=DB.kt.filter(function(x){return x.i!==k.i;});ktRender();save();
+    };
+    row.appendChild(rm);host.appendChild(row);
+  });
+}
+$("ktForm").onsubmit=function(e){
+  e.preventDefault();
+  var ad=$("ktAd").value.trim();if(!ad)return;
+  DB.kt.push({i:Date.now(),ad:ad,sy:Math.max(0,Math.round(+$("ktSy").value)||0),b:0});
+  $("ktAd").value="";$("ktSy").value="";ktRender();save();
+};
 var rF=null,rD=null;
 function rTot(){return Math.max(1,Math.round(+DB.rc.total)||8000);}
 function rSum(a,b){var s=0;for(var k in DB.r){var t=utc(parse(k));
@@ -1722,7 +1776,7 @@ function rRefresh(){
     nd.className="bneed";nd.innerHTML=s.avg?"ortalaman <b>"+tn(s.avg)+"</b> sayfa/gün":"";
     hn.textContent=s.left===0?"Hedef tamamlandı.":"Bir bitirme tarihi seçersen günde kaç sayfa okuman gerektiğini hesaplarım.";
   }
-  rChart(s);head();
+  rChart(s);ktRender();head();
 }
 function rChart(s){
   s=s||rStats();
@@ -2014,6 +2068,8 @@ $("file").onchange=function(){
       if(o.st)for(var e3 in o.st)DB.st[e3]=o.st[e3];
       if(+o.sg>0)DB.sg=+o.sg;
       if(o.kb)for(var e4 in o.kb)DB.kb[e4]=o.kb[e4];
+      if(Array.isArray(o.kt)){var vr={};DB.kt.forEach(function(x){vr[x.i]=1;});
+        o.kt.forEach(function(x){if(!vr[x.i])DB.kt.push(x);});}
       if(o.rc&&typeof o.rc==="object"){if(+o.rc.total>0)DB.rc.total=+o.rc.total;if(o.rc.target)DB.rc.target=o.rc.target;}
       save();buildKonu();qRefresh();dRefresh();rRefresh();
     }catch(e){alert("Dosya okunamadı — geçerli bir yedek dosyası seç.");}
@@ -2095,7 +2151,7 @@ $("bld").textContent=window.BUILD||"yerel kopya";
         applying=true;
         DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
         DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{total:8000};
-        DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||DB.bk;DB.sg=+o.sg>0?+o.sg:DB.sg;DB.kb=o.kb||{};
+        DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||DB.bk;DB.sg=+o.sg>0?+o.sg:DB.sg;DB.kb=o.kb||{};DB.kt=Array.isArray(o.kt)?o.kt:DB.kt;
         if(!(+DB.rc.total>0))DB.rc.total=8000;
         try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}
         redrawAll();
@@ -2108,7 +2164,7 @@ $("bld").textContent=window.BUILD||"yerel kopya";
 })();
 </script>
 <script>
-window.BUILD="2026-10-03 · 572f546";
+window.BUILD="2026-10-03 · de0b114";
 try{document.getElementById("bld").textContent=window.BUILD;}catch(e){}
 if("serviceWorker" in navigator){
   var swReg=null,swReloaded=false;
