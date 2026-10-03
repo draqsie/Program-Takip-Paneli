@@ -485,6 +485,34 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 @media (hover:none),(pointer:coarse){.tdrow .rm{padding:9px 12px;font-size:14px;border-color:var(--hair)}}
 
 /* ============ KRONOMETRE ============ */
+
+/* ---- elle sure girisi ---- */
+.stadd{display:grid;grid-template-columns:repeat(auto-fit,minmax(214px,1fr));gap:14px;
+  padding:14px 16px;margin-bottom:17px;background:var(--panel-2);border:1px solid var(--hair);border-radius:11px}
+.scell{min-width:0;display:flex;flex-direction:column;gap:7px}
+.scell .sv{font-family:var(--fm);font-size:25px;font-weight:700;line-height:1;letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.scell .sv em{font-style:normal;font-size:12px;font-weight:400;color:var(--faint);letter-spacing:0}
+.sbar{height:6px;background:var(--sunk);border:1px solid var(--hair);border-radius:99px;overflow:hidden}
+.sbar i{display:block;height:4px;width:0;background:var(--s5);border-radius:99px;transition:width .4s}
+.sbar i.full{background:var(--ok)}
+.shint{font-size:11.5px;color:var(--faint);line-height:1.45}
+.sin{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.sin input{width:62px;background:var(--panel);border:1px solid var(--hair);border-radius:8px;padding:8px 6px;
+  font-family:var(--fm);font-size:16px;text-align:center;font-variant-numeric:tabular-nums}
+.sin input:focus{border-color:var(--brand);outline:none}
+.sin span{font-family:var(--fm);font-size:11.5px;color:var(--dim)}
+.sin .btn{padding:8px 17px;font-size:13.5px;margin-left:2px}
+.squick{display:flex;gap:5px;flex-wrap:wrap}
+.squick .chip{font-size:11px;padding:5px 10px}
+.squick #stClear{margin-left:auto;color:var(--faint)}
+.squick #stClear:hover{border-color:var(--bad);color:var(--bad)}
+@media (hover:none),(pointer:coarse){.squick .chip{padding:9px 13px;font-size:12px}}
+
+/* ---- kronometre hedef cubugu ---- */
+.tmr .tgoal{height:4px;background:var(--sunk);margin:0 14px 12px;border-radius:99px;overflow:hidden}
+.tmr .tgoal i{display:block;height:4px;width:0;background:var(--s5);border-radius:99px;transition:width .4s}
+.tmr .tgoal i.full{background:var(--ok)}
 .tmr{position:fixed;z-index:60;font-family:var(--fm);
   right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom))}
 .tmr .pill{display:flex;align-items:center;gap:10px;background:var(--hero);color:var(--hero-ink);
@@ -594,6 +622,8 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
         <span class="meter"><i id="gNetBar"></i></span></div>
       <div class="gauge"><p class="lbl">Kalan sayfa</p><p class="v" id="gBook">—</p>
         <span class="meter"><i id="gBookBar" style="background:var(--s4)"></i></span></div>
+      <div class="gauge"><p class="lbl">Bugün çalışma</p><p class="v" id="gStudy">0dk</p>
+        <span class="meter"><i id="gStudyBar" style="background:var(--s5)"></i></span></div>
     </div>
   </div>
   <div class="traj">
@@ -667,10 +697,38 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   </section>
 
   <section class="panel">
-    <div class="phead"><h3>Çalışma Süresi</h3><span class="sub">son 14 gün · kronometreden gelir</span>
+    <div class="phead"><h3>Çalışma Süresi</h3><span class="sub">kronometre + elle giriş</span>
       <div class="right"><span class="sub" id="stSum"></span></div>
     </div>
     <div class="pbody">
+      <div class="stadd">
+        <div class="scell">
+          <p class="lbl">Seçili gün</p>
+          <p class="sv"><b id="stDayVal">0dk</b><em id="stDayGoal"></em></p>
+          <div class="sbar"><i id="stDayBar"></i></div>
+          <p class="shint" id="stDayHint"></p>
+        </div>
+        <div class="scell">
+          <p class="lbl">Elle süre ekle</p>
+          <div class="sin">
+            <input type="number" id="stH" min="0" max="23" placeholder="0" inputmode="numeric"><span>sa</span>
+            <input type="number" id="stM" min="0" max="59" placeholder="0" inputmode="numeric"><span>dk</span>
+            <button class="btn" id="stAdd" type="button">Ekle</button>
+          </div>
+          <div class="squick" id="stQuick">
+            <button class="chip" data-m="30" type="button">+30dk</button>
+            <button class="chip" data-m="60" type="button">+1sa</button>
+            <button class="chip" data-m="120" type="button">+2sa</button>
+            <button class="chip" data-m="-30" type="button">&minus;30dk</button>
+            <button class="chip" id="stClear" type="button">Günü sıfırla</button>
+          </div>
+        </div>
+        <div class="scell">
+          <p class="lbl">Günlük hedef</p>
+          <div class="sin"><input type="number" id="stGoal" min="1" max="24" step="0.5" inputmode="decimal"><span>saat</span></div>
+          <p class="shint">Kronometre bu toplamın üzerine saymaya devam eder.</p>
+        </div>
+      </div>
       <div class="cbox" id="stBox"><canvas id="stCan"></canvas><div class="tip" id="stTip"></div></div>
       <div class="key" id="stKey"></div>
     </div>
@@ -831,6 +889,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
       <button class="btn" id="tmrGo" type="button">Başlat</button>
       <button class="btn q" id="tmrRst" type="button">Sıfırla</button>
     </div>
+    <div class="tgoal"><i id="tmrGoalBar"></i></div>
     <div class="tf">
       <div><span>Bugün</span><b id="tmrDay">0dk</b></div>
       <div><span>Bu hafta</span><b id="tmrWeek">0dk</b></div>
@@ -983,11 +1042,11 @@ function net(d,y){return (+d||0)-(+y||0)/4;}
 function clamp(v,a,b){return v<a?a:(v>b?b:v);}
 
 /* ---------- durum ---------- */
-var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0};
+var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0,sg:36000};
 try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&typeof o==="object"){
   DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
   DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{};
-  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;}}}catch(e){}
+  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;DB.sg=+o.sg>0?+o.sg:36000;}}}catch(e){}
 if(!(+DB.rc.total>0))DB.rc.total=8000;
 var pT=null,RDB=null,syncT=null,syncing=false,applying=false;
 function save(){
@@ -1005,7 +1064,7 @@ function push(){
       .catch(function(){}).then(function(){syncing=false;});
   },700);
 }
-function redrawAll(){buildKonu();qRefresh();dRefresh();rRefresh();tPaint();stChart();}
+function redrawAll(){buildKonu();qRefresh();dRefresh();rRefresh();tPaint();stPaint();}
 
 /* ================== GRAFİK MOTORU ================== */
 function setup(cv){
@@ -1249,7 +1308,7 @@ function qRefresh(){
   var pct=Math.round(wk.t/HW_TOPLAM*100);
   $("tGoal").textContent=pct+"%";
   $("tGoalBox").className="tile "+(pct>=100?"ok":pct>=70?"warn":"bad");
-  tdRender();qChart();qTable();stChart();head();
+  tdRender();qChart();qTable();stPaint();head();
 }
 function qAgg(mode){
   var labels=[],keys=[],now=new Date();
@@ -1654,9 +1713,13 @@ function tPaint(){
   $("pillT").textContent=T.run||T.acc?hms(e):hm(+DB.st[iso(new Date())]||0);
   $("tmrPill").classList.toggle("run",T.run);
   $("tmrGo").textContent=T.run?"Duraklat":"Başlat";
-  $("tmrDay").textContent=hm(+DB.st[iso(new Date())]||0);
+  var bugun=+DB.st[iso(new Date())]||0;
+  $("tmrDay").textContent=hm(bugun);
   var m=monday(new Date());
   $("tmrWeek").textContent=hm(stSum(utc(m),utc(m)+6*864e5));
+  var gp=clamp(bugun/DB.sg*100,0,100);
+  $("tmrGoalBar").style.width=gp+"%";
+  $("tmrGoalBar").className=gp>=100?"full":"";
 }
 function tTick(){
   if(T.run){
@@ -1666,6 +1729,24 @@ function tTick(){
   tPaint();
 }
 setInterval(tTick,500);
+$("stAdd").onclick=function(){
+  var h=Math.max(0,+$("stH").value||0),m=Math.max(0,+$("stM").value||0);
+  if(!h&&!m)return;
+  stEkle(h*3600+m*60);$("stH").value="";$("stM").value="";
+};
+$("stQuick").onclick=function(e){
+  var b=e.target.closest(".chip");if(!b||b.id==="stClear")return;
+  stEkle((+b.dataset.m||0)*60);
+};
+$("stClear").onclick=function(){
+  if(!(+DB.st[iso(qCur)]))return;
+  if(!confirm("Bu günün çalışma süresi sıfırlansın mı?"))return;
+  delete DB.st[iso(qCur)];save();stPaint();head();
+};
+$("stGoal").onchange=function(){
+  var sa=+this.value;if(!(sa>0&&sa<=24)){this.value=Math.round(DB.sg/360)/10;return;}
+  DB.sg=Math.round(sa*3600);save();stPaint();tPaint();head();
+};
 $("tmrPill").onclick=function(){$("tmr").classList.add("open");};
 $("tmrClose").onclick=function(){$("tmr").classList.remove("open");};
 $("tmrGo").onclick=function(){
@@ -1682,20 +1763,43 @@ $("tmrRst").onclick=function(){
   T.run=false;T.acc=0;T.from=0;tSave();save();tPaint();
 };
 
-/* ---------- çalışma süresi grafiği ---------- */
+/* ---------- çalışma süresi: elle giriş, hedef ve grafik ---------- */
 var stF=null,stD=null;
+function stEkle(sn){
+  var k=iso(qCur),v=(+DB.st[k]||0)+sn;
+  if(v<=0)delete DB.st[k];else DB.st[k]=v;
+  save();stPaint();head();
+}
+function stPaint(){
+  var k=iso(qCur),v=+DB.st[k]||0,hedefSa=DB.sg/3600;
+  $("stDayVal").textContent=hm(v);
+  $("stDayGoal").textContent=GUN[qCur.getDay()]+" "+qCur.getDate()+" "+AY[qCur.getMonth()]+
+    " · hedef "+(Math.round(hedefSa*10)/10).toString().replace(".",",")+" sa";
+  var p=clamp(v/DB.sg*100,0,100);
+  $("stDayBar").style.width=p+"%";
+  $("stDayBar").className=p>=100?"full":"";
+  var kalan=DB.sg-v;
+  $("stDayHint").textContent=kalan<=0
+    ? "Günlük hedef tamamlandı."
+    : "Hedefe "+hm(kalan)+" kaldı.";
+  if(document.activeElement!==$("stGoal"))$("stGoal").value=Math.round(hedefSa*10)/10;
+  stChart();
+}
 function stChart(){
   var labels=[],data=[];
   for(var i=13;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);
     labels.push(d.getDate()+" "+AYK[d.getMonth()]);
     data.push(Math.round((+DB.st[iso(d)]||0)/60));}
-  stD={labels:labels,series:[{n:"Çalışma (dk)",c:"--s5",data:data}]};
+  var hedefDk=Math.round(DB.sg/60);
+  stD={labels:labels,series:[{n:"Çalışma (dk)",c:"--s5",data:data}],
+    targets:[{v:hedefDk,n:"günlük hedef · "+hm(DB.sg),c:"--brand"}]};
   var res=bars($("stCan"),stD);stF=res?res.f:null;
   var K=$("stKey");K.textContent="";
-  var e=document.createElement("span");e.innerHTML='<i style="background:var(--s5)"></i>Günlük çalışma süresi (dakika)';
-  K.appendChild(e);
-  if(!data.some(function(x){return x>0;})){var e2=document.createElement("span");
-    e2.innerHTML="<em>Kronometreyi çalıştırdıkça dolar.</em>";K.appendChild(e2);}
+  var e=document.createElement("span");
+  e.innerHTML='<i style="background:var(--s5)"></i>Günlük çalışma süresi (dakika)';K.appendChild(e);
+  var tutan=data.filter(function(x){return x>=hedefDk;}).length;
+  var e2=document.createElement("span");
+  e2.innerHTML='<em>Son 14 günde hedefi tutturduğun gün: <b>'+tutan+'</b></em>';K.appendChild(e2);
   var tot=stSum(),days=Object.keys(DB.st).length;
   $("stSum").textContent=days?("toplam "+hm(tot)+" · günlük ort. "+hm(tot/days)):"";
 }
@@ -1724,6 +1828,9 @@ function head(){
     $("gNetBar").style.width=clamp(t/HEDEF_NET*100,0,100)+"%";
     $("gNetBar").className=t>=HEDEF_NET?"":t>=HEDEF_NET*.75?"w":"b";
   }else{$("gNet").textContent="—";$("gNetBar").style.width="0";}
+  var bg=+DB.st[iso(new Date())]||0,gp=clamp(bg/DB.sg*100,0,100);
+  $("gStudy").textContent=hm(bg);
+  $("gStudyBar").style.width=gp+"%";
   var rs=rStats();
   $("gBook").innerHTML=tn(rs.left)+'<small> syf</small>';
   $("gBookBar").style.width=clamp(rs.read/rs.tot*100,0,100)+"%";
@@ -1794,6 +1901,7 @@ $("file").onchange=function(){
       if(o.r)for(var c in o.r)DB.r[c]=o.r[c];
       if(o.t)for(var e1 in o.t)DB.t[e1]=o.t[e1];
       if(o.st)for(var e3 in o.st)DB.st[e3]=o.st[e3];
+      if(+o.sg>0)DB.sg=+o.sg;
       if(o.rc&&typeof o.rc==="object"){if(+o.rc.total>0)DB.rc.total=+o.rc.total;if(o.rc.target)DB.rc.target=o.rc.target;}
       save();buildKonu();qRefresh();dRefresh();rRefresh();
     }catch(e){alert("Dosya okunamadı — geçerli bir yedek dosyası seç.");}
@@ -1875,7 +1983,7 @@ $("bld").textContent=window.BUILD||"yerel kopya";
         applying=true;
         DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
         DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{total:8000};
-        DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||DB.bk;
+        DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||DB.bk;DB.sg=+o.sg>0?+o.sg:DB.sg;
         if(!(+DB.rc.total>0))DB.rc.total=8000;
         try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}
         redrawAll();
@@ -1888,7 +1996,7 @@ $("bld").textContent=window.BUILD||"yerel kopya";
 })();
 </script>
 <script>
-window.BUILD="2026-09-27 · ec74fa0";
+window.BUILD="2026-10-03 · fb44267";
 try{document.getElementById("bld").textContent=window.BUILD;}catch(e){}
 if("serviceWorker" in navigator){
   var swReg=null,swReloaded=false;
