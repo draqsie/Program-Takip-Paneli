@@ -73,10 +73,10 @@ button,.ki,.ders>header,.chip,.seg button{touch-action:manipulation}
   .chip{padding:10px 15px;font-size:12.5px}
   .gh{padding:10px 14px;font-size:12.5px}
   .seg button{padding:10px 17px;font-size:14px}
-  .ki{padding:13px 18px}
-  .ki .mk{width:20px;height:20px;margin-top:1px}
-  .ki .mk::after{left:4px;top:5.5px;width:8px;height:4px}
-  .ki .tx{font-size:14px}
+  .kim{padding:13px 10px 13px 18px}
+  .kim .mk{width:20px;height:20px;margin-top:1px}
+  .kim .mk::after{left:4px;top:5.5px;width:8px;height:4px}
+  .kim .tx{font-size:14px}
   .xbtn{padding:8px 14px;font-size:12px}
   .btn{padding:13px 26px}
   .ders>header{padding:16px 18px}
@@ -84,7 +84,7 @@ button,.ki,.ders>header,.chip,.seg button{touch-action:manipulation}
   td,th{padding:12px 14px}
   tbody tr:hover td{background:transparent}
   .ki:hover{background:none}
-  .ki:active{background:var(--panel-2)}
+  .kim:active{background:var(--panel-2)}
   .ders>header:active{background:var(--panel-2)}
   .cbox canvas{cursor:default}
 }
@@ -381,21 +381,40 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 .tema .gr.g9{color:var(--s4);border-color:color-mix(in srgb,var(--s4) 45%,transparent);background:color-mix(in srgb,var(--s4) 10%,transparent)}
 .tema .gr.g10{color:var(--s5);border-color:color-mix(in srgb,var(--s5) 45%,transparent);background:color-mix(in srgb,var(--s5) 10%,transparent)}
 .klist{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
-.ki{display:flex;align-items:flex-start;gap:11px;padding:9px 18px;border-bottom:1px solid var(--hair);
-  border-right:1px solid var(--hair);cursor:pointer;background:none;border-top:0;border-left:0;text-align:left;
-  width:100%;font:inherit;color:inherit;transition:background .12s}
+/* ---- konu satiri: ana dugme + soru bankasi sayaci ---- */
+.ki{display:flex;align-items:stretch;gap:0;border-bottom:1px solid var(--hair);
+  border-right:1px solid var(--hair);background:none;padding:0;width:100%}
 .ki:hover{background:var(--panel-2)}
-.ki .mk{width:16px;height:16px;border:1.5px solid var(--hair-2);border-radius:5px;flex:0 0 auto;margin-top:3px;
+.kim{flex:1;min-width:0;display:flex;align-items:flex-start;gap:11px;padding:9px 10px 9px 18px;
+  background:none;border:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.kib{flex:0 0 auto;display:flex;align-items:center;gap:3px;padding:0 14px 0 6px;
+  background:none;border:0;cursor:pointer}
+.kib i{width:7px;height:7px;border-radius:2px;background:var(--hair);
+  border:1px solid var(--hair-2);display:block;transition:background .15s}
+.kib[data-n="1"] i:nth-child(1),
+.kib[data-n="2"] i:nth-child(-n+2),
+.kib[data-n="3"] i{background:var(--s3);border-color:var(--s3)}
+.kib:hover i{border-color:var(--s3)}
+@media (hover:none),(pointer:coarse){
+  .kib{padding:0 16px 0 8px}
+  .kib i{width:9px;height:9px}
+}
+/* ---- sinav rozeti ---- */
+.sv-tyt,.sv-ayt{font-family:var(--fm);font-size:8.5px;font-weight:700;letter-spacing:.1em;
+  padding:3px 7px;border-radius:5px;flex:0 0 auto}
+.sv-tyt{color:var(--brand-ink);background:var(--brand-wash)}
+.sv-ayt{color:var(--s5);background:color-mix(in srgb,var(--s5) 14%,transparent)}
+.kim .mk{width:16px;height:16px;border:1.5px solid var(--hair-2);border-radius:5px;flex:0 0 auto;margin-top:3px;
   position:relative;background:var(--panel);transition:all .15s}
-.ki .mk::after{content:"";position:absolute;left:3px;top:4px;width:7px;height:3.5px;
+.kim .mk::after{content:"";position:absolute;left:3px;top:4px;width:7px;height:3.5px;
   border-left:2px solid var(--panel);border-bottom:2px solid var(--panel);transform:rotate(-45deg);opacity:0}
-:root[data-theme="dark"] .ki .mk::after,:root:not([data-theme="light"]) .ki .mk::after{border-color:#06110C}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .ki .mk::after{border-color:#fff}}
-.ki .tx{font-size:13px;line-height:1.45}
-.ki[data-s="1"] .mk{background:linear-gradient(135deg,var(--warn) 50%,transparent 50%);border-color:var(--warn)}
-.ki[data-s="2"] .mk{background:var(--brand);border-color:var(--brand)}
-.ki[data-s="2"] .mk::after{opacity:1}
-.ki[data-s="2"] .tx{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--hair-2)}
+:root[data-theme="dark"] .ki .mk::after,:root:not([data-theme="light"]) .kim .mk::after{border-color:#06110C}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .kim .mk::after{border-color:#fff}}
+.kim .tx{font-size:13px;line-height:1.45}
+.ki[data-s="1"] .kim .mk{background:linear-gradient(135deg,var(--warn) 50%,transparent 50%);border-color:var(--warn)}
+.ki[data-s="2"] .kim .mk{background:var(--brand);border-color:var(--brand)}
+.ki[data-s="2"] .kim .mk::after{opacity:1}
+.ki[data-s="2"] .kim .tx{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--hair-2)}
 .srcline{font-family:var(--fm);font-size:10px;letter-spacing:.03em;color:var(--faint);padding:9px 18px;
   background:var(--panel-2);border-top:1px solid var(--hair);margin:0}
 .srcline.w{color:var(--warn)}
@@ -842,9 +861,15 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
     <div>
       <p><b>Bu liste neye dayanıyor?</b> Tema ve ünite adları <b>MEB Türkiye Yüzyılı Maarif Modeli 9 ve 10. sınıf öğretim programlarından</b> alındı (<a href="https://tymm.meb.gov.tr/ogretim-programlari" target="_blank" rel="noopener">tymm.meb.gov.tr</a>). Altlarındaki satırlar o temanın TYT'deki karşılığıdır &mdash; çalışma amaçlı eşleme, MEB'in resmî alt başlıkları değil.</p>
       <p><b>ÖSYM henüz resmî 2028 TYT kapsamını açıklamadı.</b> Sen 2024-25'te 9. sınıfa başlayan ilk Maarif kuşağısın; TYT'n 9 ve 10. sınıf Maarif müfredatından gelecek. Kesin dağılım açıklandığında bu listeyi karşılaştır. Din Kültürü üniteleri MEB sayfasından çekilemedi &mdash; okul kitabından doğrula.</p>
+      <p><b>AYT bölümü 11. sınıf Maarif programlarından</b> alındı. Sen 11. sınıftayken hem okul konunu hem AYT karşılığını buradan takip edebilir, aynı anda TYT listesine bakabilirsin. AYT alt başlıkları da aynı şekilde çalışma amaçlı eşlemedir.</p>
     </div>
   </div>
   <div class="kbar">
+    <div class="chips" id="kSinav">
+      <button class="chip" data-s="hepsi" aria-pressed="true" type="button">Tümü</button>
+      <button class="chip" data-s="TYT" aria-pressed="false" type="button">TYT · 9–10</button>
+      <button class="chip" data-s="AYT" aria-pressed="false" type="button">AYT · 11</button>
+    </div>
     <span class="num" id="kNum">—</span>
     <span class="track"><i id="kTrackH" class="h"></i><i id="kTrack"></i></span>
     <div class="klegend">
@@ -853,7 +878,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
     <button class="chip" id="kFilter" aria-pressed="false">Sadece bitmeyenler</button>
   </div>
   <div id="kWrap"></div>
-  <p class="pfoot" style="border:1px solid var(--hair);border-radius:11px;margin-top:4px">Konuya bir kez tıkla &rarr; <b>yarım</b> (çalıştın, eksik var). İki kez &rarr; <b>bitti</b>. Üç kez &rarr; sıfırlanır. Müfredat yüzdesi yarımları 0,5 sayar.</p>
+  <p class="pfoot" style="border:1px solid var(--hair);border-radius:11px;margin-top:4px">Konuya bir kez tıkla &rarr; <b>yarım</b> (çalıştın, eksik var). İki kez &rarr; <b>bitti</b>. Üç kez &rarr; sıfırlanır. Müfredat yüzdesi yarımları 0,5 sayar. Sağdaki <b>üç kutucuk</b> o konuyu kaç soru bankasından bitirdiğini tutar — üstüne dokundukça artar.</p>
 </div>
 
   <p class="build">sürüm <span id="bld">yerel kopya</span></p>
@@ -1019,8 +1044,61 @@ var KONU=[
 
 {k:"din",n:"Din Kültürü",w:"~5 soru",src:"⚠ MEB sayfası çekilemedi — okul kitabından doğrula",tm:[
  {g:"9",n:"9. Sınıf Üniteleri",t:["Bilgi ve inanç","Din ve İslam","İslam ve ibadet","Gençlik ve değerler","Gönül coğrafyamız"]},
- {g:"10",n:"10. Sınıf Üniteleri",t:["Allah – insan ilişkisi","Hz. Muhammed ve gençlik","Din ve hayat","Ahlaki tutum ve davranışlar","İslam düşüncesinde itikadi ve fıkhi yorumlar"]}]}
+ {g:"10",n:"10. Sınıf Üniteleri",t:["Allah – insan ilişkisi","Hz. Muhammed ve gençlik","Din ve hayat","Ahlaki tutum ve davranışlar","İslam düşüncesinde itikadi ve fıkhi yorumlar"]}]},
+/* ---------- AYT · 11. sınıf (Maarif) ---------- */
+{k:"amat",n:"Matematik",w:"AYT 40 soru",sinav:"AYT",src:"MEB · Matematik 11",tm:[
+ {g:"11",n:"Nicelikler ve Değişimler (1)",t:["Birim çember","Trigonometrik fonksiyonlar","Toplam – fark formülleri","Trigonometrik denklemler"]},
+ {g:"11",n:"Nicelikler ve Değişimler (2)",t:["Üstel fonksiyon","Logaritma fonksiyonu","Logaritmik denklem ve eşitsizlikler"]},
+ {g:"11",n:"Nicelikler ve Değişimler (3)",t:["Diziler","Limit kavramı","Türeve giriş"]},
+ {g:"11",n:"Geometrik Şekiller",t:["Çemberde açı ve uzunluk (ileri)","Çemberin analitiği","Katı cisimlerde hacim ve alan","Uzay geometri"]},
+ {g:"11",n:"İstatistiksel Araştırma Süreci",t:["Örnekleme yöntemleri","Güven aralığı","İstatistiksel çıkarım"]}]},
+
+{k:"afiz",n:"Fizik",w:"AYT 14 soru",sinav:"AYT",src:"MEB · Fizik 11",tm:[
+ {g:"11",n:"1. Ünite: Kuvvet ve Hareket",t:["Vektörler","Bağıl hareket","Newton yasalarının uygulamaları","Tork ve denge","Açısal momentum","Basit makineler"]},
+ {g:"11",n:"2. Ünite: Elektrik ve Manyetizma",t:["Elektriksel kuvvet ve alan","Elektriksel potansiyel","Kondansatörler","Manyetik alan","İndüksiyon","Alternatif akım"]},
+ {g:"11",n:"3. Ünite: Optik",t:["Işığın yansıması","Işığın kırılması","Aynalar","Mercekler","Prizma ve renk"]}]},
+
+{k:"akim",n:"Kimya",w:"AYT 13 soru",sinav:"AYT",src:"MEB · Kimya 11 (sarmal: 3 tema)",tm:[
+ {g:"11",n:"1. Tema: Etkileşim",t:["Modern atom teorisi","Kimyasal tepkimelerde hız","Kimyasal denge"]},
+ {g:"11",n:"2. Tema: Çeşitlilik",t:["Asit – baz dengesi","Çözünürlük dengesi","Gazlar (ileri)"]},
+ {g:"11",n:"3. Tema: Sürdürülebilirlik",t:["Kimya ve enerji","Elektrokimya","Organik kimyaya giriş"]}]},
+
+{k:"abiy",n:"Biyoloji",w:"AYT 13 soru",sinav:"AYT",src:"MEB · Biyoloji 11",tm:[
+ {g:"11",n:"1. Tema: Tepki",t:["Sinir sistemi","Duyu organları","Endokrin sistem","Destek ve hareket sistemi"]},
+ {g:"11",n:"2. Tema: Homeostazi",t:["Sindirim sistemi","Dolaşım sistemi","Bağışıklık","Solunum sistemi","Boşaltım sistemi"]}]},
+
+{k:"aede",n:"Edebiyat",w:"AYT 24 soru",sinav:"AYT",src:"MEB · Türk Dili ve Edebiyatı 11",tm:[
+ {g:"11",n:"Bir Diyeceğim Var!",t:["Hikâye: dönem ve yapı","Şiir: Tanzimat ve Servetifünun"]},
+ {g:"11",n:"Kültür Yolculuğu",t:["Roman","Tiyatro"]},
+ {g:"11",n:"Yaşamın İzinde",t:["Biyografi ve otobiyografi","Deneme","Gezi yazısı"]},
+ {g:"11",n:"Hayatın Aynası",t:["Edebî akımlar","Dönem ve topluluk özellikleri","Metin karşılaştırma"]}]},
+
+{k:"atar",n:"Tarih",w:"AYT Tarih-1 / -2",sinav:"AYT",src:"MEB · Tarih 11",tm:[
+ {g:"11",n:"1. Ünite: Değişen Dünyada Osmanlı (1683–1789)",t:["Gerileme dönemi siyaseti","Islahat hareketleri","Avrupa'daki gelişmeler"]},
+ {g:"11",n:"2. Ünite: Dönüşüm Sürecinde Osmanlı (1789–1908)",t:["III. Selim ve II. Mahmut","Tanzimat ve Islahat fermanları","I. ve II. Meşrutiyet"]},
+ {g:"11",n:"3. Ünite: Savaşlar Sarmalında Osmanlı (1908–1918)",t:["Trablusgarp ve Balkan savaşları","I. Dünya Savaşı","Cepheler ve sonuçları"]}]},
+
+{k:"acog",n:"Coğrafya",w:"AYT Coğrafya-1 / -2",sinav:"AYT",src:"MEB · Coğrafya 11 (sarmal: aynı 7 ünite)",tm:[
+ {g:"11",n:"1. Ünite: Coğrafyanın Doğası",t:["Coğrafi sorgulama ve analiz"]},
+ {g:"11",n:"2. Ünite: Mekânsal Bilgi Teknolojileri",t:["CBS uygulamaları","Mekânsal veri analizi"]},
+ {g:"11",n:"3. Ünite: Doğal Sistemler ve Süreçler",t:["Ekosistem ve biyoçeşitlilik","Su kaynakları yönetimi","Doğal sistemlerde değişim"]},
+ {g:"11",n:"4. Ünite: Beşerî Sistemler ve Süreçler",t:["Nüfus politikaları","Şehirleşme ve etkileri","Kültür bölgeleri"]},
+ {g:"11",n:"5. Ünite: Ekonomik Faaliyetler ve Etkileri",t:["Türkiye ekonomisi","Doğal kaynak ve enerji","Küresel ticaret"]},
+ {g:"11",n:"6. Ünite: Afetler ve Sürdürülebilir Çevre",t:["Afet yönetimi","Çevre politikaları"]},
+ {g:"11",n:"7. Ünite: Bölgeler, Ülkeler ve Küresel Bağlantılar",t:["Bölgesel kalkınma","Jeopolitik konum","Küresel örgütler"]}]},
+
+{k:"afel",n:"Felsefe",w:"AYT Felsefe grubu",sinav:"AYT",src:"MEB · Felsefe 11 — 6 ünite",tm:[
+ {g:"11",n:"1. Ünite: Çevre Sorunları ve Felsefe",t:["Doğa – insan ilişkisi","Çevre etiği"]},
+ {g:"11",n:"2. Ünite: Teknoloji ve Hayat",t:["Teknoloji felsefesi","Yapay zekâ ve etik"]},
+ {g:"11",n:"3. Ünite: Akıl ve İnanç",t:["Akıl – inanç ilişkisi","Din felsefesi tartışmaları"]},
+ {g:"11",n:"4. Ünite: Edebiyat ve Felsefe",t:["Edebî metinde felsefi sorun"]},
+ {g:"11",n:"5. Ünite: Hayatın Anlamı",t:["Varoluş ve anlam","Mutluluk öğretileri"]},
+ {g:"11",n:"6. Ünite: Hukuk ve Felsefe",t:["Adalet kavramı","Hukuk felsefesi"]}]},
+
+{k:"adin",n:"Din Kültürü",w:"AYT 6 soru",sinav:"AYT",src:"⚠ MEB sayfası çekilemedi — okul kitabından doğrula",tm:[
+ {g:"11",n:"11. Sınıf Üniteleri",t:["Dünya ve ahiret","Kur'an'a göre Hz. Muhammed","Kur'an'dan mesajlar","İslam ve bilim","Anadolu'da İslam"]}]}
 ];
+KONU.forEach(function(d){if(!d.sinav)d.sinav="TYT";});
 function eachKonu(fn){
   KONU.forEach(function(d){d.tm.forEach(function(tm,ti){tm.t.forEach(function(nm,ki){
     fn(d,tm,ti,ki,d.k+"-"+ti+"-"+ki,nm);});});});
@@ -1042,11 +1120,11 @@ function net(d,y){return (+d||0)-(+y||0)/4;}
 function clamp(v,a,b){return v<a?a:(v>b?b:v);}
 
 /* ---------- durum ---------- */
-var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0,sg:36000};
+var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0,sg:36000,kb:{}};
 try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&typeof o==="object"){
   DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
   DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{};
-  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;DB.sg=+o.sg>0?+o.sg:36000;}}}catch(e){}
+  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;DB.sg=+o.sg>0?+o.sg:36000;DB.kb=o.kb||{};}}}catch(e){}
 if(!(+DB.rc.total>0))DB.rc.total=8000;
 var pT=null,RDB=null,syncT=null,syncing=false,applying=false;
 function save(){
@@ -1481,15 +1559,22 @@ hover($("dBox"),$("dTip"),function(){return dF;},function(i){
 });
 
 /* ================== KONU LİSTESİ ================== */
-var kOnly=false;
+var kOnly=false,kSinav="hepsi",KB_MAX=3;
 function kState(id){return DB.k[id]||0;}
-function kScore(){var s=0,done=0;
-  eachKonu(function(d,tm,ti,ki,id){var v=kState(id);s+=(v===2?1:v===1?.5:0);if(v===2)done++;});
-  return {s:s,done:done};}
-function dersCount(d){var done=0,half=0,tot=0;
+function kScore(){
+  var s=0,done=0,tot=0;
+  eachKonu(function(d,tm,ti,ki,id){
+    if(kSinav!=="hepsi"&&d.sinav!==kSinav)return;
+    tot++;var v=kState(id);s+=(v===2?1:v===1?.5:0);if(v===2)done++;
+  });
+  return {s:s,done:done,tot:tot||1};
+}
+function dersCount(d){var done=0,half=0,tot=0,bank=0;
   d.tm.forEach(function(tm,ti){tm.t.forEach(function(_,ki){tot++;
-    var v=kState(d.k+"-"+ti+"-"+ki);if(v===2)done++;else if(v===1)half++;});});
-  return {done:done,half:half,tot:tot};}
+    var id=d.k+"-"+ti+"-"+ki,v=kState(id);
+    if(v===2)done++;else if(v===1)half++;
+    bank+=+DB.kb[id]||0;});});
+  return {done:done,half:half,tot:tot,bank:bank};}
 function ring(id){
   return '<svg class="ring" id="'+id+'" width="30" height="30" viewBox="0 0 30 30">'+
     '<circle cx="15" cy="15" r="12" fill="none" stroke="var(--hair)" stroke-width="3"></circle>'+
@@ -1500,8 +1585,10 @@ function buildKonu(){
   var h=$("kWrap");h.textContent="";
   KONU.forEach(function(d){
     var sec=document.createElement("section");sec.className="ders open";
+    sec.dataset.sinav=d.sinav;
     var hd=document.createElement("header");
-    hd.innerHTML=ring("kr-"+d.k)+'<h4>'+d.n+'</h4><span class="wt">'+d.w+'</span>'+
+    hd.innerHTML=ring("kr-"+d.k)+'<span class="sv-'+d.sinav.toLowerCase()+'">'+d.sinav+'</span>'+
+      '<h4>'+d.n+'</h4><span class="wt">'+d.w+'</span>'+
       '<span class="cnt" id="kc-'+d.k+'"></span><span class="car">&#9662;</span>';
     var body=document.createElement("div");body.id="kl-"+d.k;
     hd.onclick=function(){sec.classList.toggle("open");body.classList.toggle("hide");};
@@ -1515,16 +1602,33 @@ function buildKonu(){
       var list=document.createElement("div");list.className="klist";list.dataset.tema=ti;
       tm.t.forEach(function(name,ki){
         var id=d.k+"-"+ti+"-"+ki;
-        var b=document.createElement("button");b.type="button";b.className="ki";
-        b.dataset.s=kState(id);b.dataset.id=id;
-        b.innerHTML='<span class="mk"></span><span class="tx"></span>';
-        b.querySelector(".tx").textContent=name;
-        b.onclick=function(){
+        var row=document.createElement("div");row.className="ki";
+        row.dataset.s=kState(id);row.dataset.id=id;
+
+        var ana=document.createElement("button");ana.type="button";ana.className="kim";
+        ana.innerHTML='<span class="mk"></span><span class="tx"></span>';
+        ana.querySelector(".tx").textContent=name;
+        ana.onclick=function(){
           var v=(kState(id)+1)%3;
           if(v)DB.k[id]=v;else delete DB.k[id];
-          b.dataset.s=v;kStats();save();if(kOnly)kApply();
+          row.dataset.s=v;kStats();save();if(kOnly)kApply();
         };
-        list.appendChild(b);
+
+        var bank=document.createElement("button");bank.type="button";bank.className="kib";
+        bank.innerHTML='<i></i><i></i><i></i>';
+        function bankCiz(){
+          var n=+DB.kb[id]||0;
+          bank.dataset.n=n;
+          bank.title=n?(n+" soru bankasından bitirdin"+(n>=KB_MAX?" (en fazla)":"")):"Kaç soru bankasından bitirdin?";
+        }
+        bank.onclick=function(){
+          var n=((+DB.kb[id]||0)+1)%(KB_MAX+1);
+          if(n)DB.kb[id]=n;else delete DB.kb[id];
+          bankCiz();kStats();save();
+        };
+        bankCiz();
+
+        row.appendChild(ana);row.appendChild(bank);list.appendChild(row);
       });
       body.appendChild(list);
     });
@@ -1537,20 +1641,22 @@ function buildKonu(){
 function kStats(){
   KONU.forEach(function(d){
     var c=dersCount(d);
-    $("kc-"+d.k).textContent=c.done+" / "+c.tot;
+    $("kc-"+d.k).textContent=c.done+" / "+c.tot+(c.bank?"  ·  "+c.bank+" bank.":"");
     var arc=$("kr-"+d.k).querySelector(".arc"),p=(c.done+c.half*.5)/c.tot,C=2*Math.PI*12;
     arc.setAttribute("stroke-dasharray",(p*C).toFixed(1)+" 999");
     arc.setAttribute("stroke",p>=1?"var(--ok)":(c.done?"var(--brand)":"var(--warn)"));
   });
-  var s=kScore();
-  $("kNum").innerHTML=s.done+'<small>/'+TOPLAM_KONU+'</small>';
-  $("kTrack").style.width=Math.round(s.done/TOPLAM_KONU*100)+"%";
-  $("kTrackH").style.width=Math.round(s.s/TOPLAM_KONU*100)+"%";
+  var sc=kScore();
+  $("kNum").innerHTML=sc.done+'<small>/'+sc.tot+'</small>';
+  $("kTrack").style.width=Math.round(sc.done/sc.tot*100)+"%";
+  $("kTrackH").style.width=Math.round(sc.s/sc.tot*100)+"%";
   head();
 }
 function kApply(){
   KONU.forEach(function(d){
-    var body=$("kl-"+d.k),any=false;
+    var body=$("kl-"+d.k),any=false,sec=body.parentNode;
+    if(kSinav!=="hepsi"&&d.sinav!==kSinav){sec.classList.add("hide");return;}
+    sec.classList.remove("hide");
     body.querySelectorAll(".klist").forEach(function(list){
       var vis=0;
       list.querySelectorAll(".ki").forEach(function(b){
@@ -1561,7 +1667,7 @@ function kApply(){
       if(th)th.classList.toggle("hide",!vis);
       if(vis)any=true;
     });
-    body.parentNode.classList.toggle("hide",!any&&kOnly);
+    sec.classList.toggle("hide",!any&&kOnly);
   });
 }
 
@@ -1819,7 +1925,7 @@ function head(){
   $("gWeekBar").className=pw>=100?"":pw>=70?"w":"b";
   $("gTot").textContent=tn(tot);
   $("gTotBar").style.width=clamp(tot/PLAN_SORU*100,0,100)+"%";
-  var s=kScore(),kp=s.s/TOPLAM_KONU*100;
+  var s=kScore(),kp=s.s/s.tot*100;
   $("gKonu").innerHTML=Math.round(kp)+'<small>%</small>';
   $("gKonuBar").style.width=clamp(kp,0,100)+"%";
   if(DB.d.length){
@@ -1868,6 +1974,11 @@ $("dAdd").onclick=dAdd;
 $("dClear").onclick=dReset;
 $("kFilter").onclick=function(){kOnly=!kOnly;this.setAttribute("aria-pressed",kOnly?"true":"false");
   this.textContent=kOnly?"Tümünü göster":"Sadece bitmeyenler";kApply();};
+$("kSinav").onclick=function(e){
+  var b=e.target.closest(".chip");if(!b)return;kSinav=b.dataset.s;
+  $("kSinav").querySelectorAll(".chip").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});
+  kApply();kStats();
+};
 $("prt").onclick=function(){window.print();};
 $("exp").onclick=function(){
   var name="tyt-takip-yedek-"+iso(new Date())+".json",data=JSON.stringify(DB,null,2);
@@ -1902,6 +2013,7 @@ $("file").onchange=function(){
       if(o.t)for(var e1 in o.t)DB.t[e1]=o.t[e1];
       if(o.st)for(var e3 in o.st)DB.st[e3]=o.st[e3];
       if(+o.sg>0)DB.sg=+o.sg;
+      if(o.kb)for(var e4 in o.kb)DB.kb[e4]=o.kb[e4];
       if(o.rc&&typeof o.rc==="object"){if(+o.rc.total>0)DB.rc.total=+o.rc.total;if(o.rc.target)DB.rc.target=o.rc.target;}
       save();buildKonu();qRefresh();dRefresh();rRefresh();
     }catch(e){alert("Dosya okunamadı — geçerli bir yedek dosyası seç.");}
@@ -1983,7 +2095,7 @@ $("bld").textContent=window.BUILD||"yerel kopya";
         applying=true;
         DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
         DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{total:8000};
-        DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||DB.bk;DB.sg=+o.sg>0?+o.sg:DB.sg;
+        DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||DB.bk;DB.sg=+o.sg>0?+o.sg:DB.sg;DB.kb=o.kb||{};
         if(!(+DB.rc.total>0))DB.rc.total=8000;
         try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}
         redrawAll();
@@ -1996,7 +2108,7 @@ $("bld").textContent=window.BUILD||"yerel kopya";
 })();
 </script>
 <script>
-window.BUILD="2026-10-03 · fb44267";
+window.BUILD="2026-10-03 · 572f546";
 try{document.getElementById("bld").textContent=window.BUILD;}catch(e){}
 if("serviceWorker" in navigator){
   var swReg=null,swReloaded=false;
