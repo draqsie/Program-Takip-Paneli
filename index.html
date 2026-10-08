@@ -393,7 +393,9 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   border:1px solid var(--hair-2);display:block;transition:background .15s}
 .kib[data-n="1"] i:nth-child(1),
 .kib[data-n="2"] i:nth-child(-n+2),
-.kib[data-n="3"] i{background:var(--s3);border-color:var(--s3)}
+.kib[data-n="3"] i:nth-child(-n+3),
+.kib[data-n="4"] i:nth-child(-n+4),
+.kib[data-n="5"] i{background:var(--s3);border-color:var(--s3)}
 .kib:hover i{border-color:var(--s3)}
 @media (hover:none),(pointer:coarse){
   .kib{padding:0 16px 0 8px}
@@ -476,6 +478,49 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 .tdquote{margin:0;padding:15px 18px;border-bottom:1px solid var(--hair);background:var(--panel-2);
   font-family:var(--fh);font-size:13px;line-height:1.55;color:var(--ink-2);font-style:italic;
   border-left:2px solid var(--brand)}
+
+/* ---- cekmece ic sekmeleri ---- */
+.dwtabs{display:flex;gap:2px;padding:12px 18px 0;border-bottom:1px solid var(--hair);flex:0 0 auto}
+.dwtabs button{flex:1;background:transparent;border:0;border-bottom:2px solid transparent;
+  color:var(--dim);padding:9px 6px 10px;cursor:pointer;font-family:var(--fh);font-size:13.5px;
+  font-weight:500;display:flex;align-items:center;justify-content:center;gap:7px}
+.dwtabs button:hover{color:var(--ink)}
+.dwtabs button[aria-selected="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--brand)}
+.dwtabs em{font-style:normal;font-family:var(--fm);font-size:9.5px;font-weight:700;
+  background:var(--hair);color:var(--dim);padding:2px 6px;border-radius:99px}
+.dwtabs em:empty{display:none}
+.dwtabs button[aria-selected="true"] em{background:var(--brand);color:#06110C}
+.dwtabs em.gec{background:var(--bad);color:#fff}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .dwtabs button[aria-selected="true"] em{color:#fff}}
+:root[data-theme="light"] .dwtabs button[aria-selected="true"] em{color:#fff}
+.dwpane{flex:1;min-height:0;display:flex;flex-direction:column}
+.odadd{flex-direction:column;gap:8px}
+.odadd .odrow{display:flex;gap:8px}
+.odadd .odrow input{flex:1;min-width:0;background:var(--panel-2);border:1px solid var(--hair);
+  border-radius:9px;padding:9px 11px;font-family:var(--fm);font-size:14px}
+.odadd .odrow input:focus{border-color:var(--brand);outline:none}
+
+/* ---- odev satiri ---- */
+.odrw{display:flex;align-items:flex-start;gap:11px;padding:11px 2px;border-bottom:1px solid var(--hair)}
+.odrw:last-child{border-bottom:none}
+.odrw .ck{width:19px;height:19px;border:1.5px solid var(--hair-2);border-radius:6px;background:var(--panel);
+  flex:0 0 auto;margin-top:2px;cursor:pointer;padding:0;position:relative;transition:all .15s}
+.odrw .ck::after{content:"";position:absolute;left:4px;top:5px;width:8px;height:4px;
+  border-left:2px solid var(--panel);border-bottom:2px solid var(--panel);transform:rotate(-45deg);opacity:0}
+:root[data-theme="dark"] .odrw .ck::after,:root:not([data-theme="light"]) .odrw .ck::after{border-color:#06110C}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .odrw .ck::after{border-color:#fff}}
+.odrw.bitti .ck{background:var(--brand);border-color:var(--brand)}
+.odrw.bitti .ck::after{opacity:1}
+.odrw .gv{flex:1;min-width:0}
+.odrw .gv b{display:block;font-size:14px;font-weight:400;line-height:1.45;word-break:break-word}
+.odrw .gv .ne{display:block;font-family:var(--fm);font-size:10.5px;margin-top:3px;color:var(--dim)}
+.odrw.bitti .gv b{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--hair-2)}
+.odrw .ne.yakin{color:var(--warn);font-weight:600}
+.odrw .ne.gecti{color:var(--bad);font-weight:600}
+.odrw .rm{flex:0 0 auto;background:transparent;border:1px solid transparent;color:var(--faint);
+  cursor:pointer;font-size:12.5px;padding:6px 9px;border-radius:7px;transition:all .15s}
+.odrw .rm:hover{color:var(--bad);border-color:var(--bad);background:var(--bad-wash)}
+@media (hover:none),(pointer:coarse){.odrw .rm{padding:9px 12px;border-color:var(--hair)}}
 .tdscroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 18px 22px}
 .tdadd{display:flex;gap:8px;padding:14px 18px}
 .tdadd input{flex:1;min-width:0;background:var(--panel-2);border:1px solid var(--hair);border-radius:9px;
@@ -504,6 +549,47 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 @media (hover:none),(pointer:coarse){.tdrow .rm{padding:9px 12px;font-size:14px;border-color:var(--hair)}}
 
 /* ============ KRONOMETRE ============ */
+
+/* ---- gunun kelimesi seridi ---- */
+.wordbar{background:var(--panel);border-bottom:1px solid var(--hair)}
+.wordbar .wrap{display:flex;align-items:baseline;gap:13px;padding-top:11px;padding-bottom:11px;flex-wrap:wrap}
+.wordbar .wl{font-family:var(--fm);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--faint);flex:0 0 auto}
+.wordbar b{font-family:var(--fh);font-size:17px;font-weight:700;letter-spacing:-.015em;
+  color:var(--brand-ink);flex:0 0 auto}
+.wordbar .wm{flex:1;min-width:0;font-size:13.5px;color:var(--ink-2);line-height:1.45}
+.wordbar .wn{flex:0 0 auto;background:transparent;border:1px solid var(--hair);color:var(--faint);
+  cursor:pointer;font-size:13px;padding:5px 10px;border-radius:7px;line-height:1;transition:all .15s}
+.wordbar .wn:hover{border-color:var(--brand);color:var(--brand-ink)}
+@media (hover:none),(pointer:coarse){.wordbar .wn{padding:9px 13px}}
+
+/* ---- sozluk ---- */
+.szadd{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.szadd #szK{width:168px;background:var(--panel-2);border:1px solid var(--hair);border-radius:9px;
+  padding:10px 13px;font-size:14.5px;font-weight:700}
+.szadd #szA{flex:1;min-width:190px;background:var(--panel-2);border:1px solid var(--hair);
+  border-radius:9px;padding:10px 13px;font-size:14.5px}
+.szadd input:focus{border-color:var(--brand);outline:none;background:var(--panel)}
+.szadd .btn{padding:10px 20px;font-size:13.5px}
+.szrw{display:flex;align-items:flex-start;gap:12px;padding:11px 2px;border-bottom:1px solid var(--hair)}
+.szrw:last-child{border-bottom:none}
+.szrw .ck{width:19px;height:19px;border:1.5px solid var(--hair-2);border-radius:6px;background:var(--panel);
+  flex:0 0 auto;margin-top:2px;cursor:pointer;padding:0;position:relative;transition:all .15s}
+.szrw .ck::after{content:"";position:absolute;left:4px;top:5px;width:8px;height:4px;
+  border-left:2px solid var(--panel);border-bottom:2px solid var(--panel);transform:rotate(-45deg);opacity:0}
+:root[data-theme="dark"] .szrw .ck::after,:root:not([data-theme="light"]) .szrw .ck::after{border-color:#06110C}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .szrw .ck::after{border-color:#fff}}
+.szrw.ogrenildi .ck{background:var(--ok);border-color:var(--ok)}
+.szrw.ogrenildi .ck::after{opacity:1}
+.szrw .kl{flex:0 0 auto;width:150px;font-family:var(--fh);font-weight:700;font-size:14px;
+  line-height:1.4;word-break:break-word}
+.szrw .an{flex:1;min-width:0;font-size:13.5px;color:var(--ink-2);line-height:1.45;word-break:break-word}
+.szrw.ogrenildi .kl,.szrw.ogrenildi .an{color:var(--faint)}
+.szrw .rm{flex:0 0 auto;background:transparent;border:1px solid transparent;color:var(--faint);
+  cursor:pointer;font-size:12.5px;padding:6px 9px;border-radius:7px;transition:all .15s}
+.szrw .rm:hover{color:var(--bad);border-color:var(--bad);background:var(--bad-wash)}
+@media (hover:none),(pointer:coarse){.szrw .rm{padding:9px 12px;border-color:var(--hair)}}
+@media (max-width:640px){.szrw .kl{width:100%;flex:1 1 100%}}
 
 /* ---- kitaplik ---- */
 .ktadd{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
@@ -686,6 +772,13 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
     </div>
   </div>
 </div></header>
+
+<div class="wordbar hide" id="wordBar"><div class="wrap">
+  <span class="wl">Günün kelimesi</span>
+  <b id="wordK"></b>
+  <span class="wm" id="wordA"></span>
+  <button class="wn" id="wordNext" type="button" title="Başka bir kelime göster">&#8635;</button>
+</div></div>
 
 <main><div class="wrap">
 
@@ -888,6 +981,23 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   </section>
 
   <section class="panel">
+    <div class="phead"><h3>Sözlük</h3>
+      <span class="sub" id="szSub"></span>
+      <div class="right"><button class="chip" id="szFilter" aria-pressed="false" type="button">Sadece öğrenmediklerim</button></div>
+    </div>
+    <div class="pbody">
+      <form class="szadd" id="szForm" autocomplete="off">
+        <input id="szK" maxlength="60" placeholder="Kelime">
+        <input id="szA" maxlength="200" placeholder="Anlamı">
+        <button class="btn" type="submit">Ekle</button>
+      </form>
+      <div id="szList"></div>
+    </div>
+    <p class="pfoot">Eklediğin kelimelerden biri her gün sayfanın üstünde çıkar. Öğrendiklerini
+      işaretlersen günün kelimesi <b>öğrenmediklerin arasından</b> seçilir.</p>
+  </section>
+
+  <section class="panel">
     <div class="phead"><h3>Okuma Grafiği</h3><span class="sub">son 30 gün</span></div>
     <div class="pbody">
       <div class="cbox" id="rBox"><canvas id="rCan"></canvas><div class="tip" id="rTip"></div></div>
@@ -920,7 +1030,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
     <button class="chip" id="kFilter" aria-pressed="false">Sadece bitmeyenler</button>
   </div>
   <div id="kWrap"></div>
-  <p class="pfoot" style="border:1px solid var(--hair);border-radius:11px;margin-top:4px">Konuya bir kez tıkla &rarr; <b>yarım</b> (çalıştın, eksik var). İki kez &rarr; <b>bitti</b>. Üç kez &rarr; sıfırlanır. Müfredat yüzdesi yarımları 0,5 sayar. Sağdaki <b>üç kutucuk</b> o konuyu kaç soru bankasından bitirdiğini tutar — üstüne dokundukça artar.</p>
+  <p class="pfoot" style="border:1px solid var(--hair);border-radius:11px;margin-top:4px">Konuya bir kez tıkla &rarr; <b>yarım</b> (çalıştın, eksik var). İki kez &rarr; <b>bitti</b>. Üç kez &rarr; sıfırlanır. Müfredat yüzdesi yarımları 0,5 sayar. Sağdaki <b>beş kutucuk</b> o konuyu kaç soru bankasından bitirdiğini tutar — üstüne dokundukça artar.</p>
 </div>
 
   <p class="build">sürüm <span id="bld">yerel kopya</span></p>
@@ -937,11 +1047,29 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
     <button id="tdClose" type="button" title="Kapat">&#10005;</button>
   </header>
   <blockquote class="tdquote">Aslan sessizken hafife alınır; sabır bittiğinde kimin ne olduğu denemede belli olur.</blockquote>
-  <form class="tdadd" id="tdForm" autocomplete="off">
-    <input id="tdIn" maxlength="160" placeholder="Bir iş yaz, Enter'a bas…">
-    <button class="add" type="submit" title="Ekle">+</button>
-  </form>
-  <div class="tdscroll"><div id="tdList"></div></div>
+  <div class="dwtabs" id="dwTabs">
+    <button data-v="gun" aria-selected="true" type="button">Bugün<em id="tdBadge2"></em></button>
+    <button data-v="odev" aria-selected="false" type="button">Ödevler<em id="odBadge"></em></button>
+  </div>
+
+  <div class="dwpane" id="dwGun">
+    <form class="tdadd" id="tdForm" autocomplete="off">
+      <input id="tdIn" maxlength="160" placeholder="Bir iş yaz, Enter'a bas…">
+      <button class="add" type="submit" title="Ekle">+</button>
+    </form>
+    <div class="tdscroll"><div id="tdList"></div></div>
+  </div>
+
+  <div class="dwpane hide" id="dwOdev">
+    <form class="tdadd odadd" id="odForm" autocomplete="off">
+      <input id="odAd" maxlength="160" placeholder="Ödev — örn. Matematik 42-48">
+      <div class="odrow">
+        <input type="date" id="odT" title="Teslim tarihi">
+        <button class="add" type="submit" title="Ekle">+</button>
+      </div>
+    </form>
+    <div class="tdscroll"><div id="odList"></div></div>
+  </div>
 </aside>
 
 <div class="tmr" id="tmr">
@@ -1131,11 +1259,11 @@ function net(d,y){return (+d||0)-(+y||0)/4;}
 function clamp(v,a,b){return v<a?a:(v>b?b:v);}
 
 /* ---------- durum ---------- */
-var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0,sg:36000,kb:{},kt:[]};
+var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0,sg:36000,kb:{},kt:[],ov:[],sz:[]};
 try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&typeof o==="object"){
   DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
   DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{};
-  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;DB.sg=+o.sg>0?+o.sg:36000;DB.kb=o.kb||{};DB.kt=Array.isArray(o.kt)?o.kt:[];}}}catch(e){}
+  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;DB.sg=+o.sg>0?+o.sg:36000;DB.kb=o.kb||{};DB.kt=Array.isArray(o.kt)?o.kt:[];DB.ov=Array.isArray(o.ov)?o.ov:[];DB.sz=Array.isArray(o.sz)?o.sz:[];}}}catch(e){}
 if(!(+DB.rc.total>0))DB.rc.total=8000;
 var pT=null,RDB=null,syncT=null,syncing=false,applying=false;
 function save(){
@@ -1153,7 +1281,7 @@ function push(){
       .catch(function(){}).then(function(){syncing=false;});
   },700);
 }
-function redrawAll(){buildKonu();qRefresh();dRefresh();rRefresh();tPaint();stPaint();}
+function redrawAll(){buildKonu();qRefresh();dRefresh();rRefresh();tPaint();stPaint();odRender();szRender();}
 
 /* ================== GRAFİK MOTORU ================== */
 function setup(cv){
@@ -1570,7 +1698,7 @@ hover($("dBox"),$("dTip"),function(){return dF;},function(i){
 });
 
 /* ================== KONU LİSTESİ ================== */
-var kOnly=false,kSinav="hepsi",KB_MAX=3;
+var kOnly=false,kSinav="hepsi",KB_MAX=5;
 function kState(id){return DB.k[id]||0;}
 function kScore(){
   var s=0,done=0,tot=0;
@@ -1626,7 +1754,7 @@ function buildKonu(){
         };
 
         var bank=document.createElement("button");bank.type="button";bank.className="kib";
-        bank.innerHTML='<i></i><i></i><i></i>';
+        bank.innerHTML='<i></i><i></i><i></i><i></i><i></i>';
         function bankCiz(){
           var n=+DB.kb[id]||0;
           bank.dataset.n=n;
@@ -1803,7 +1931,9 @@ function tdRender(){
   var kalan=list.length-done;
   $("tdCount").textContent=list.length?done+" / "+list.length:"";
   $("tdDate").textContent=GUN[qCur.getDay()]+" · "+qCur.getDate()+" "+AY[qCur.getMonth()];
-  $("tdBadge").textContent=kalan?String(kalan):"";
+  $("tdBadge2").textContent=kalan?String(kalan):"";
+  var odAcik=DB.ov.filter(function(x){return !x.b;}).length;
+  $("tdBadge").textContent=(kalan+odAcik)?String(kalan+odAcik):"";
   if(!list.length){
     var e=document.createElement("p");e.className="empty";e.style.padding="34px 6px";
     e.textContent="Bugün için henüz bir iş yazmadın.";host.appendChild(e);return;
@@ -1840,6 +1970,125 @@ $("tdForm").onsubmit=function(e){
   DB.t[k].push({i:Date.now(),x:v,d:0});
   $("tdIn").value="";tdRender();save();
 };
+
+/* ================== ÖDEVLER ================== */
+function odGun(t){                       /* teslime kaç gün kaldı */
+  return Math.round((utc(parse(t))-utc(new Date()))/864e5);
+}
+function odNe(t){
+  var g=odGun(t);
+  if(g<0)return {s:(-g)+" gün gecikti",c:"gecti"};
+  if(g===0)return {s:"bugün teslim",c:"yakin"};
+  if(g===1)return {s:"yarın teslim",c:"yakin"};
+  if(g<=3)return {s:g+" gün kaldı",c:"yakin"};
+  var d=parse(t);
+  return {s:g+" gün kaldı · "+d.getDate()+" "+AYK[d.getMonth()],c:""};
+}
+function odRender(){
+  var host=$("odList");host.textContent="";
+  var acik=DB.ov.filter(function(x){return !x.b;});
+  var gec=acik.filter(function(x){return odGun(x.t)<0;}).length;
+  var bd=$("odBadge");
+  bd.textContent=acik.length?String(acik.length):"";
+  bd.className=gec?"gec":"";
+  if(!DB.ov.length){
+    var e=document.createElement("p");e.className="empty";e.style.padding="34px 6px";
+    e.textContent="Ödev yok. Okulda verileni teslim tarihiyle buraya yaz.";
+    host.appendChild(e);return;
+  }
+  /* bitmeyenler teslim tarihine göre önce, bitenler sonda */
+  var sirali=DB.ov.slice().sort(function(a,b){
+    if(!!a.b!==!!b.b)return a.b?1:-1;
+    return a.t<b.t?-1:(a.t>b.t?1:0);
+  });
+  sirali.forEach(function(o){
+    var row=document.createElement("div");row.className="odrw"+(o.b?" bitti":"");
+    var ck=document.createElement("button");ck.type="button";ck.className="ck";
+    ck.setAttribute("aria-pressed",o.b?"true":"false");ck.title="Yaptım olarak işaretle";
+    ck.onclick=function(){o.b=o.b?0:1;odRender();save();};
+    var gv=document.createElement("div");gv.className="gv";
+    var b=document.createElement("b");b.textContent=o.x;
+    var ne=document.createElement("span");
+    var bilgi=odNe(o.t);
+    ne.className="ne"+(o.b?"":" "+bilgi.c);
+    ne.textContent=o.b?"yapıldı":bilgi.s;
+    gv.appendChild(b);gv.appendChild(ne);
+    var rm=document.createElement("button");rm.type="button";rm.className="rm";
+    rm.textContent="Sil";rm.title="Ödevi sil";
+    rm.onclick=function(){DB.ov=DB.ov.filter(function(x){return x.i!==o.i;});odRender();save();};
+    row.appendChild(ck);row.appendChild(gv);row.appendChild(rm);host.appendChild(row);
+  });
+}
+$("odForm").onsubmit=function(e){
+  e.preventDefault();
+  var x=$("odAd").value.trim(),t=$("odT").value;
+  if(!x)return;
+  if(!t){var d=new Date();d.setDate(d.getDate()+1);t=iso(d);}   /* tarih yoksa yarın */
+  DB.ov.push({i:Date.now(),x:x,t:t,b:0});
+  $("odAd").value="";$("odT").value="";odRender();save();
+};
+$("dwTabs").onclick=function(e){
+  var b=e.target.closest("button");if(!b)return;
+  $("dwTabs").querySelectorAll("button").forEach(function(x){
+    x.setAttribute("aria-selected",x===b?"true":"false");});
+  $("dwGun").classList.toggle("hide",b.dataset.v!=="gun");
+  $("dwOdev").classList.toggle("hide",b.dataset.v!=="odev");
+};
+
+/* ================== SÖZLÜK ================== */
+var szOnly=false,szKay=0;
+function szRender(){
+  var host=$("szList");host.textContent="";
+  var ogr=DB.sz.filter(function(x){return x.o;}).length;
+  $("szSub").textContent=DB.sz.length?ogr+" / "+DB.sz.length+" kelime öğrenildi":"";
+  var gos=szOnly?DB.sz.filter(function(x){return !x.o;}):DB.sz;
+  if(!gos.length){
+    var e=document.createElement("p");e.className="empty";e.style.padding="30px 10px";
+    e.textContent=DB.sz.length?"Hepsini öğrenmişsin.":"Kitapta bilmediğin bir kelimeye rastlayınca buraya yaz.";
+    host.appendChild(e);wordCiz();return;
+  }
+  gos.slice().reverse().forEach(function(w){
+    var row=document.createElement("div");row.className="szrw"+(w.o?" ogrenildi":"");
+    var ck=document.createElement("button");ck.type="button";ck.className="ck";
+    ck.setAttribute("aria-pressed",w.o?"true":"false");ck.title="Öğrendim olarak işaretle";
+    ck.onclick=function(){w.o=w.o?0:1;szRender();save();};
+    var kl=document.createElement("span");kl.className="kl";kl.textContent=w.k;
+    var an=document.createElement("span");an.className="an";an.textContent=w.a;
+    var rm=document.createElement("button");rm.type="button";rm.className="rm";
+    rm.textContent="Sil";rm.title="Kelimeyi sil";
+    rm.onclick=function(){DB.sz=DB.sz.filter(function(x){return x.i!==w.i;});szRender();save();};
+    row.appendChild(ck);row.appendChild(kl);row.appendChild(an);row.appendChild(rm);
+    host.appendChild(row);
+  });
+  wordCiz();
+}
+$("szForm").onsubmit=function(e){
+  e.preventDefault();
+  var k=$("szK").value.trim(),a=$("szA").value.trim();
+  if(!k||!a)return;
+  DB.sz.push({i:Date.now(),k:k,a:a,o:0});
+  $("szK").value="";$("szA").value="";$("szK").focus();
+  szRender();save();
+};
+$("szFilter").onclick=function(){
+  szOnly=!szOnly;this.setAttribute("aria-pressed",szOnly?"true":"false");
+  this.textContent=szOnly?"Tümünü göster":"Sadece öğrenmediklerim";szRender();
+};
+
+/* günün kelimesi — tarihe göre sabit, gün içinde değişmez */
+function wordCiz(){
+  var bar=$("wordBar");
+  var havuz=DB.sz.filter(function(x){return !x.o;});
+  if(!havuz.length)havuz=DB.sz;
+  if(!havuz.length){bar.classList.add("hide");return;}
+  var k=iso(new Date()),h=0;
+  for(var i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i))>>>0;
+  var w=havuz[(h+szKay)%havuz.length];
+  $("wordK").textContent=w.k;
+  $("wordA").textContent=w.a;
+  bar.classList.remove("hide");
+}
+$("wordNext").onclick=function(){szKay++;wordCiz();};
 
 /* ================== KRONOMETRE ================== */
 /* Düz kronometre. Geçen süre saniye saniye "bugünün çalışma bankasına"
@@ -2068,8 +2317,11 @@ $("file").onchange=function(){
       if(o.st)for(var e3 in o.st)DB.st[e3]=o.st[e3];
       if(+o.sg>0)DB.sg=+o.sg;
       if(o.kb)for(var e4 in o.kb)DB.kb[e4]=o.kb[e4];
-      if(Array.isArray(o.kt)){var vr={};DB.kt.forEach(function(x){vr[x.i]=1;});
-        o.kt.forEach(function(x){if(!vr[x.i])DB.kt.push(x);});}
+      ["kt","ov","sz"].forEach(function(alan){
+        if(!Array.isArray(o[alan]))return;
+        var vr={};DB[alan].forEach(function(x){vr[x.i]=1;});
+        o[alan].forEach(function(x){if(!vr[x.i])DB[alan].push(x);});
+      });
       if(o.rc&&typeof o.rc==="object"){if(+o.rc.total>0)DB.rc.total=+o.rc.total;if(o.rc.target)DB.rc.target=o.rc.target;}
       save();buildKonu();qRefresh();dRefresh();rRefresh();
     }catch(e){alert("Dosya okunamadı — geçerli bir yedek dosyası seç.");}
@@ -2090,7 +2342,7 @@ if(window.matchMedia)try{window.matchMedia("(prefers-color-scheme: dark)")
 /* ---------- başlat ---------- */
 buildQ();buildD();buildKonu();
 $("dDate").value=iso(new Date());
-qRefresh();dRefresh();dCalc();rRefresh();tPaint();bkCheck();
+qRefresh();dRefresh();dCalc();rRefresh();tPaint();odRender();szRender();bkCheck();
 
 /* ================== YEDEK HATIRLATICISI ==================
    iOS, uzun süre açılmayan sitelerin yerel verisini silebiliyor.
@@ -2151,7 +2403,7 @@ $("bld").textContent=window.BUILD||"yerel kopya";
         applying=true;
         DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
         DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{total:8000};
-        DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||DB.bk;DB.sg=+o.sg>0?+o.sg:DB.sg;DB.kb=o.kb||{};DB.kt=Array.isArray(o.kt)?o.kt:DB.kt;
+        DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||DB.bk;DB.sg=+o.sg>0?+o.sg:DB.sg;DB.kb=o.kb||{};DB.kt=Array.isArray(o.kt)?o.kt:DB.kt;DB.ov=Array.isArray(o.ov)?o.ov:DB.ov;DB.sz=Array.isArray(o.sz)?o.sz:DB.sz;
         if(!(+DB.rc.total>0))DB.rc.total=8000;
         try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}
         redrawAll();
@@ -2164,7 +2416,7 @@ $("bld").textContent=window.BUILD||"yerel kopya";
 })();
 </script>
 <script>
-window.BUILD="2026-10-03 · de0b114";
+window.BUILD="2026-10-08 · 7be309e";
 try{document.getElementById("bld").textContent=window.BUILD;}catch(e){}
 if("serviceWorker" in navigator){
   var swReg=null,swReloaded=false;
