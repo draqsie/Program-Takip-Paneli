@@ -807,7 +807,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
         <div class="tile"><p class="v" id="tAvg">0</p><p class="lbl">Günlük ort.</p></div>
       </div>
     </div>
-    <p class="pfoot"><b>15 Aralık &middot; 90+ net planı.</b> Hafta içi günlük <b>~128</b>, Cumartesi <b>~218</b>, Pazar <b>~220</b> &rarr; haftalık <b>~1.080</b> soru. Hafta sonu, kutulardaki günlük hedeflerin yaklaşık <b>1,7 katı</b>. 12,3 haftada toplam <b>~13.300</b>. <b>↳ Paragraf</b> ve <b>↳ Problemler</b> ayrı sayılır ama üstlerindeki dersin bütçesinden gelir: Türkçe 30 = 10 dil bilgisi + 20 paragraf, Matematik 40 = 25 konu + 15 problem.</p>
+    <p class="pfoot"><b>15 Aralık &middot; 90+ net planı.</b> Hafta içi günlük <b>~128</b>, Cumartesi <b>~218</b>, Pazar <b>~220</b> &rarr; haftalık <b>~1.080</b> soru. Hafta sonu, kutulardaki günlük hedeflerin yaklaşık <b>1,7 katı</b>. <span id="planHafta">12,1</span> haftada toplam <b id="planSoru">~13.100</b>. <b>↳ Paragraf</b> ve <b>↳ Problemler</b> ayrı sayılır ama üstlerindeki dersin bütçesinden gelir: Türkçe 30 = 10 dil bilgisi + 20 paragraf, Matematik 40 = 25 konu + 15 problem.</p>
   </section>
 
   <section class="panel">
@@ -1014,7 +1014,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
     <div>
       <p><b>Bu liste neye dayanıyor?</b> Tema ve ünite adları <b>MEB Türkiye Yüzyılı Maarif Modeli 9 ve 10. sınıf öğretim programlarından</b> alındı (<a href="https://tymm.meb.gov.tr/ogretim-programlari" target="_blank" rel="noopener">tymm.meb.gov.tr</a>). Altlarındaki satırlar o temanın TYT'deki karşılığıdır &mdash; çalışma amaçlı eşleme, MEB'in resmî alt başlıkları değil.</p>
       <p><b>ÖSYM henüz resmî 2028 TYT kapsamını açıklamadı.</b> Sen 2024-25'te 9. sınıfa başlayan ilk Maarif kuşağısın; TYT'n 9 ve 10. sınıf Maarif müfredatından gelecek. Kesin dağılım açıklandığında bu listeyi karşılaştır. Din Kültürü üniteleri MEB sayfasından çekilemedi &mdash; okul kitabından doğrula.</p>
-      <p><b>AYT bölümü sayısal alana göre</b> kuruldu — Matematik, Fizik, Kimya, Biyoloji (80 soru). Tema adları 11. sınıf Maarif programlarından alındı. Sen 11. sınıftayken hem okul konunu hem AYT karşılığını buradan takip edebilir, aynı anda TYT listesine bakabilirsin. AYT alt başlıkları da aynı şekilde çalışma amaçlı eşlemedir.</p>
+      <p><b>AYT bölümü sayısal alana göre</b> kuruldu — Matematik, Fizik, Kimya, Biyoloji (80 soru). Temalar <b>2026-27'de ilk kez uygulanan 11. sınıf Maarif programlarına</b> göre güncellendi: Matematik 5 tema (trigonometri, üstel–logaritmik fonksiyonlar, bileşke, dörtgen–çokgenler, iki değişkenli istatistik), Fizik 3 ünite, Kimya 3 tema, Biyoloji 2 tema (Tepki, Homeostazi). Eski programdaki limit–türev, diziler, indüksiyon, modern atom teorisi gibi konular 11. sınıfta yok; 12. sınıf programıyla eklenecek. Alt başlıklar çalışma amaçlı eşlemedir &mdash; okul kitabın ve yıllık planınla karşılaştır.</p>
     </div>
   </div>
   <div class="kbar">
@@ -1216,27 +1216,32 @@ var KONU=[
 {k:"din",n:"Din Kültürü",w:"~5 soru",src:"⚠ MEB sayfası çekilemedi — okul kitabından doğrula",tm:[
  {g:"9",n:"9. Sınıf Üniteleri",t:["Bilgi ve inanç","Din ve İslam","İslam ve ibadet","Gençlik ve değerler","Gönül coğrafyamız"]},
  {g:"10",n:"10. Sınıf Üniteleri",t:["Allah – insan ilişkisi","Hz. Muhammed ve gençlik","Din ve hayat","Ahlaki tutum ve davranışlar","İslam düşüncesinde itikadi ve fıkhi yorumlar"]}]},
-/* ---------- AYT · 11. sınıf (Maarif) ---------- */
-{k:"amat",n:"Matematik",w:"AYT 40 soru",sinav:"AYT",src:"MEB · Matematik 11",tm:[
- {g:"11",n:"Nicelikler ve Değişimler (1)",t:["Birim çember","Trigonometrik fonksiyonlar","Toplam – fark formülleri","Trigonometrik denklemler"]},
- {g:"11",n:"Nicelikler ve Değişimler (2)",t:["Üstel fonksiyon","Logaritma fonksiyonu","Logaritmik denklem ve eşitsizlikler"]},
- {g:"11",n:"Nicelikler ve Değişimler (3)",t:["Diziler","Limit kavramı","Türeve giriş"]},
- {g:"11",n:"Geometrik Şekiller",t:["Çemberde açı ve uzunluk (ileri)","Çemberin analitiği","Katı cisimlerde hacim ve alan","Uzay geometri"]},
- {g:"11",n:"İstatistiksel Araştırma Süreci",t:["Örnekleme yöntemleri","Güven aralığı","İstatistiksel çıkarım"]}]},
+/* ---------- AYT · 11. sınıf — Maarif 2026-27 programı ----------
+   11. sınıfta Maarif Modeli ilk kez 2026-27'de uygulanıyor. Eski
+   programdaki limit–türev, diziler, indüksiyon/alternatif akım, modern
+   atom teorisi, sindirim gibi konular 11. sınıf programında yok; bunlar
+   12. sınıf programıyla gelecek. Satırlar programın kazanım başlıklarına
+   göre çalışma amaçlı eşlemedir.                                       */
+{k:"amat",n:"Matematik",w:"AYT 40 soru",sinav:"AYT",src:"MEB · TYMM Matematik 11 — 5 tema",tm:[
+ {g:"11",n:"Nicelikler ve Değişimler: Trigonometri",t:["Derece ve radyan","Birim çember","Trigonometrik oranlar ve referans fonksiyonlar (sin, cos, tan, cot)","Trigonometrik fonksiyonların grafikleri","Trigonometrik denklemler"]},
+ {g:"11",n:"Nicelikler ve Değişimler: Üstel ve Logaritmik Fonksiyonlar",t:["Üstel fonksiyon ve e sayısı","Logaritma ve özellikleri","Logaritma fonksiyonu","Üstel ve logaritmik denklemler","Üstel ve logaritmik eşitsizlikler"]},
+ {g:"11",n:"Nicelikler ve Değişimler: Fonksiyonlarla İşlemler",t:["Fonksiyonlarla dört işlem","Bileşke fonksiyon"]},
+ {g:"11",n:"Geometrik Şekiller",t:["Dörtgenler ve temel özellikleri","Paralelkenar, eşkenar dörtgen, dikdörtgen, kare","Yamuk ve deltoid","Çokgenler"]},
+ {g:"11",n:"İstatistiksel Araştırma Süreci",t:["İki nicel değişkenli veri","Serpme diyagramı","Korelasyon katsayısı"]}]},
 
-{k:"afiz",n:"Fizik",w:"AYT 14 soru",sinav:"AYT",src:"MEB · Fizik 11",tm:[
- {g:"11",n:"1. Ünite: Kuvvet ve Hareket",t:["Vektörler","Bağıl hareket","Newton yasalarının uygulamaları","Tork ve denge","Açısal momentum","Basit makineler"]},
- {g:"11",n:"2. Ünite: Elektrik ve Manyetizma",t:["Elektriksel kuvvet ve alan","Elektriksel potansiyel","Kondansatörler","Manyetik alan","İndüksiyon","Alternatif akım"]},
- {g:"11",n:"3. Ünite: Optik",t:["Işığın yansıması","Işığın kırılması","Aynalar","Mercekler","Prizma ve renk"]}]},
+{k:"afiz",n:"Fizik",w:"AYT 14 soru",sinav:"AYT",src:"MEB · TYMM Fizik 11 — 3 ünite",tm:[
+ {g:"11",n:"1. Ünite: Kuvvet ve Hareket",t:["Serbest düşme ve hava direnci","Yatay atış","Eğik atış (iki boyutta sabit ivmeli hareket)","Newton'ın hareket yasaları","Serbest cisim diyagramı","Statik ve kinetik sürtünme"]},
+ {g:"11",n:"2. Ünite: Elektrik ve Manyetizma",t:["Elektriksel kuvvet — Coulomb yasası","Elektrik alan ve Faraday kafesi","Elektriksel potansiyel ve düzgün elektrik alan","Sığa ve kondansatörler","Mıknatıslar ve manyetik alan","Akım ve manyetik kuvvet"]},
+ {g:"11",n:"3. Ünite: Optik",t:["Işığın yansıması ve düz ayna","Küresel aynalar","Işığın kırılması","Mercekler","Prizma ve renk"]}]},
 
-{k:"akim",n:"Kimya",w:"AYT 13 soru",sinav:"AYT",src:"MEB · Kimya 11 (sarmal: 3 tema)",tm:[
- {g:"11",n:"1. Tema: Etkileşim",t:["Modern atom teorisi","Kimyasal tepkimelerde hız","Kimyasal denge"]},
- {g:"11",n:"2. Tema: Çeşitlilik",t:["Asit – baz dengesi","Çözünürlük dengesi","Gazlar (ileri)"]},
- {g:"11",n:"3. Tema: Sürdürülebilirlik",t:["Kimya ve enerji","Elektrokimya","Organik kimyaya giriş"]}]},
+{k:"akim",n:"Kimya",w:"AYT 13 soru",sinav:"AYT",src:"MEB · TYMM Kimya 11 (sarmal: 3 tema)",tm:[
+ {g:"11",n:"1. Tema: Etkileşim",t:["Endotermik ve ekzotermik tepkimeler","Tepkime entalpisi ve standart oluşum entalpisi","Bağ enerjileri","Tepkime hızı ve aktivasyon enerjisi","Hıza etki eden faktörler","Hız denklemi"]},
+ {g:"11",n:"2. Tema: Çeşitlilik",t:["Tersinir tepkimeler ve kimyasal denge","Denge sabiti","Dengeyi etkileyen faktörler (Le Chatelier)","Asit – baz dengesi, pH ve pOH","Nötralleşme ve titrasyon","Çözünürlük dengesi"]},
+ {g:"11",n:"3. Tema: Sürdürülebilirlik",t:["Nanoteknoloji ve nanoteknolojik ürünler","Yeşil hidrojen","Mikroplastik ve nanoplastikler"]}]},
 
-{k:"abiy",n:"Biyoloji",w:"AYT 13 soru",sinav:"AYT",src:"MEB · Biyoloji 11",tm:[
- {g:"11",n:"1. Tema: Tepki",t:["Sinir sistemi","Duyu organları","Endokrin sistem","Destek ve hareket sistemi"]},
- {g:"11",n:"2. Tema: Homeostazi",t:["Sindirim sistemi","Dolaşım sistemi","Bağışıklık","Solunum sistemi","Boşaltım sistemi"]}]}
+{k:"abiy",n:"Biyoloji",w:"AYT 13 soru",sinav:"AYT",src:"MEB · TYMM Biyoloji 11 — 2 tema",tm:[
+ {g:"11",n:"1. Tema: Tepki",t:["Bitkilerde tepki: hormonlar, tropizma, nasti","Duyu organları","Destek ve hareket sistemi","Bağışıklık"]},
+ {g:"11",n:"2. Tema: Homeostazi",t:["Homeostazi ve geri bildirim mekanizmaları","Sinir sistemi","Endokrin sistem","Dolaşım sistemi","Solunum sistemi","Boşaltım sistemi","Homeostazi bozuklukları: diyabet, hipertansiyon, obezite"]}]}
 ];
 KONU.forEach(function(d){if(!d.sinav)d.sinav="TYT";});
 function eachKonu(fn){
@@ -1244,6 +1249,56 @@ function eachKonu(fn){
     fn(d,tm,ti,ki,d.k+"-"+ti+"-"+ki,nm);});});});
 }
 var TOPLAM_KONU=0;eachKonu(function(){TOPLAM_KONU++;});
+
+/* ---------- konu listesi göçü ----------
+   İşaretler "ders-tema-sıra" kimliğiyle tutulur. AYT listesi 11. sınıf
+   Maarif programına göre yenilenince sıralar kaydı; eski kimlikteki
+   işaret yanlış konuya düşmesin diye adıyla eşleşen yeni konuya taşınır,
+   karşılığı olmayan eski işaret silinir.                               */
+var KONU_SURUM=2;
+var AYT_ESKI={
+ amat:[["Birim çember","Trigonometrik fonksiyonlar","Toplam – fark formülleri","Trigonometrik denklemler"],
+       ["Üstel fonksiyon","Logaritma fonksiyonu","Logaritmik denklem ve eşitsizlikler"],
+       ["Diziler","Limit kavramı","Türeve giriş"],
+       ["Çemberde açı ve uzunluk (ileri)","Çemberin analitiği","Katı cisimlerde hacim ve alan","Uzay geometri"],
+       ["Örnekleme yöntemleri","Güven aralığı","İstatistiksel çıkarım"]],
+ afiz:[["Vektörler","Bağıl hareket","Newton yasalarının uygulamaları","Tork ve denge","Açısal momentum","Basit makineler"],
+       ["Elektriksel kuvvet ve alan","Elektriksel potansiyel","Kondansatörler","Manyetik alan","İndüksiyon","Alternatif akım"],
+       ["Işığın yansıması","Işığın kırılması","Aynalar","Mercekler","Prizma ve renk"]],
+ akim:[["Modern atom teorisi","Kimyasal tepkimelerde hız","Kimyasal denge"],
+       ["Asit – baz dengesi","Çözünürlük dengesi","Gazlar (ileri)"],
+       ["Kimya ve enerji","Elektrokimya","Organik kimyaya giriş"]],
+ abiy:[["Sinir sistemi","Duyu organları","Endokrin sistem","Destek ve hareket sistemi"],
+       ["Sindirim sistemi","Dolaşım sistemi","Bağışıklık","Solunum sistemi","Boşaltım sistemi"]]
+};
+/* eski ad → yeni ad (birebir aynı olmayan ama aynı konu olanlar) */
+var AYT_ESLE={"Trigonometrik fonksiyonlar":"Trigonometrik oranlar ve referans fonksiyonlar (sin, cos, tan, cot)",
+ "Üstel fonksiyon":"Üstel fonksiyon ve e sayısı","Logaritmik denklem ve eşitsizlikler":"Üstel ve logaritmik denklemler",
+ "Elektriksel kuvvet ve alan":"Elektriksel kuvvet — Coulomb yasası","Elektriksel potansiyel":"Elektriksel potansiyel ve düzgün elektrik alan",
+ "Kondansatörler":"Sığa ve kondansatörler","Manyetik alan":"Mıknatıslar ve manyetik alan",
+ "Işığın yansıması":"Işığın yansıması ve düz ayna","Aynalar":"Küresel aynalar",
+ "Kimyasal tepkimelerde hız":"Tepkime hızı ve aktivasyon enerjisi","Kimyasal denge":"Tersinir tepkimeler ve kimyasal denge",
+ "Asit – baz dengesi":"Asit – baz dengesi, pH ve pOH"};
+function konuGoc(o){
+  if(!o||typeof o!=="object"||+o.kv>=KONU_SURUM)return false;
+  var yeni={};                           /* ders → ad → yeni kimlik */
+  KONU.forEach(function(d){if(!AYT_ESKI[d.k])return;yeni[d.k]={};
+    d.tm.forEach(function(tm,ti){tm.t.forEach(function(nm,ki){yeni[d.k][nm]=d.k+"-"+ti+"-"+ki;});});});
+  ["k","kb"].forEach(function(alan){
+    var src=o[alan];if(!src||typeof src!=="object")return;
+    var tasi={};
+    Object.keys(src).forEach(function(id){
+      var p=id.split("-"),eski=AYT_ESKI[p[0]];if(!eski||p.length!==3)return;
+      var nm=(eski[+p[1]]||[])[+p[2]],v=src[id];delete src[id];
+      if(nm==null)return;
+      var hedef=yeni[p[0]][AYT_ESLE[nm]||nm];
+      if(hedef&&!(tasi[hedef]>=v))tasi[hedef]=v;
+    });
+    for(var h in tasi)src[h]=tasi[h];
+  });
+  o.kv=KONU_SURUM;
+  return true;
+}
 
 var SEC=[{k:"tur",n:"Türkçe",s:40,c:"--s1"},{k:"mat",n:"Temel Matematik",s:40,c:"--s2"},
          {k:"sos",n:"Sosyal Bilimler",s:20,c:"--s5"},{k:"fen",n:"Fen Bilimleri",s:20,c:"--s4"}];
@@ -1260,15 +1315,17 @@ function net(d,y){return (+d||0)-(+y||0)/4;}
 function clamp(v,a,b){return v<a?a:(v>b?b:v);}
 
 /* ---------- durum ---------- */
-var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0,sg:36000,kb:{},kt:[],ov:[],sz:[]};
+var DB={q:{},k:{},d:[],r:{},rc:{},t:{},st:{},bk:0,sg:36000,kb:{},kt:[],ov:[],sz:[],kv:0};
 try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&typeof o==="object"){
   DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
   DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{};
-  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;DB.sg=+o.sg>0?+o.sg:36000;DB.kb=o.kb||{};DB.kt=Array.isArray(o.kt)?o.kt:[];DB.ov=Array.isArray(o.ov)?o.ov:[];DB.sz=Array.isArray(o.sz)?o.sz:[];}}}catch(e){}
+  DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||0;DB.sg=+o.sg>0?+o.sg:36000;DB.kb=o.kb||{};DB.kt=Array.isArray(o.kt)?o.kt:[];DB.ov=Array.isArray(o.ov)?o.ov:[];DB.sz=Array.isArray(o.sz)?o.sz:[];DB.kv=o.kv;}}}catch(e){}
 if(!(+DB.rc.total>0))DB.rc.total=8000;
-var pT=null,RDB=null,syncT=null,syncing=false,applying=false;
+if(konuGoc(DB))try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}
+var pT=null,RDB=null,syncT=null,syncing=false,applying=false,SENT=[];
 function save(){
   try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}
+  if(T)tSave();                         /* kronometre durumu DB ile aynı anda yazılır */
   var p=$("pulse");p.classList.add("on");clearTimeout(pT);pT=setTimeout(function(){p.classList.remove("on");},1100);
   push();
 }
@@ -1278,7 +1335,10 @@ function push(){
   syncT=setTimeout(function go(){
     if(syncing){syncT=setTimeout(go,400);return;}
     syncing=true;
-    RDB.set({state:JSON.stringify(DB),at:new Date().toISOString()})
+    var st=JSON.stringify(DB);
+    /* kendi yazdığımızın yankısını tanımak için son gönderimleri tut */
+    SENT.push(st);if(SENT.length>8)SENT.shift();
+    RDB.set({state:st,at:new Date().toISOString()})
       .catch(function(){}).then(function(){syncing=false;});
   },700);
 }
@@ -1610,7 +1670,7 @@ function buildD(){
 function dCalc(){
   var tot=0,err="";
   SEC.forEach(function(s){
-    var d=+$("fd-"+s.k).value||0,y=+$("fy-"+s.k).value||0;
+    var d=Math.max(0,+$("fd-"+s.k).value||0),y=Math.max(0,+$("fy-"+s.k).value||0);
     if(d+y>s.s)err=s.n+": doğru + yanlış "+s.s+"'ı aşamaz.";
     var n=net(d,y);tot+=n;$("fn-"+s.k).textContent=nf(n);
   });
@@ -1625,7 +1685,7 @@ function dAdd(){
   if(!any){$("dErr").textContent="En az bir bölüme doğru/yanlış gir.";return;}
   var rec={id:Date.now(),date:$("dDate").value||iso(new Date()),
     name:($("dName").value||"").trim()||"İsimsiz deneme",s:{}};
-  SEC.forEach(function(s){rec.s[s.k]={d:+$("fd-"+s.k).value||0,y:+$("fy-"+s.k).value||0};});
+  SEC.forEach(function(s){rec.s[s.k]={d:Math.max(0,+$("fd-"+s.k).value||0),y:Math.max(0,+$("fy-"+s.k).value||0)};});
   DB.d.push(rec);
   DB.d.sort(function(a,b){return a.date===b.date?a.id-b.id:(a.date<b.date?-1:1);});
   save();dReset();dRefresh();
@@ -1691,7 +1751,7 @@ function dChart(){
 }
 hover($("dBox"),$("dTip"),function(){return dF;},function(i){
   if(!dD||i>=dD.labels.length||!DB.d[i])return null;
-  var r=DB.d[i],out="<b>"+r.name+" · "+dD.labels[i]+"</b>";
+  var r=DB.d[i],out="<b>"+String(r.name).replace(/[<>&]/g,"")+" · "+dD.labels[i]+"</b>";
   SEC.forEach(function(s){var v=r.s[s.k]||{d:0,y:0};
     out+='<i style="background:'+css(s.c)+'"></i>'+s.n+" &nbsp;"+nf(net(v.d,v.y))+
       ' <u>('+v.d+"D "+v.y+"Y)</u><br>";});
@@ -1701,10 +1761,11 @@ hover($("dBox"),$("dTip"),function(){return dF;},function(i){
 /* ================== KONU LİSTESİ ================== */
 var kOnly=false,kSinav="hepsi",KB_MAX=5;
 function kState(id){return DB.k[id]||0;}
-function kScore(){
+function kScore(f){
+  f=f||kSinav;
   var s=0,done=0,tot=0;
   eachKonu(function(d,tm,ti,ki,id){
-    if(kSinav!=="hepsi"&&d.sinav!==kSinav)return;
+    if(f!=="hepsi"&&d.sinav!==f)return;
     tot++;var v=kState(id);s+=(v===2?1:v===1?.5:0);if(v===2)done++;
   });
   return {s:s,done:done,tot:tot||1};
@@ -1736,7 +1797,7 @@ function buildKonu(){
       var th=document.createElement("div");th.className="tema";th.dataset.tema=ti;
       var gr=document.createElement("span");
       gr.className="gr"+(tm.g==="9"?" g9":tm.g==="10"?" g10":"");
-      gr.textContent=(tm.g==="9"||tm.g==="10")?tm.g+". sınıf":tm.g;
+      gr.textContent=/^\d+$/.test(tm.g)?tm.g+". sınıf":tm.g;
       var nb=document.createElement("b");nb.textContent=tm.n;
       th.appendChild(gr);th.appendChild(nb);body.appendChild(th);
       var list=document.createElement("div");list.className="klist";list.dataset.tema=ti;
@@ -1776,7 +1837,7 @@ function buildKonu(){
     sr.textContent="Kaynak: "+d.src;body.appendChild(sr);
     sec.appendChild(hd);sec.appendChild(body);h.appendChild(sec);
   });
-  kStats();
+  kStats();kApply();                    /* yeniden kurulunca seçili süzgeç korunur */
 }
 function kStats(){
   KONU.forEach(function(d){
@@ -2103,10 +2164,17 @@ $("wordNext").onclick=function(){szKay++;wordCiz();};
 /* Düz kronometre. Geçen süre saniye saniye "bugünün çalışma bankasına"
    yazılır, böylece kaydetmeyi unutsan da gün toplamı doğru kalır.      */
 var TK="tyt-kronometre";
-var T={run:false,from:0,acc:0,bank:0},lastSave=0;
+var T={run:false,from:0,acc:0,bank:0},lastSave=0,lastChart=0;
+/* Çalışırken kapanan/yenilenen sayfada kronometre kaldığı yerden sürer.
+   "bank" — güne en son yazılan an; DB ile aynı anda saklanır (save()),
+   böylece yeniden açılışta aradaki süre ne eksik ne fazla yazılır.     */
 try{var ts=JSON.parse(localStorage.getItem(TK)||"null");
-  if(ts&&typeof ts==="object")T.acc=+ts.acc||0;}catch(e){}   /* yenilemede duraklat, oturum korunur */
-function tSave(){try{localStorage.setItem(TK,JSON.stringify({acc:T.acc}));}catch(e){}}
+  if(ts&&typeof ts==="object"){
+    T.acc=+ts.acc||0;
+    if(ts.run&&+ts.from>0&&+ts.bank>0&&+ts.from<=Date.now()){
+      T.run=true;T.from=+ts.from;T.bank=Math.min(+ts.bank,Date.now());}
+  }}catch(e){}
+function tSave(){try{localStorage.setItem(TK,JSON.stringify({acc:T.acc,run:T.run,from:T.from,bank:T.bank}));}catch(e){}}
 function hms(s){s=Math.max(0,Math.floor(s));
   return String(Math.floor(s/3600)).padStart(2,"0")+":"+
          String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
@@ -2117,11 +2185,17 @@ function stSum(a,b){var s=0;for(var k in DB.st){var t=utc(parse(k));
   if((a==null||t>=a)&&(b==null||t<=b))s+=+DB.st[k]||0;}return s;}
 function tBank(){                       /* geçen süreyi güne yaz */
   if(!T.run)return;
-  var now=Date.now(),d=(now-T.bank)/1000;
-  if(d<=0){T.bank=now;return;}
-  if(d>3600)d=0;                        /* uyku/askıya alma: uçuk farkı sayma */
-  var k=iso(new Date());
-  if(d)DB.st[k]=(+DB.st[k]||0)+d;
+  var now=Date.now(),t=T.bank;
+  if(!(t>0)||now<=t){T.bank=now;return;}
+  /* Arka planda/ekran kapalıyken biriken süre de sayılır — kronometre
+     ekranında görünenle gün toplamı aynı kalsın. Gece yarısını geçen
+     aralık iki güne bölünür.                                          */
+  while(t<now){
+    var d=new Date(t),gece=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1).getTime();
+    var son=Math.min(now,gece),k=iso(d);
+    DB.st[k]=(+DB.st[k]||0)+(son-t)/1000;
+    t=son;
+  }
   T.bank=now;
 }
 function tPaint(){
@@ -2143,10 +2217,17 @@ function tTick(){
   if(T.run){
     tBank();
     if(Date.now()-lastSave>15000){lastSave=Date.now();save();}
+    /* kronometre çalışırken diğer "bugün" göstergeleri de canlı kalsın */
+    stGun();gStudyCiz();
+    if(Date.now()-lastChart>30000){lastChart=Date.now();stChart();}
   }
   tPaint();
 }
 setInterval(tTick,500);
+/* sekme gizlenince/kapanınca biriken süreyi hemen kaydet */
+function tFlush(){if(T.run){tBank();lastSave=Date.now();save();}}
+document.addEventListener("visibilitychange",function(){if(document.hidden)tFlush();else tTick();});
+window.addEventListener("pagehide",tFlush);
 $("stAdd").onclick=function(){
   var h=Math.max(0,+$("stH").value||0),m=Math.max(0,+$("stM").value||0);
   if(!h&&!m)return;
@@ -2168,17 +2249,17 @@ $("stGoal").onchange=function(){
 $("tmrPill").onclick=function(){$("tmr").classList.add("open");};
 $("tmrClose").onclick=function(){$("tmr").classList.remove("open");};
 $("tmrGo").onclick=function(){
+  var now=Date.now();
   if(T.run){
-    tBank();T.acc+=(Date.now()-T.from)/1000;T.run=false;
-    save();
+    tBank();T.acc+=(now-T.from)/1000;T.run=false;T.from=0;T.bank=0;
   }else{
-    T.from=Date.now();T.bank=Date.now();T.run=true;
+    T.from=now;T.bank=now;T.run=true;
   }
-  tSave();tPaint();stChart();
+  lastSave=now;save();tPaint();stPaint();gStudyCiz();
 };
 $("tmrRst").onclick=function(){
   if(T.run)tBank();
-  T.run=false;T.acc=0;T.from=0;tSave();save();tPaint();
+  T.run=false;T.acc=0;T.from=0;T.bank=0;save();tPaint();stPaint();gStudyCiz();
 };
 
 /* ---------- çalışma süresi: elle giriş, hedef ve grafik ---------- */
@@ -2188,7 +2269,8 @@ function stEkle(sn){
   if(v<=0)delete DB.st[k];else DB.st[k]=v;
   save();stPaint();head();
 }
-function stPaint(){
+function stPaint(){stGun();stChart();}
+function stGun(){                       /* seçili günün kutusu — grafiksiz, her tikte çağrılabilir */
   var k=iso(qCur),v=+DB.st[k]||0,hedefSa=DB.sg/3600;
   $("stDayVal").textContent=hm(v);
   $("stDayGoal").textContent=GUN[qCur.getDay()]+" "+qCur.getDate()+" "+AY[qCur.getMonth()]+
@@ -2201,7 +2283,6 @@ function stPaint(){
     ? "Günlük hedef tamamlandı."
     : "Hedefe "+hm(kalan)+" kaldı.";
   if(document.activeElement!==$("stGoal"))$("stGoal").value=Math.round(hedefSa*10)/10;
-  stChart();
 }
 function stChart(){
   var labels=[],data=[];
@@ -2227,6 +2308,11 @@ hover($("stBox"),$("stTip"),function(){return stF;},function(i){
 });
 
 /* ================== BAŞLIK ================== */
+function gStudyCiz(){
+  var bg=+DB.st[iso(new Date())]||0,gp=clamp(bg/DB.sg*100,0,100);
+  $("gStudy").textContent=hm(bg);
+  $("gStudyBar").style.width=gp+"%";
+}
 function head(){
   var left=Math.ceil((HEDEF_TARIH-utc(new Date()))/864e5);
   $("hLeft").textContent=left>0?left:0;
@@ -2237,7 +2323,7 @@ function head(){
   $("gWeekBar").className=pw>=100?"":pw>=70?"w":"b";
   $("gTot").textContent=tn(tot);
   $("gTotBar").style.width=clamp(tot/PLAN_SORU*100,0,100)+"%";
-  var s=kScore(),kp=s.s/s.tot*100;
+  var s=kScore("hepsi"),kp=s.s/s.tot*100;   /* başlık, Konu sekmesindeki süzgeçten bağımsız */
   $("gKonu").innerHTML=Math.round(kp)+'<small>%</small>';
   $("gKonuBar").style.width=clamp(kp,0,100)+"%";
   if(DB.d.length){
@@ -2246,9 +2332,7 @@ function head(){
     $("gNetBar").style.width=clamp(t/HEDEF_NET*100,0,100)+"%";
     $("gNetBar").className=t>=HEDEF_NET?"":t>=HEDEF_NET*.75?"w":"b";
   }else{$("gNet").textContent="—";$("gNetBar").style.width="0";}
-  var bg=+DB.st[iso(new Date())]||0,gp=clamp(bg/DB.sg*100,0,100);
-  $("gStudy").textContent=hm(bg);
-  $("gStudyBar").style.width=gp+"%";
+  gStudyCiz();
   var rs=rStats();
   $("gBook").innerHTML=tn(rs.left)+'<small> syf</small>';
   $("gBookBar").style.width=clamp(rs.read/rs.tot*100,0,100)+"%";
@@ -2270,14 +2354,19 @@ $("rIn").oninput=function(){
 };
 $("rTotal").onchange=function(){var v=Math.round(+this.value);if(v>0){DB.rc.total=v;save();}rRefresh();};
 $("rTarget").onchange=function(){DB.rc.target=this.value||"";save();rRefresh();};
-$("rPrev").onclick=function(){qCur.setDate(qCur.getDate()-1);rRefresh();};
-$("rNext").onclick=function(){qCur.setDate(qCur.getDate()+1);rRefresh();};
-$("rToday").onclick=function(){qCur=new Date();rRefresh();};
-$("rDate").onchange=function(){if(this.value){qCur=parse(this.value);rRefresh();}};
-$("qPrev").onclick=function(){qCur.setDate(qCur.getDate()-1);qRefresh();};
-$("qNext").onclick=function(){qCur.setDate(qCur.getDate()+1);qRefresh();};
-$("qToday").onclick=function(){qCur=new Date();qRefresh();};
-$("qDate").onchange=function(){if(this.value){qCur=parse(this.value);qRefresh();}};
+/* Seçili gün (qCur) soru, okuma, çalışma süresi ve yapılacaklar için ortak;
+   biri değişince hepsi birlikte yenilenmeli, yoksa ekranda eski günün
+   değeri durur ama giriş yeni güne yazılır.                              */
+function gunGit(d){qCur=d;qRefresh();rRefresh();}
+function gunKay(n){var d=new Date(qCur);d.setDate(d.getDate()+n);gunGit(d);}
+$("rPrev").onclick=function(){gunKay(-1);};
+$("rNext").onclick=function(){gunKay(1);};
+$("rToday").onclick=function(){gunGit(new Date());};
+$("rDate").onchange=function(){if(this.value)gunGit(parse(this.value));};
+$("qPrev").onclick=function(){gunKay(-1);};
+$("qNext").onclick=function(){gunKay(1);};
+$("qToday").onclick=function(){gunGit(new Date());};
+$("qDate").onchange=function(){if(this.value)gunGit(parse(this.value));};
 $("qMode").onclick=function(e){var b=e.target.closest(".chip");if(!b)return;qMode=b.dataset.m;
   $("qMode").querySelectorAll(".chip").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});qChart();};
 $("dMode").onclick=function(e){var b=e.target.closest(".chip");if(!b)return;dMode=b.dataset.m;
@@ -2315,6 +2404,7 @@ $("file").onchange=function(){
   r.onload=function(){
     try{
       var o=JSON.parse(r.result);if(!o||typeof o!=="object")throw 0;
+      konuGoc(o);
       if(!confirm("Yedekteki kayıtlar mevcut kayıtlarla birleştirilecek. Devam edilsin mi?"))return;
       if(o.q)for(var a in o.q)DB.q[a]=o.q[a];
       if(o.k)for(var b in o.k)DB.k[b]=o.k[b];
@@ -2332,7 +2422,7 @@ $("file").onchange=function(){
         o[alan].forEach(function(x){if(!vr[x.i])DB[alan].push(x);});
       });
       if(o.rc&&typeof o.rc==="object"){if(+o.rc.total>0)DB.rc.total=+o.rc.total;if(o.rc.target)DB.rc.target=o.rc.target;}
-      save();buildKonu();qRefresh();dRefresh();rRefresh();
+      save();redrawAll();
     }catch(e){alert("Dosya okunamadı — geçerli bir yedek dosyası seç.");}
   };
   r.readAsText(f);this.value="";
@@ -2350,6 +2440,8 @@ if(window.matchMedia)try{window.matchMedia("(prefers-color-scheme: dark)")
 
 /* ---------- başlat ---------- */
 buildQ();buildD();buildKonu();
+$("planHafta").textContent=String(Math.round(PLAN_HAFTA*10)/10).replace(".",",");
+$("planSoru").textContent="~"+tn(Math.round(PLAN_SORU/100)*100);
 $("dDate").value=iso(new Date());
 qRefresh();dRefresh();dCalc();rRefresh();tPaint();odRender();szRender();bkCheck();
 
@@ -2406,12 +2498,19 @@ $("bld").textContent=window.BUILD||"yerel kopya";
       if(!s||!s.exists)return;
       if(s.metadata&&s.metadata.hasPendingWrites)return;
       var d=s.data();if(!d||typeof d.state!=="string")return;
+      /* Kendi gönderdiğimiz durum geri geldiyse uygulama: aradan geçen
+         sürede kronometre güne saniye eklemiş olabilir, eski hali bunu siler. */
+      if(SENT.indexOf(d.state)>=0)return;
       try{
         var o=JSON.parse(d.state);if(!o||typeof o!=="object")return;
+        konuGoc(o);
         if(JSON.stringify(o)===JSON.stringify(DB))return;
+        if(T.run){tBank();var bk=iso(new Date());
+          if(o.st&&typeof o.st==="object"&&(+DB.st[bk]||0)>(+o.st[bk]||0))o.st[bk]=DB.st[bk];}
         applying=true;
         DB.q=o.q||{};DB.k=o.k||{};DB.d=Array.isArray(o.d)?o.d:[];
         DB.r=o.r||{};DB.rc=(o.rc&&typeof o.rc==="object")?o.rc:{total:8000};
+        DB.kv=o.kv;
         DB.t=o.t||{};DB.st=o.st||{};DB.bk=+o.bk||DB.bk;DB.sg=+o.sg>0?+o.sg:DB.sg;DB.kb=o.kb||{};DB.kt=Array.isArray(o.kt)?o.kt:DB.kt;DB.ov=Array.isArray(o.ov)?o.ov:DB.ov;DB.sz=Array.isArray(o.sz)?o.sz:DB.sz;
         if(!(+DB.rc.total>0))DB.rc.total=8000;
         try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}
