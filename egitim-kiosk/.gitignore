@@ -16,3 +16,8 @@ admin-panel/.env.local
 # Firebase
 backend/.firebaserc
 backend/firebase-debug.log
+
+# iOS
+ios/**/GoogleService-Info.plist
+ios/**/xcuserdata/
+ios/build/

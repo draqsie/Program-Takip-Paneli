@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "EgitimKiosk"
+rootProject.name = "OkulIzin"
 include(":app")

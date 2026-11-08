@@ -1,99 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- Device owner, beyaz listedeki APK'ları kullanıcıya sormadan kurabilir (AppInstaller.kt) -->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- Kullanıcının Ayarlar'dan elle verdiği özel izinler (uygulama içinden yönlendirilir): -->
+    <!-- "Kullanım erişimi": hangi uygulamanın ön planda olduğunu öğrenmek için -->
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+    <!-- "Diğer uygulamaların üzerinde göster": izinsiz uygulamanın üstüne engel ekranı koymak için -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-    <!-- Android 11+ paket görünürlüğü: yalnızca başlatıcı ikonu olan uygulamaları görmemiz yeterli -->
+    <!-- Android 11+ paket görünürlüğü: QUERY_ALL_PACKAGES yerine yalnızca gereken sorgular -->
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.HOME" />
+        </intent>
     </queries>
 
     <application
-        android:name=".KioskApp"
+        android:name=".App"
         android:allowBackup="false"
-        android:label="Okul Tableti"
+        android:label="Okul İzin"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
-        <!-- ============ DPC (Device Policy Controller) ============ -->
-        <receiver
-            android:name=".admin.KioskAdminReceiver"
-            android:exported="true"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data
-                android:name="android.app.device_admin"
-                android:resource="@xml/device_admin" />
-            <intent-filter>
-                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
-                <action android:name="android.app.action.PROFILE_PROVISIONING_COMPLETE" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Android 12+ QR/NFC kurulumunda zorunlu: hangi modda kurulacağımızı sistem bize sorar -->
         <activity
-            android:name=".admin.GetProvisioningModeActivity"
-            android:exported="true"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <intent-filter>
-                <action android:name="android.app.action.GET_PROVISIONING_MODE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <!-- Android 12+: kurulumun son adımı, ilk politikalar burada uygulanır -->
-        <activity
-            android:name=".admin.PolicyComplianceActivity"
-            android:exported="true"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <intent-filter>
-                <action android:name="android.app.action.ADMIN_POLICY_COMPLIANCE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <!-- ============ Öğrenci ana ekranı (HOME) ============ -->
-        <!-- lockTaskMode="if_whitelisted": paket lock-task beyaz listesindeyse aktivite
-             açılır açılmaz otomatik olarak kiosk (Lock Task) moduna girer. -->
-        <activity
-            android:name=".launcher.LauncherActivity"
-            android:clearTaskOnLaunch="true"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:lockTaskMode="if_whitelisted"
-            android:stateNotNeeded="true">
+            android:name=".ui.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- ============ PDF okuyucu + işaretleme ============ -->
-        <activity
-            android:name=".pdf.PdfReaderActivity"
-            android:exported="false"
-            android:lockTaskMode="if_whitelisted" />
-
-        <!-- ============ Uzaktan kontrol ============ -->
+        <!-- Okul saatinde ön plan uygulamasını izleyen servis. Android 14+: specialUse türü ve
+             Google Play Console'da gerekçe beyanı gerekir. -->
         <service
-            android:name=".sync.KioskMessagingService"
+            android:name=".enforce.EnforcementService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Okul saatlerinde, öğrenci ve velinin onayıyla, okulun izin vermediği uygulamaların kullanımını engelleyen ebeveyn denetimi/okul denetimi." />
+        </service>
+
+        <receiver
+            android:name=".enforce.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".sync.PushService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <receiver
-            android:name=".policy.InstallResultReceiver"
-            android:exported="false" />
     </application>
 </manifest>
