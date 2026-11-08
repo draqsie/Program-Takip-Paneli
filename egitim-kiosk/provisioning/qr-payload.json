@@ -1,0 +1,16 @@
+{
+  "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME": "tr.okul.kiosk/.admin.KioskAdminReceiver",
+  "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION": "https://ORNEK-ALAN-ADI/kiosk/egitim-kiosk-0.1.0.apk",
+  "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM": "IMZA_SERTIFIKASI_SHA256_BASE64URL",
+  "android.app.extra.PROVISIONING_WIFI_SSID": "OKUL-TABLET",
+  "android.app.extra.PROVISIONING_WIFI_SECURITY_TYPE": "WPA",
+  "android.app.extra.PROVISIONING_WIFI_PASSWORD": "WIFI_SIFRESI",
+  "android.app.extra.PROVISIONING_LOCALE": "tr_TR",
+  "android.app.extra.PROVISIONING_TIME_ZONE": "Europe/Istanbul",
+  "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED": true,
+  "android.app.extra.PROVISIONING_SKIP_EDUCATION_SCREENS": true,
+  "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE": {
+    "schoolId": "ornek-anadolu-lisesi",
+    "enrollToken": "createEnrollmentToken_FONKSIYONUNDAN_ALINAN_ANAHTAR"
+  }
+}

@@ -1,0 +1,65 @@
+rules_version = '2';
+
+// Roller Firebase Auth "custom claims" ile taşınır:
+//   öğretmen/yönetici : { role: 'teacher' | 'admin', schoolId }   ← setStaffRole fonksiyonu atar
+//   tablet            : { role: 'device', schoolId, deviceId }    ← enrollDevice fonksiyonu atar
+service cloud.firestore {
+  match /databases/{db}/documents {
+
+    function signedIn()        { return request.auth != null; }
+    function claims()          { return request.auth.token; }
+    function inSchool(s)       { return signedIn() && claims().schoolId == s; }
+    function isStaff(s)        { return inSchool(s) && claims().role in ['teacher', 'admin']; }
+    function isAdmin(s)        { return inSchool(s) && claims().role == 'admin'; }
+    function isDevice(s)       { return inSchool(s) && claims().role == 'device'; }
+    function isThisDevice(s, d){ return isDevice(s) && claims().deviceId == d; }
+    function onlyChanges(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+    function myGroup(s) {
+      return get(/databases/$(db)/documents/schools/$(s)/devices/$(claims().deviceId)).data.groupId;
+    }
+
+    match /schools/{s} {
+      allow read: if isStaff(s);
+
+      // PIN özeti burada; yalnızca setKioskPin fonksiyonu (Admin SDK) yazar.
+      match /config/{doc} {
+        allow read: if isStaff(s) || isDevice(s);
+        allow write: if false;
+      }
+
+      // Sınıflar: izinli uygulamalar, mod (NORMAL/SINAV/KILITLI), kitaplar
+      match /groups/{g} {
+        allow read: if isStaff(s) || (isDevice(s) && myGroup(s) == g);
+        allow write: if isStaff(s);
+      }
+
+      // Okulun uygulama kataloğu (apkUrl + sha256)
+      match /apps/{pkg} {
+        allow read: if inSchool(s);
+        allow write: if isAdmin(s);
+      }
+
+      match /devices/{d} {
+        allow read: if isStaff(s) || isThisDevice(s, d);
+        // Öğretmen cihazı sınıfa atar / istisna tanımlar; cihaz yalnızca kendi durumunu yazar.
+        allow update: if isStaff(s) || (isThisDevice(s, d) && onlyChanges(['status', 'fcmToken']));
+        allow create: if false; // yalnızca enrollDevice
+        allow delete: if isAdmin(s);
+
+        match /commands/{c} {
+          allow read: if isStaff(s) || isThisDevice(s, d);
+          allow create: if isStaff(s)
+                        && request.resource.data.type in ['SYNC', 'MESSAGE', 'OPEN_BOOK', 'MAINTENANCE', 'REBOOT']
+                        && request.resource.data.ackAt == null;
+          allow update: if isThisDevice(s, d) && onlyChanges(['ackAt', 'result']);
+          allow delete: if isAdmin(s);
+        }
+      }
+
+      // Kayıt anahtarları yalnızca yönetici tarafından üretilir, cihazlar fonksiyon üzerinden kullanır.
+      match /enrollmentTokens/{t} {
+        allow read, write: if isAdmin(s);
+      }
+    }
+  }
+}

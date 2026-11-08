@@ -1,0 +1,18 @@
+# Android
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/app/google-services.json
+*.jks
+*.keystore
+
+# Node
+node_modules/
+backend/functions/lib/
+admin-panel/dist/
+admin-panel/.env.local
+
+# Firebase
+backend/.firebaserc
+backend/firebase-debug.log

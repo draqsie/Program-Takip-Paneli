@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Device owner olduğumuzda DevicePolicyManager'ın neredeyse tüm API'leri açılır;
+     buradaki liste eski "device admin" uyumluluğu içindir. -->
+<device-admin>
+    <uses-policies>
+        <limit-password />
+        <watch-login />
+        <reset-password />
+        <force-lock />
+        <wipe-data />
+        <disable-camera />
+    </uses-policies>
+</device-admin>
