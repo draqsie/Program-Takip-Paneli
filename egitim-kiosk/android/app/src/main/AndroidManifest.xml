@@ -13,6 +13,8 @@
         tools:ignore="ProtectedPermissions" />
     <!-- "Diğer uygulamaların üzerinde göster": izinsiz uygulamanın üstüne engel ekranı koymak için -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- GitHub'dan kendi güncellemesini kurmak için (ilk seferde sistem bir kez onay ister) -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <!-- Android 11+ paket görünürlüğü: QUERY_ALL_PACKAGES yerine yalnızca gereken sorgular -->
     <queries>
@@ -42,15 +44,14 @@
             </intent-filter>
         </activity>
 
-        <!-- Okul saatinde ön plan uygulamasını izleyen servis. Android 14+: specialUse türü ve
-             Google Play Console'da gerekçe beyanı gerekir. -->
+        <!-- Okul saatinde ön plan uygulamasını izleyen servis (Android 14+: specialUse türü). -->
         <service
             android:name=".enforce.EnforcementService"
             android:exported="false"
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Okul saatlerinde, öğrenci ve velinin onayıyla, okulun izin vermediği uygulamaların kullanımını engelleyen ebeveyn denetimi/okul denetimi." />
+                android:value="Okul saatlerinde, öğrenci ve velinin onayıyla, okulun izin vermediği uygulamaların kullanımını engelleyen okul denetimi." />
         </service>
 
         <receiver
@@ -62,12 +63,8 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".sync.PushService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+        <receiver
+            android:name=".update.InstallResultReceiver"
+            android:exported="false" />
     </application>
 </manifest>

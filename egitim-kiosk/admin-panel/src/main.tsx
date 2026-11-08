@@ -1,14 +1,13 @@
 import { StrictMode, useEffect, useState, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { GoogleAuthProvider, onIdTokenChanged, signInWithPopup, signOut, type User } from "firebase/auth";
-import { auth } from "./firebase";
+import { ADMIN_EMAILS, auth, SCHOOL_ID } from "./firebase";
 import { YonetimPaneli } from "./YonetimPaneli";
 
 /**
- * Panel yalnızca role=admin claim'i taşıyan hesaba açılır. Bu claim'i yalnızca sunucu tarafında
- * (ilk-yonetici betiği) atayabilirsiniz; tarayıcıdan değiştirilemez. Asıl koruma Firestore
- * kurallarındadır: claim'i olmayan biri paneli açsa bile tek bir kayıt okuyamaz.
- * Hesabınızda iki adımlı doğrulamayı mutlaka açın.
+ * Panel yalnızca yönetici e-postasıyla açılır. Buradaki kontrol sadece arayüz içindir; asıl koruma
+ * Firestore kurallarındadır (backend/firestore.rules): listede olmayan biri paneli açsa bile
+ * tek bir kayıt okuyamaz. Google hesabınızda iki adımlı doğrulamayı mutlaka açın.
  */
 function App() {
   const [state, setState] = useState<
@@ -17,11 +16,11 @@ function App() {
 
   useEffect(
     () =>
-      onIdTokenChanged(auth, async (user) => {
+      onIdTokenChanged(auth, (user) => {
         if (!user) return setState({ kind: "out" });
-        const { claims } = await user.getIdTokenResult();
-        if (claims.role === "admin" && typeof claims.schoolId === "string") {
-          setState({ kind: "admin", user, schoolId: claims.schoolId });
+        const email = (user.email ?? "").toLowerCase();
+        if (user.emailVerified && ADMIN_EMAILS.includes(email)) {
+          setState({ kind: "admin", user, schoolId: SCHOOL_ID });
         } else {
           setState({ kind: "denied", user });
         }

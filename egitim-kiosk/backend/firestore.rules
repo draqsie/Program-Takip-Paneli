@@ -1,56 +1,74 @@
 rules_version = '2';
 
-// Roller Firebase Auth "custom claims" ile taşınır:
-//   yönetici (yalnızca siz) : { role: 'admin', schoolId }                 ← ilk-yonetici betiği atar
-//   öğrenci cihazı          : { role: 'student', schoolId, studentId }    ← enrollStudent fonksiyonu atar
+// Sunucu kodu (Cloud Functions) YOK: tüm güvenlik bu dosyadadır. Firebase'in ücretsiz
+// (Spark) planında çalışır.
 //
-// Öğrenci kendi izin listesini ASLA değiştiremez; yalnızca kendi durumunu, uygulama envanterini
-// yazabilir ve kendi adına "BEKLEMEDE" istek oluşturabilir.
+//   Yönetici : Google ile giriş yapmış, e-postası aşağıdaki listede olan hesap.
+//   Öğrenci  : Uygulamanın açtığı anonim oturum. Öğrenci kaydının belge kimliği = oturum uid'i,
+//              bu yüzden her tablet yalnızca kendi kaydına dokunabilir.
 service cloud.firestore {
   match /databases/{db}/documents {
 
-    function claims()           { return request.auth.token; }
-    function signedIn()         { return request.auth != null; }
-    function isAdmin(s)         { return signedIn() && claims().role == 'admin' && claims().schoolId == s; }
-    function isStudent(s)       { return signedIn() && claims().role == 'student' && claims().schoolId == s; }
-    function isThisStudent(s, id) { return isStudent(s) && claims().studentId == id; }
-    function onlyChanges(keys)  { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+    // >>> KENDİ E-POSTANIZI YAZIN (birden fazla yönetici için listeye ekleyin) <<<
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.get('email_verified', false) == true
+        && request.auth.token.get('email', '') in ['yonetici@okulunuz.k12.tr'];
+    }
+
+    function signedIn() { return request.auth != null; }
+    function onlyChanges(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
 
     match /schools/{s} {
-      allow read, write: if isAdmin(s);
+      allow read, write: if isAdmin();
 
-      // Okul saatleri, tatil/duraklatma, varsayılan izinli Android uygulamaları
+      // Okul saatleri, duraklatma, herkese açık Android uygulamaları
       match /config/{doc} {
-        allow read: if isAdmin(s) || (isStudent(s) && doc == 'settings');
-        allow write: if isAdmin(s);
+        allow read: if isAdmin() || (signedIn() && doc == 'settings');
+        allow write: if isAdmin();
       }
 
-      match /students/{id} {
-        allow read: if isAdmin(s) || isThisStudent(s, id);
-        allow update: if isAdmin(s)
-                      || (isThisStudent(s, id)
-                          && onlyChanges(['inventory', 'inventoryUpdatedAt', 'status', 'fcmToken']));
-        allow create: if false;          // yalnızca enrollStudent
-        allow delete: if isAdmin(s);
+      // Kayıt kodları: öğrenci yalnızca bildiği kodu tek tek okuyabilir, listeleyemez.
+      match /enrollmentCodes/{code} {
+        allow get: if signedIn();
+        allow list, write: if isAdmin();
+      }
+
+      match /students/{uid} {
+        allow read: if isAdmin() || request.auth.uid == uid;
+
+        // Kayıt: geçerli ve süresi dolmamış bir kodla, boş izinlerle, kendi uid'i altında.
+        allow create: if signedIn() && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(
+               ['name', 'className', 'platform', 'enrollCode', 'consentVersion',
+                'allowed', 'grants', 'labels', 'inventory', 'status', 'enrolledAt'])
+          && request.resource.data.allowed.size() == 0
+          && request.resource.data.grants.size() == 0
+          && request.resource.data.name is string && request.resource.data.name.size() >= 3
+          && request.resource.data.name.size() <= 60
+          && request.resource.data.platform in ['android', 'ios']
+          && exists(/databases/$(db)/documents/schools/$(s)/enrollmentCodes/$(request.resource.data.enrollCode))
+          && get(/databases/$(db)/documents/schools/$(s)/enrollmentCodes/$(request.resource.data.enrollCode)).data.expiresAt > request.time
+          && request.resource.data.className == get(/databases/$(db)/documents/schools/$(s)/enrollmentCodes/$(request.resource.data.enrollCode)).data.className;
+
+        // Öğrenci kendi izin listesini DEĞİŞTİREMEZ; yalnızca durumunu ve uygulama listesini yazar.
+        allow update: if isAdmin()
+          || (request.auth.uid == uid && onlyChanges(['inventory', 'inventoryUpdatedAt', 'status']));
+        allow delete: if isAdmin();
       }
 
       match /requests/{r} {
-        allow read: if isAdmin(s) || (isStudent(s) && resource.data.studentId == claims().studentId);
-        allow create: if isStudent(s)
-                      && request.resource.data.studentId == claims().studentId
-                      && request.resource.data.status == 'PENDING'
-                      && request.resource.data.appKey is string
-                      && request.resource.data.appKey.size() < 200
-                      && request.resource.data.appLabel is string
-                      && request.resource.data.appLabel.size() < 80
-                      && request.resource.data.keys().hasOnly(
-                           ['studentId', 'studentName', 'className', 'platform', 'appKey',
-                            'appLabel', 'labelVerified', 'note', 'status', 'createdAt']);
-        allow update, delete: if isAdmin(s);
-      }
-
-      match /enrollmentCodes/{c} {
-        allow read, write: if isAdmin(s);
+        allow read: if isAdmin() || (signedIn() && resource.data.studentId == request.auth.uid);
+        allow create: if signedIn()
+          && request.resource.data.studentId == request.auth.uid
+          && exists(/databases/$(db)/documents/schools/$(s)/students/$(request.auth.uid))
+          && request.resource.data.status == 'PENDING'
+          && request.resource.data.appKey is string && request.resource.data.appKey.size() < 200
+          && request.resource.data.appLabel is string && request.resource.data.appLabel.size() < 80
+          && request.resource.data.keys().hasOnly(
+               ['studentId', 'studentName', 'className', 'platform', 'appKey',
+                'appLabel', 'labelVerified', 'note', 'status', 'createdAt']);
+        allow update, delete: if isAdmin();
       }
     }
   }

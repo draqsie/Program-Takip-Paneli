@@ -1,0 +1,73 @@
+name: Okul İzin — Android sürümü
+
+# Yeni sürüm yayımlamak için:  git tag okul-izin-v1.0.0 && git push origin okul-izin-v1.0.0
+# Çıktılar GitHub Releases'a yüklenir; tabletlerdeki uygulama oradan kendini günceller.
+#
+# Gerekli repo gizlileri (Settings → Secrets and variables → Actions):
+#   GOOGLE_SERVICES_JSON     Firebase'den indirilen google-services.json dosyasının içeriği
+#   OKUL_KEYSTORE_BASE64     İmza anahtarı: base64 -w0 okul.jks
+#   OKUL_KEYSTORE_PASSWORD   Anahtar deposu şifresi
+#   OKUL_KEY_ALIAS           Anahtar adı
+#   OKUL_KEY_PASSWORD        Anahtar şifresi
+
+on:
+  push:
+    tags: ["okul-izin-v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    env:
+      OKUL_VERSION_CODE: ${{ github.run_number }}
+    defaults:
+      run:
+        working-directory: egitim-kiosk/android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.11.1"
+
+      - name: Sürüm adı ve gizli dosyalar
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          OKUL_KEYSTORE_BASE64: ${{ secrets.OKUL_KEYSTORE_BASE64 }}
+        run: |
+          echo "OKUL_VERSION_NAME=${GITHUB_REF_NAME#okul-izin-v}" >> "$GITHUB_ENV"
+          echo "OKUL_KEYSTORE_PATH=$RUNNER_TEMP/okul.jks" >> "$GITHUB_ENV"
+          printf '%s' "$GOOGLE_SERVICES_JSON" > app/google-services.json
+          printf '%s' "$OKUL_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/okul.jks"
+
+      - name: Test ve imzalı derleme
+        env:
+          OKUL_KEYSTORE_PASSWORD: ${{ secrets.OKUL_KEYSTORE_PASSWORD }}
+          OKUL_KEY_ALIAS: ${{ secrets.OKUL_KEY_ALIAS }}
+          OKUL_KEY_PASSWORD: ${{ secrets.OKUL_KEY_PASSWORD }}
+        run: gradle --no-daemon :app:testReleaseUnitTest :app:assembleRelease
+
+      - name: APK ve version.json
+        run: |
+          cp app/build/outputs/apk/release/app-release.apk okul-izin.apk
+          SHA=$(sha256sum okul-izin.apk | cut -d' ' -f1)
+          printf '{"versionCode":%s,"versionName":"%s","sha256":"%s","apk":"okul-izin.apk"}\n' \
+            "$OKUL_VERSION_CODE" "$OKUL_VERSION_NAME" "$SHA" > version.json
+          cat version.json
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: Okul İzin ${{ env.OKUL_VERSION_NAME }}
+          body: |
+            Tablete kurulum: okul-izin.apk dosyasını tabletten indirip açın.
+            Kurulu tabletler bu sürümü uygulama içinden kendisi bulur (okul saati dışında).
+          files: |
+            egitim-kiosk/android/okul-izin.apk
+            egitim-kiosk/android/version.json

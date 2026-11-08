@@ -2,16 +2,15 @@ package tr.okul.izin.sync
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.functions.FirebaseFunctions
-import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,10 +23,12 @@ import tr.okul.izin.enforce.Permissions
 import tr.okul.izin.policy.AccessPolicy
 
 /**
- * Cihaz ↔ Firebase.
- *  - Kayıt: kayıt kodu → enrollStudent → claim'li custom token (öğrenci yalnızca kendi verisine erişir).
- *  - Dinleme: okul ayarları + öğrenci belgesi (izinli liste, geçici izinler) + kendi bekleyen istekleri.
- *  - Rapor: 5 dakikada bir durum (izinler tam mı, saat sapması) ve değiştiyse uygulama listesi.
+ * Cihaz ↔ Firebase. Sunucu kodu yoktur; her şey Firestore + güvenlik kurallarıyla yürür.
+ *  - Kayıt: anonim oturum açılır, öğretmenin kayıt koduyla `students/{uid}` oluşturulur
+ *    (kurallar kodun geçerliliğini ve izin listesinin boş olduğunu denetler).
+ *  - Canlı dinleme: okul ayarları, kendi kaydı (izinler), kendi istekleri. Ön plan servisi süreci
+ *    canlı tuttuğu için öğretmen onayladığı anda cihaza düşer; push sunucusu gerekmez.
+ *  - Rapor: okul saatinde 10 dk'da, dışında saatte bir (Firebase ücretsiz kotasına sığması için).
  */
 class StudentSync(private val app: App, private val scope: CoroutineScope) {
 
@@ -40,38 +41,52 @@ class StudentSync(private val app: App, private val scope: CoroutineScope) {
     private var settingsDoc: Map<String, Any?>? = null
     private var studentDoc: Map<String, Any?>? = null
 
-    private val _profile = MutableStateFlow(Profile.load(prefs))
-    val profile: StateFlow<Profile?> = _profile
-
     data class Profile(val studentId: String, val name: String, val className: String) {
         companion object {
-            fun load(p: android.content.SharedPreferences): Profile? {
+            fun load(p: SharedPreferences): Profile? {
                 val id = p.getString("id", null) ?: return null
                 return Profile(id, p.getString("name", "") ?: "", p.getString("class", "") ?: "")
             }
         }
     }
 
-    val isEnrolled: Boolean get() = _profile.value != null && auth.currentUser != null
+    private val _profile = MutableStateFlow(Profile.load(prefs))
+    val profile: StateFlow<Profile?> = _profile
 
-    private val schoolId = BuildConfig.SCHOOL_ID
-    private fun school() = db.collection("schools").document(schoolId)
+    val isEnrolled: Boolean
+        get() = _profile.value != null && auth.currentUser?.uid == _profile.value?.studentId
+
+    private fun school() = db.collection("schools").document(BuildConfig.SCHOOL_ID)
     private fun me(p: Profile) = school().collection("students").document(p.studentId)
 
     // ------------------------------------------------------------------ kayıt
 
     suspend fun enroll(code: String, name: String, consentVersion: String) {
-        val res = FirebaseFunctions.getInstance("europe-west1").getHttpsCallable("enrollStudent").call(
+        val user = auth.currentUser ?: auth.signInAnonymously().await().user ?: error("Oturum açılamadı")
+        val codeDoc = school().collection("enrollmentCodes").document(code).get().await()
+        if (!codeDoc.exists()) error("Kayıt kodu geçersiz")
+        val expires = codeDoc.getTimestamp("expiresAt")
+        if (expires != null && expires.toDate().time < System.currentTimeMillis()) error("Kodun süresi dolmuş")
+        val className = codeDoc.getString("className") ?: ""
+
+        school().collection("students").document(user.uid).set(
             mapOf(
-                "schoolId" to schoolId, "code" to code, "name" to name,
-                "platform" to "android", "consentVersion" to consentVersion,
+                "name" to name,
+                "className" to className,
+                "platform" to "android",
+                "enrollCode" to code,
+                "consentVersion" to consentVersion,
+                "allowed" to emptyList<String>(),
+                "grants" to emptyMap<String, Any>(),
+                "labels" to emptyMap<String, Any>(),
+                "inventory" to emptyList<Any>(),
+                "status" to emptyMap<String, Any>(),
+                "enrolledAt" to FieldValue.serverTimestamp(),
             )
         ).await()
-        val data = res.getData() as Map<*, *>
-        auth.signInWithCustomToken(data["customToken"] as String).await()
-        val id = data["studentId"] as String
-        prefs.edit().putString("id", id).putString("name", name).apply()
-        _profile.value = Profile(id, name, "")
+
+        prefs.edit().putString("id", user.uid).putString("name", name).putString("class", className).apply()
+        _profile.value = Profile(user.uid, name, className)
         start()
     }
 
@@ -79,7 +94,7 @@ class StudentSync(private val app: App, private val scope: CoroutineScope) {
 
     fun start() {
         val p = _profile.value ?: return
-        if (started || auth.currentUser == null) return
+        if (started || !isEnrolled) return
         started = true
 
         regs += school().collection("config").document("settings").addSnapshotListener { s, _ ->
@@ -89,29 +104,29 @@ class StudentSync(private val app: App, private val scope: CoroutineScope) {
         regs += me(p).addSnapshotListener { s, _ ->
             if (s == null || !s.exists()) return@addSnapshotListener
             studentDoc = s.data.orEmpty()
-            val className = s.getString("className") ?: ""
-            if (className != _profile.value?.className) {
-                prefs.edit().putString("class", className).apply()
-                _profile.value = p.copy(className = className)
-            }
-            // Kendi yazdığımız sunucu zaman damgası onaylandığında güvenilir saati güncelle.
+            // Kendi raporumuzdaki sunucu zaman damgası onaylanınca güvenilir saati güncelle.
             if (!s.metadata.hasPendingWrites()) {
                 (s.get("status.lastSeen") as? Timestamp)?.let { app.clock.onServerTime(it.toDate().time) }
             }
             recompute()
         }
-        regs += school().collection("requests")
-            .whereEqualTo("studentId", p.studentId)
-            .whereEqualTo("status", "PENDING")
+        regs += school().collection("requests").whereEqualTo("studentId", p.studentId)
             .addSnapshotListener { s, _ ->
-                app.pendingRequests.value = s?.documents?.mapNotNull { it.getString("appKey") }?.toSet().orEmpty()
+                if (s == null) return@addSnapshotListener
+                app.pendingRequests.value = s.documents
+                    .filter { it.getString("status") == "PENDING" }
+                    .mapNotNull { it.getString("appKey") }
+                    .toSet()
+                s.documentChanges
+                    .filter { it.type != DocumentChange.Type.REMOVED && !it.document.metadata.hasPendingWrites() }
+                    .forEach { notifyIfDecided(it.document.id, it.document.data) }
             }
 
-        FirebaseMessaging.getInstance().token.addOnSuccessListener { updateFcmToken(it) }
         scope.launch {
             while (true) {
                 runCatching { report(p) }.onFailure { Log.w(TAG, "rapor", it) }
-                delay(5 * 60_000L)
+                val schoolTime = app.policy.value.isRestrictedNow(app.clock.now())
+                delay(if (schoolTime) 10 * 60_000L else 60 * 60_000L)
             }
         }
     }
@@ -125,6 +140,18 @@ class StudentSync(private val app: App, private val scope: CoroutineScope) {
             key to ts.toDate().time
         }.toMap()
         app.updatePolicy(AccessPolicy.fromMaps(settings, student, grants))
+    }
+
+    /** Karar verilmiş ve henüz bildirilmemiş (son 6 saatteki) istekler için bir kez bildirim gösterir. */
+    private fun notifyIfDecided(id: String, data: Map<String, Any?>) {
+        val status = data["status"] as? String ?: return
+        if (status == "PENDING") return
+        val decidedAt = (data["decidedAt"] as? Timestamp)?.toDate()?.time ?: return
+        if (System.currentTimeMillis() - decidedAt > 6 * 3600_000L) return
+        val notified = prefs.getStringSet("notified", emptySet()).orEmpty()
+        if (id in notified) return
+        Notifier.decision(app, id, data["appLabel"] as? String ?: "Uygulama", status == "APPROVED")
+        prefs.edit().putStringSet("notified", (notified + id).toList().takeLast(200).toSet()).apply()
     }
 
     // ------------------------------------------------------------------ istek ve rapor
@@ -148,12 +175,7 @@ class StudentSync(private val app: App, private val scope: CoroutineScope) {
         ).addOnFailureListener { Log.w(TAG, "istek gönderilemedi", it) }
     }
 
-    fun updateFcmToken(token: String) {
-        val p = _profile.value ?: return
-        me(p).set(mapOf("fcmToken" to token), SetOptions.merge())
-    }
-
-    /** Uygulama listesi değiştiyse gönderilir (ad + paket; simge ve kullanım süresi gönderilmez). */
+    /** Durum + (değiştiyse) uygulama listesi. Simge, kullanım süresi vb. gönderilmez. */
     private fun report(p: Profile) {
         val missing = Permissions.missing(app)
         val status = mapOf(
@@ -168,12 +190,13 @@ class StudentSync(private val app: App, private val scope: CoroutineScope) {
 
         val inventory = installedApps()
         val hash = inventory.joinToString("|") { it["id"] + "=" + it["label"] }.hashCode()
-        if (hash != prefs.getInt("inventoryHash", 0)) {
+        val inventoryChanged = hash != prefs.getInt("inventoryHash", 0)
+        if (inventoryChanged) {
             updates["inventory"] = inventory
             updates["inventoryUpdatedAt"] = FieldValue.serverTimestamp()
         }
         me(p).update(updates).addOnSuccessListener {
-            prefs.edit().putInt("inventoryHash", hash).apply()
+            if (inventoryChanged) prefs.edit().putInt("inventoryHash", hash).apply()
         }
     }
 
@@ -185,11 +208,6 @@ class StudentSync(private val app: App, private val scope: CoroutineScope) {
             .filter { it != app.packageName }
             .map { pkg -> mapOf("id" to pkg, "label" to pm.getApplicationLabel(pm.getApplicationInfo(pkg, 0)).toString()) }
             .sortedBy { it["label"] }
-    }
-
-    fun onPush() {
-        val p = _profile.value ?: return
-        scope.launch { runCatching { report(p) } }
     }
 
     private companion object { const val TAG = "StudentSync" }

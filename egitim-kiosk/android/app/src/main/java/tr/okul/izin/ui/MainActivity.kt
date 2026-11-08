@@ -37,6 +37,8 @@ import kotlinx.coroutines.launch
 import tr.okul.izin.App
 import tr.okul.izin.enforce.EnforcementService
 import tr.okul.izin.enforce.Permissions
+import tr.okul.izin.update.Updater
+import androidx.compose.runtime.LaunchedEffect
 
 /** Bu metin değişirse sürümü artırın; sunucu öğrencinin hangi metni onayladığını saklar. */
 private const val CONSENT_VERSION = "2026-11-v1"
@@ -68,6 +70,7 @@ class MainActivity : ComponentActivity() {
                             }
                         })
                         StatusScreen(app)
+                        UpdateCard(app)
                     }
                 }
             }
@@ -166,6 +169,38 @@ private fun StatusScreen(app: App) {
             )
             Text("Okul saatleri: ${hm(s.startMin)}–${hm(s.endMin)}")
             if (pending.isNotEmpty()) Text("Onay bekleyen isteğin: ${pending.size}")
+        }
+    }
+}
+
+/** GitHub'daki son sürümü denetler. Okul saatinde güncellenmez (kurulum ekranı o saatte kapalıdır). */
+@Composable
+private fun UpdateCard(app: App) {
+    var info by remember { mutableStateOf<Updater.Info?>(null) }
+    var message by remember { mutableStateOf<String?>(null) }
+    var busy by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    LaunchedEffect(Unit) { info = runCatching { Updater.check() }.getOrNull() }
+
+    val available = info ?: return
+    val schoolTime = app.policy.value.isRestrictedNow(app.clock.now())
+    Card(Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Yeni sürüm: ${available.versionName}", fontWeight = FontWeight.SemiBold)
+            if (schoolTime) {
+                Text("Okul saati bitince güncelleyebilirsin.")
+            } else {
+                Button(enabled = !busy, onClick = {
+                    busy = true
+                    scope.launch {
+                        message = runCatching { Updater.install(ctx, available) }
+                            .fold({ "Kurulum ekranında \"Güncelle\"ye bas." }, { "Güncellenemedi: ${it.message}" })
+                        busy = false
+                    }
+                }) { Text(if (busy) "İndiriliyor…" else "Güncelle") }
+            }
+            message?.let { Text(it) }
         }
     }
 }

@@ -9,13 +9,14 @@ android/app/google-services.json
 
 # Node
 node_modules/
-backend/functions/lib/
 admin-panel/dist/
 admin-panel/.env.local
 
 # Firebase
 backend/.firebaserc
 backend/firebase-debug.log
+backend/firestore-debug.log
+admin-panel/.firebaserc
 
 # iOS
 ios/**/GoogleService-Info.plist

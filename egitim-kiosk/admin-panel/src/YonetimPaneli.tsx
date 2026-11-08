@@ -3,8 +3,7 @@ import {
   arrayRemove, arrayUnion, collection, deleteField, doc, FieldPath, limit, onSnapshot, orderBy,
   query, serverTimestamp, setDoc, Timestamp, updateDoc, where, writeBatch,
 } from "firebase/firestore";
-import { httpsCallable } from "firebase/functions";
-import { db, functions } from "./firebase";
+import { db } from "./firebase";
 
 // ----------------------------------------------------------------------------- veri tipleri
 
@@ -87,13 +86,13 @@ function expiryFor(duration: Duration, settings: Settings): Timestamp | null {
   return Timestamp.fromDate(end.getTime() > Date.now() ? end : new Date(Date.now() + 60 * 60_000));
 }
 
-/** Kırmızı/sarı/yeşil koruma durumu. Android 5 dk'da bir rapor verir; iOS yalnızca uygulama açıldığında. */
+/** Kırmızı/sarı/yeşil koruma durumu. Android okul saatinde 10 dk'da bir rapor verir; iOS yalnızca uygulama açıldığında. */
 function protectionBadge(s: Student): { text: string; color: string } {
   const st = s.status ?? {};
   if (st.protection === "DISABLED") return { text: "Koruma kapatılmış", color: "#c62828" };
   if (st.protection === "PERMISSION_MISSING") return { text: `İzin eksik: ${(st.missing ?? []).join(", ")}`, color: "#c62828" };
   if (Math.abs(st.clockSkewSec ?? 0) > 300) return { text: "Cihaz saati oynanmış", color: "#ef6c00" };
-  const staleMin = s.platform === "android" ? 20 : 24 * 60;
+  const staleMin = s.platform === "android" ? 30 : 24 * 60;
   if (!st.lastSeen || Date.now() - st.lastSeen.toMillis() > staleMin * 60_000) return { text: "Rapor gelmiyor", color: "#ef6c00" };
   return { text: "Aktif", color: "#2e7d32" };
 }
@@ -338,9 +337,17 @@ function Ayarlar({ base, settings }: { base: string; settings: Settings }) {
 
   const togglePause = () => setDoc(doc(db, `${base}/config/settings`), { paused: !settings.paused }, { merge: true });
 
+  /** Kayıt kodu tarayıcıda kriptografik rastgele üretilir (31^10 ≈ 8×10^14 olasılık, tahmin edilemez). */
   const makeCode = async () => {
-    const res = await httpsCallable<{ className: string }, { code: string }>(functions, "createEnrollmentCode")({ className: codeClass });
-    setCode(res.data.code);
+    const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+    const bytes = crypto.getRandomValues(new Uint32Array(10));
+    const newCode = Array.from(bytes, (b) => alphabet[b % alphabet.length]).join("");
+    await setDoc(doc(db, `${base}/enrollmentCodes/${newCode}`), {
+      className: codeClass.trim(),
+      expiresAt: Timestamp.fromMillis(Date.now() + 7 * 86_400_000),
+      createdAt: serverTimestamp(),
+    });
+    setCode(newCode);
   };
 
   const toggleDay = (d: number) =>
@@ -372,7 +379,7 @@ function Ayarlar({ base, settings }: { base: string; settings: Settings }) {
       <button onClick={togglePause}>{settings.paused ? "Kısıtlamaları yeniden başlat" : "Tüm kısıtlamaları duraklat"}</button>
 
       <h2>Öğrenci kayıt kodu</h2>
-      <p>Öğrenci uygulamayı indirdikten sonra bu kodu girer. Kod 7 gün ve 40 kayıt için geçerlidir.</p>
+      <p>Öğrenci uygulamayı kurduktan sonra bu kodu girer. Kod 7 gün geçerlidir; süre dolunca yeni kayıt yapılamaz (kayıtlı öğrenciler etkilenmez).</p>
       <input placeholder="Sınıf (ör. 9-A)" value={codeClass} onChange={(e) => setCodeClass(e.target.value)} />{" "}
       <button disabled={!codeClass.trim()} onClick={makeCode}>Kod üret</button>
       {code && <p style={{ fontSize: 28, letterSpacing: 4, fontFamily: "monospace" }}>{code}</p>}
