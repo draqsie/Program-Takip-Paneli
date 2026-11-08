@@ -9,7 +9,8 @@ tablet tamamen serbesttir. Tam kiosk değildir: öğrencinin tableti onun tablet
 ```
 egitim-kiosk/
 ├── android/       ← Android uygulaması (Kotlin). APK, GitHub Releases'tan kurulur ve oradan güncellenir.
-├── ios/           ← iPad uygulaması (Swift) + App Store'suz kurulum rehberi + kodsuz B planı
+├── ipad-kisayol/  ← iPad için ÖNERİLEN yol: Kestirmeler + Google Apps Script sunucusu (üyeliksiz)
+├── ios/           ← iPad için alternatif: Swift uygulaması (geliştirici üyeliği gerekir) + kodsuz B planı
 ├── backend/       ← Firestore güvenlik kuralları + indeksler (sunucu kodu yok)
 └── admin-panel/   ← yalnızca sizin girdiğiniz web paneli (React)
 .github/workflows/okul-izin-android.yml  ← etiket atınca imzalı APK'yı derleyip Releases'a koyar
@@ -25,14 +26,19 @@ egitim-kiosk/
 2. **Okul kuralı:** "Okula tablet getiren öğrencide Okul İzin açık olmalı." Kapatan öğrenci panelde
    **kırmızı** görünür.
 
-| | Android | iPad — A: uygulama | iPad — B: Ekran Süresi |
-|---|---|---|---|
-| Kurulum | GitHub'dan APK | Mac + Xcode + geliştirici üyeliği | Ayarlar'dan, kodsuz |
-| İzinsiz uygulamayı kapatma | ✅ | ✅ | ✅ |
-| İstek → panel → uzaktan onay | ✅ Onay saniyeler içinde cihaza düşer | ✅ Onay, öğrenci Okul İzin'i açınca uygulanır | ❌ Öğretmen iPad'in başında parola girer |
-| Paneldeki uygulama listesi | ✅ | ❌ Apple vermez | ❌ |
-| Okul saatinde izni / uygulamayı kapatma | Engelli (Ayarlar okul saatinde kapalı) | Kapatabilir → panelde kırmızı | Parolasız kapatamaz |
-| Saat değiştirerek atlatma | Engelli (sunucu saati) | Panelde uyarı | Ekran Süresi'ne bağlı |
+| | Android | **iPad — Kestirmeler (önerilen)** | iPad — Swift uygulaması | iPad — yalnız Ekran Süresi |
+|---|---|---|---|---|
+| Kurulum | GitHub'dan APK | Kısayol iCloud bağlantısı + otomasyonlar | Mac + geliştirici üyeliği | Ayarlar'dan |
+| Üyelik / 7 gün yenileme | Yok | **Yok** | Yıllık üyelik | Yok |
+| Kendini güncelleme | GitHub Releases | **Mantık sunucuda: anında** | Yeniden kurulum | Gerekmez |
+| İzinsiz uygulamayı kapatma | ✅ Tam ekran engel | ⚠️ Açılır, ~1–2 sn sonra ana ekrana döner | ✅ | ✅ |
+| İstek → panel → uzaktan onay | ✅ | ✅ | ✅ | ❌ |
+| Hangi uygulamalar denetlenir | Hepsi | Otomasyon kurulanlar | Hepsi | Hepsi |
+| Silinirse panelde görünür mü | ✅ Rapor kesilir | ✅ Nabız kesilir | ⚠️ Gecikmeli | — |
+| Saat değiştirerek atlatma | Engelli | Engelli (sunucu saati) | Panelde uyarı | Ekran Süresi'ne bağlı |
+
+Kestirmeler yolunun açıkları (tek bir otomasyonu silmek, internetsiz kullanım) [`ipad-kisayol/README.md`](ipad-kisayol/README.md)
+içinde tek tek yazılı.
 
 ---
 
@@ -179,8 +185,9 @@ okul saati dışında "Güncelle"ye basar.
 
 ### 5.4 iPad
 
-[`ios/README.md`](ios/README.md): **A)** uygulama (Mac + geliştirici üyeliği, Apple başvurusu yok)
-veya **B)** kodsuz Ekran Süresi + öğretmen parolası.
+**Önerilen:** [`ipad-kisayol/README.md`](ipad-kisayol/README.md). Apps Script sunucusu bir kez
+yayımlanır, kısayol bir kez oluşturulur, her iPad'e 5–8 dakikada kurulur.
+Alternatifler: [`ios/README.md`](ios/README.md).
 
 ---
 
@@ -230,6 +237,8 @@ Okul İzin için "Otomatik başlatma"yı açın ve pil kısıtlamasını "Kısı
 | Android: `enforce/*`, `policy/*`, `update/*`, `sync/Notifier.kt` | Android 15 framework sınıflarına karşı **derlendi**; `AccessPolicy` birim testleri **geçti** |
 | Android: `StudentSync.kt` (Firebase), `MainActivity.kt` (Compose) | Bu ortamdan Google'ın paket deposuna erişilemediği için **derlenmedi**; ilk derleme GitHub Actions'ta olacak |
 | GitHub Actions iş akışı | YAML sözdizimi doğrulandı; gizliler olmadan **çalıştırılmadı** |
+| iPad Kestirmeler sunucusu (`ipad-kisayol/Kod.gs`) | Karar, okul saati, anahtar ve yönlendirme mantığı Node'da **test edildi** (`node --test kod.test.mjs`). Gerçek Apps Script ortamında ve Firestore'a karşı **çalıştırılmadı** |
+| Kısayolun kendisi | Bir Apple cihazında elle kurulacak; **denenmedi** |
 | iOS (Swift) | Xcode olmadığı için **derlenmedi** |
 | Firestore kuralları | Emülatörle **test edilmedi** |
 | Gerçek cihaz | **Denenmedi** |

@@ -1,4 +1,8 @@
-# iPad / iPhone — App Store'suz kurulum
+# iPad / iPhone — App Store'suz kurulum (alternatifler)
+
+> **Üyeliksiz ve uzaktan panelli yol için [`../ipad-kisayol/README.md`](../ipad-kisayol/README.md)'ye
+> bakın (önerilen).** Bu sayfadaki A seçeneği yıllık geliştirici üyeliği ister; B seçeneğinde
+> uzaktan panel yoktur.
 
 iOS'ta Android'deki gibi "GitHub'dan dosyayı indir, kur" yolu yoktur: Apple, imzalanmamış
 uygulama kurulmasına izin vermez. Apple'a uygulama incelemesi ya da yetki başvurusu yapmadan iki

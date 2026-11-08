@@ -3,11 +3,15 @@ import {
   arrayRemove, arrayUnion, collection, deleteField, doc, FieldPath, limit, onSnapshot, orderBy,
   query, serverTimestamp, setDoc, Timestamp, updateDoc, where, writeBatch,
 } from "firebase/firestore";
+import QRCode from "qrcode";
 import { db } from "./firebase";
 
 // ----------------------------------------------------------------------------- veri tipleri
 
-type Platform = "android" | "ios";
+type Platform = "android" | "ios" | "ios-kisayol";
+
+const PLATFORM_ADI: Record<Platform, string> = { android: "Android", ios: "iPad (uygulama)", "ios-kisayol": "iPad (Kestirmeler)" };
+const ANAHTAR_ALFABESI = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 type Duration = "LESSON" | "TODAY" | "PERMANENT";
 
 type Schedule = { days: number[]; start: string; end: string }; // days: 1=Pzt … 7=Paz
@@ -86,14 +90,48 @@ function expiryFor(duration: Duration, settings: Settings): Timestamp | null {
   return Timestamp.fromDate(end.getTime() > Date.now() ? end : new Date(Date.now() + 60 * 60_000));
 }
 
-/** Kırmızı/sarı/yeşil koruma durumu. Android okul saatinde 10 dk'da bir rapor verir; iOS yalnızca uygulama açıldığında. */
-function protectionBadge(s: Student): { text: string; color: string } {
+/** İstanbul saatinde (sabit UTC+3) gün (1=Pzt) ve gece yarısından beri dakika. */
+function istanbul(ms: number) {
+  const t = new Date(ms + 180 * 60_000);
+  return { gun: ((t.getUTCDay() + 6) % 7) + 1, dk: t.getUTCHours() * 60 + t.getUTCMinutes(), gunBasi: ms - (t.getUTCHours() * 60 + t.getUTCMinutes()) * 60_000 - t.getUTCSeconds() * 1000 };
+}
+const dakika = (hm: string) => { const [h, m] = hm.split(":").map(Number); return h * 60 + m; };
+
+/**
+ * Kırmızı/turuncu/yeşil koruma durumu.
+ *  - Android: okul saatinde 10 dk'da, dışında saatte bir rapor verir.
+ *  - iPad (Kestirmeler): okul günü belirli saatlerde "nabız" otomasyonu + her uygulama açılışı.
+ *    Okul günü başladıktan sonra hiç sinyal gelmezse kısayol / otomasyon silinmiş demektir
+ *    (ya da iPad kapalı / okula getirilmemiş). Bu ikisi ayırt edilemez.
+ *  - iPad (uygulama): yalnızca uygulama açılınca rapor verir.
+ */
+function protectionBadge(s: Student, settings: Settings): { text: string; color: string } {
   const st = s.status ?? {};
+  const now = Date.now();
+  const last = st.lastSeen?.toMillis();
+  const { gun, dk, gunBasi } = istanbul(now);
+  const sch = settings.schedule;
+  const okulGunu = sch.days.includes(gun) && !settings.paused;
+  const okulSaati = okulGunu && dk >= dakika(sch.start) && dk < dakika(sch.end);
+
   if (st.protection === "DISABLED") return { text: "Koruma kapatılmış", color: "#c62828" };
   if (st.protection === "PERMISSION_MISSING") return { text: `İzin eksik: ${(st.missing ?? []).join(", ")}`, color: "#c62828" };
   if (Math.abs(st.clockSkewSec ?? 0) > 300) return { text: "Cihaz saati oynanmış", color: "#ef6c00" };
-  const staleMin = s.platform === "android" ? 30 : 24 * 60;
-  if (!st.lastSeen || Date.now() - st.lastSeen.toMillis() > staleMin * 60_000) return { text: "Rapor gelmiyor", color: "#ef6c00" };
+
+  if (s.platform === "ios-kisayol") {
+    if (!last) return { text: "Kurulum tamamlanmadı (hiç sinyal yok)", color: "#ef6c00" };
+    const okulBasi = gunBasi + dakika(sch.start) * 60_000;
+    if (okulGunu && dk >= dakika(sch.start) + 45 && last < okulBasi) {
+      return { text: "Bugün sinyal yok — kısayol silinmiş ya da iPad kapalı olabilir", color: "#c62828" };
+    }
+    if (okulSaati && now - last > 150 * 60_000) return { text: "Sinyal gecikti", color: "#ef6c00" };
+    return { text: "Aktif", color: "#2e7d32" };
+  }
+
+  const staleMin = s.platform === "android" ? (okulSaati ? 30 : 90) : 24 * 60;
+  if (!last || now - last > staleMin * 60_000) {
+    return { text: "Rapor gelmiyor — uygulama silinmiş ya da tablet kapalı olabilir", color: okulSaati ? "#c62828" : "#ef6c00" };
+  }
   return { text: "Aktif", color: "#2e7d32" };
 }
 
@@ -182,7 +220,7 @@ function Istekler({ base, pending, settings }: { base: string; pending: Request[
       {pending.map((r) => (
         <div key={r.id} style={card}>
           <div>
-            <strong>{r.studentName}</strong> <span style={{ color: "#666" }}>({r.className}, {r.platform === "ios" ? "iPad/iPhone" : "Android"})</span>
+            <strong>{r.studentName}</strong> <span style={{ color: "#666" }}>({r.className}, {PLATFORM_ADI[r.platform] ?? r.platform})</span>
             <div style={{ fontSize: 20, margin: "6px 0" }}>
               {r.appLabel}{" "}
               {!r.labelVerified && <span style={pill} title="iOS uygulama adını gizler; bu ad öğrencinin kendi yazdığıdır.">öğrenci beyanı</span>}
@@ -225,10 +263,31 @@ function Ogrenciler({ base, students, settings }: { base: string; students: Stud
   const [filter, setFilter] = useState("");
   const shown = students.filter((s) => `${s.name} ${s.className}`.toLocaleLowerCase("tr").includes(filter.toLocaleLowerCase("tr")));
   const current = students.find((s) => s.id === selected);
+  const [yeniAd, setYeniAd] = useState("");
+  const [yeniSinif, setYeniSinif] = useState("");
+
+  /** iPad (Kestirmeler) öğrencisi: kaydın kimliği aynı zamanda kısayolun gizli anahtarıdır (20 karakter ≈ 99 bit). */
+  const ipadEkle = async () => {
+    const bytes = crypto.getRandomValues(new Uint32Array(20));
+    const anahtar = Array.from(bytes, (b) => ANAHTAR_ALFABESI[b % ANAHTAR_ALFABESI.length]).join("");
+    await setDoc(doc(db, `${base}/students/${anahtar}`), {
+      name: yeniAd.trim(), className: yeniSinif.trim(), platform: "ios-kisayol",
+      allowed: [], grants: {}, labels: {}, inventory: [], status: {}, enrolledAt: serverTimestamp(),
+    });
+    setYeniAd("");
+    setSelected(anahtar);
+  };
 
   return (
     <div style={{ display: "grid", gridTemplateColumns: current ? "1fr 1fr" : "1fr", gap: 24 }}>
       <div>
+        <details style={{ marginBottom: 12 }}>
+          <summary style={{ cursor: "pointer" }}>+ iPad öğrencisi ekle (Kestirmeler)</summary>
+          <p style={{ color: "#666", fontSize: 14 }}>Android öğrencileri kendileri kayıt koduyla kaydolur. iPad öğrencisini buradan ekleyin; çıkan anahtarı iPad'deki kısayola girin.</p>
+          <input placeholder="Ad Soyad" value={yeniAd} onChange={(e) => setYeniAd(e.target.value)} />{" "}
+          <input placeholder="Sınıf (ör. 9-A)" value={yeniSinif} onChange={(e) => setYeniSinif(e.target.value)} />{" "}
+          <button disabled={yeniAd.trim().length < 3 || !yeniSinif.trim()} onClick={ipadEkle}>Ekle</button>
+        </details>
         <input placeholder="Ara: ad veya sınıf" value={filter} onChange={(e) => setFilter(e.target.value)} style={{ width: "100%", padding: 8 }} />
         <table style={table}>
           <thead>
@@ -236,12 +295,12 @@ function Ogrenciler({ base, students, settings }: { base: string; students: Stud
           </thead>
           <tbody>
             {shown.map((s) => {
-              const b = protectionBadge(s);
+              const b = protectionBadge(s, settings);
               return (
                 <tr key={s.id} onClick={() => setSelected(s.id)} style={{ cursor: "pointer", background: s.id === selected ? "#eef3ff" : undefined }}>
                   <td style={td}>{s.name}</td>
                   <td style={td}>{s.className}</td>
-                  <td style={td}>{s.platform === "ios" ? "iOS" : "Android"}</td>
+                  <td style={td}>{PLATFORM_ADI[s.platform] ?? s.platform}</td>
                   <td style={{ ...td, color: b.color, fontWeight: 600 }}>{b.text}</td>
                   <td style={td}>{fmtAgo(s.status?.lastSeen)}</td>
                 </tr>
@@ -269,7 +328,8 @@ function OgrenciDetay({ base, s, settings, onClose }: { base: string; s: Student
           <h2 style={{ margin: 0 }}>{s.name}</h2>
           <button onClick={onClose}>Kapat</button>
         </div>
-        <p style={{ color: "#666" }}>{s.className} · {s.platform === "ios" ? "iPad/iPhone" : "Android"} · uygulama {s.status?.appVersion ?? "?"}</p>
+        <p style={{ color: "#666" }}>{s.className} · {PLATFORM_ADI[s.platform] ?? s.platform} · {s.status?.appVersion ?? "sürüm bilinmiyor"}</p>
+        {s.platform === "ios-kisayol" && <KurulumAnahtari anahtar={s.id} />}
 
         {activeGrants.length > 0 && (
           <>
@@ -303,8 +363,9 @@ function OgrenciDetay({ base, s, settings, onClose }: { base: string; s: Student
           <>
             <h3>Kalıcı izinli uygulamalar</h3>
             <p style={{ color: "#666", fontSize: 14 }}>
-              Apple, iPad/iPhone'daki uygulama listesini üçüncü taraf uygulamalarla paylaşmaz. Bu yüzden iOS'ta izinler
-              yalnızca öğrencinin isteğiyle eklenir; adlar öğrencinin beyanıdır.
+              {s.platform === "ios-kisayol"
+                ? "Yalnızca iPad'de otomasyon kurduğunuz uygulamalar denetlenir; izinler öğrencinin isteğiyle eklenir."
+                : "Apple, iPad/iPhone'daki uygulama listesini üçüncü taraf uygulamalarla paylaşmaz. Bu yüzden iOS'ta izinler yalnızca öğrencinin isteğiyle eklenir; adlar öğrencinin beyanıdır."}
             </p>
             {s.allowed.length === 0 && <p>Henüz yok.</p>}
             {s.allowed.map((key) => (
@@ -384,6 +445,23 @@ function Ayarlar({ base, settings }: { base: string; settings: Settings }) {
       <button disabled={!codeClass.trim()} onClick={makeCode}>Kod üret</button>
       {code && <p style={{ fontSize: 28, letterSpacing: 4, fontFamily: "monospace" }}>{code}</p>}
     </>
+  );
+}
+
+// ----------------------------------------------------------------------------- iPad kurulum anahtarı
+
+function KurulumAnahtari({ anahtar }: { anahtar: string }) {
+  const [qr, setQr] = useState<string | null>(null);
+  useEffect(() => { QRCode.toDataURL(anahtar, { margin: 1, width: 180 }).then(setQr).catch(() => setQr(null)); }, [anahtar]);
+  return (
+    <div style={{ background: "#f5f7fa", borderRadius: 8, padding: 12, display: "flex", gap: 16, alignItems: "center" }}>
+      {qr && <img src={qr} alt="Kurulum anahtarı QR" width={140} height={140} />}
+      <div>
+        <div style={{ fontSize: 13, color: "#666" }}>Kısayol kurulum anahtarı (gizli tutun)</div>
+        <div style={{ fontFamily: "monospace", fontSize: 22, letterSpacing: 2 }}>{anahtar.replace(/(.{5})/g, "$1 ").trim()}</div>
+        <div style={{ fontSize: 13, color: "#666" }}>iPad kamerasıyla QR'ı okutup "Kopyala" deyin, kısayolun sorduğu yere yapıştırın.</div>
+      </div>
+    </div>
   );
 }
 
