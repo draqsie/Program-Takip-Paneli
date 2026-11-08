@@ -5,6 +5,13 @@ Sayfanın en altındaki damga, yüklü kopyanın tarihini ve içerik özetini g�
 
 ---
 
+## Önbellek v14
+
+- **Otomatik güncelleme** — açık bırakılan uygulama sunucudaki sayfanın değişip
+  değişmediğini her öne gelişte ve 10 dakikada bir yokluyor; yeni sürüm varsa veriyi
+  kaydedip kendini yeniliyor (yazı yazılırken beklemede kalır). Sayfa altındaki sürüm
+  damgası artık yayın tarihini gösteriyor
+
 ## Önbellek v13
 
 - **AYT konuları güncellendi** — liste, 2026-27'de ilk kez uygulanan 11. sınıf Maarif

@@ -2540,6 +2540,50 @@ if("serviceWorker" in navigator){
     if(!document.hidden&&swReg)try{swReg.update();}catch(e){}
   });
 }
+/* ---------- yeni sürüm denetimi ----------
+   Servis çalışanı yalnızca sw.js değişince güncellenir; tablette açık
+   bırakılan uygulama yeni index.html'i ancak yeniden açılınca görürdü.
+   Burada sayfanın kendisi düzenli aralıkla sunucudaki kopyanın imzasını
+   (ETag / Last-Modified, yoksa içerik özeti) yoklar; değişmişse veriyi
+   kaydedip kendini yeniler. Kronometre yenilemeden sonra kaldığı yerden
+   sürer. Yazı yazılırken yenilemez, uygulamaya dönülünce yeniler.      */
+(function(){
+  if(location.protocol!=="https:"&&location.protocol!=="http:")return;
+  var URL_=location.href.split("#")[0],ilk=null,bekleyen=false;
+  function imza(){
+    return fetch(URL_,{cache:"no-store"}).then(function(r){
+      if(!r.ok)return null;
+      var e=r.headers.get("etag"),m=r.headers.get("last-modified");
+      if(e||m)return {i:(e||"")+"|"+(m||""),m:m};
+      return r.text().then(function(t){var h=0;
+        for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))>>>0;return {i:"h"+h,m:null};});
+    }).catch(function(){return null;});
+  }
+  function yazarken(){var a=document.activeElement;
+    return a&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA")&&a.type!=="button";}
+  function yenile(){
+    if(!document.hidden&&yazarken()){bekleyen=true;return;}
+    try{if(typeof tFlush==="function")tFlush();if(typeof save==="function")save();}catch(e){}
+    location.reload();
+  }
+  function denetle(){
+    if(bekleyen){yenile();return;}
+    imza().then(function(s){
+      if(!s)return;
+      if(ilk===null){ilk=s.i;
+        if(s.m){var d=new Date(s.m);
+          if(!isNaN(d))try{document.getElementById("bld").textContent=
+            d.getDate()+"."+String(d.getMonth()+1).padStart(2,"0")+"."+d.getFullYear()+" "+
+            String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");}catch(e){}}
+        return;}
+      if(s.i!==ilk)yenile();
+    });
+  }
+  addEventListener("load",denetle);
+  document.addEventListener("visibilitychange",function(){if(!document.hidden)denetle();});
+  addEventListener("focusout",function(){if(bekleyen)setTimeout(denetle,800);});
+  setInterval(function(){if(!document.hidden)denetle();},10*60*1000);
+})();
 </script>
 </body>
 </html>
