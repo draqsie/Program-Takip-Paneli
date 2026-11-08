@@ -5,6 +5,38 @@ Sayfanın en altındaki damga, yüklü kopyanın tarihini ve içerik özetini g�
 
 ---
 
+## Önbellek v14
+
+- **Otomatik güncelleme** — açık bırakılan uygulama sunucudaki sayfanın değişip
+  değişmediğini her öne gelişte ve 10 dakikada bir yokluyor; yeni sürüm varsa veriyi
+  kaydedip kendini yeniliyor (yazı yazılırken beklemede kalır). Sayfa altındaki sürüm
+  damgası artık yayın tarihini gösteriyor
+
+## Önbellek v13
+
+- **AYT konuları güncellendi** — liste, 2026-27'de ilk kez uygulanan 11. sınıf Maarif
+  programlarına göre yeniden kuruldu: Matematik 5 tema (trigonometri, üstel–logaritmik
+  fonksiyonlar, fonksiyonlarla işlemler, dörtgen–çokgenler, iki değişkenli istatistik),
+  Fizik 3 ünite, Kimya 3 tema, Biyoloji 2 tema (Tepki, Homeostazi). 11. sınıfta olmayan
+  limit–türev, diziler, indüksiyon, modern atom teorisi, sindirim vb. çıkarıldı.
+  Eski işaretler adıyla eşleşen yeni konuya taşınır; karşılığı olmayanlar silinir
+- **Düzeltme** — kronometre arka planda/ekran kapalıyken 1 saati aşan süreyi güne
+  yazmıyordu; kronometre ekranı ile gün toplamı birbirini tutmuyordu
+- **Düzeltme** — eşitleme açıkken kendi gönderdiğimiz durumun yankısı geri uygulanıyor,
+  kronometrenin o arada yazdığı saniyeler siliniyordu (gün toplamı yavaş artıyordu)
+- **Düzeltme** — sayfa çalışırken yenilenince/kapanınca oturum süresi sıfırlanıyordu;
+  kronometre artık kaldığı yerden sürüyor, arada geçen süre de güne yazılıyor
+- **Düzeltme** — gece yarısını geçen çalışma tek güne yazılıyordu; iki güne bölünüyor
+- **Düzeltme** — kronometre çalışırken başlıktaki "Bugün çalışma" ve Çalışma Süresi
+  kutusu güncellenmiyordu
+- **Düzeltme** — Okuma sekmesinde gün değişince Yapılacaklar ve Çalışma Süresi eski günde
+  kalıyor, giriş ise yeni güne yazılıyordu
+- **Düzeltme** — başlıktaki Müfredat yüzdesi Konu sekmesindeki TYT/AYT süzgecine göre
+  değişiyordu
+- **Düzeltme** — yedekten geri yüklemede Ödevler ve Sözlük yenilenmiyordu; denemede eksi
+  doğru/yanlış girilebiliyordu; plan notundaki hafta ve soru sayısı koddaki değerle
+  uyuşmuyordu (12,3 → 12,1 hafta)
+
 ## Depo düzenlemesi
 
 - README yeniden yazıldı; lisans, değişiklik günlüğü, `.gitattributes` ve `.gitignore` eklendi

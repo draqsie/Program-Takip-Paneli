@@ -37,7 +37,8 @@ grafiğinde hedef çizgileri çizilidir; bölümleri kendi maksimumuna oranlayan
 ### Kronometre ve çalışma süresi
 Düz kronometre; geçen süre **saniye saniye o günün toplamına yazılır**, kaydetmeyi
 unutmak diye bir sorun yoktur. Geri sayım değil gerçek saat farkı kullanıldığı için
-sekme arka plana atıldığında veya ekran kapandığında şaşmaz. Son 14 günün çalışma
+sekme arka plana atıldığında, ekran kapandığında veya sayfa yeniden açıldığında şaşmaz;
+gece yarısını geçen çalışma iki güne bölünür. Son 14 günün çalışma
 süresi grafiği ayrıca tutulur.
 
 ### Kitap sayacı
@@ -46,7 +47,8 @@ hesaplanır. Bir bitirme tarihi seçilirse günlük kaç sayfa okunması gerekti
 
 ### Konu listesi
 MEB Türkiye Yüzyılı Maarif Modeli **9 ve 10. sınıf** öğretim programlarının tema
-yapısına göre kurulmuş 232 maddelik liste. Üç durumlu işaretleme: *başlanmadı →
+yapısına göre kurulmuş 232 maddelik TYT listesi ve **11. sınıf** (2026-27) Matematik,
+Fizik, Kimya, Biyoloji programlarına göre 62 maddelik sayısal AYT listesi. Üç durumlu işaretleme: *başlanmadı →
 yarım → bitti*; yüzde hesabında yarım konular 0,5 sayılır.
 
 ### Yapılacaklar
