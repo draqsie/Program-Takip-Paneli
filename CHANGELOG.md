@@ -5,6 +5,18 @@ Sayfanın en altındaki damga, yüklü kopyanın tarihini ve içerik özetini g�
 
 ---
 
+## Önbellek v15
+
+- **AYT denemesi** — Denemeler sayfasına TYT / AYT · 11. sınıf seçici eklendi. Sayısal AYT
+  (Matematik 40 · Fizik 14 · Kimya 13 · Biyoloji 13) ve okuldaki 11. sınıf genel denemeleri
+  ayrı kaydedilir; form, net grafiği, tablo ve özet seçili türe göre çalışır. Eski kayıtlar
+  TYT sayılır. Başlıktaki "Son TYT net" altında son AYT neti de görünür
+- **Yeni görünüm** — tek yazı ailesi (Inter, hizalı rakamlar), yeniden düzenlenmiş başlıklar,
+  aralıklar ve tablolar; uygulama adı "YKS Takip Paneli"
+- Kenardaki Yapılacaklar sekmesi içeriğin üstüne biniyordu; üst çubuğa düğme olarak taşındı
+- **Düzeltme** — başlıktaki "Hedef denemeye" gün sayısı yanlış CSS kuralı yüzünden küçük
+  yazılıyordu; koyu temada "Temizle" düğmesinin yazısı görünmüyordu
+
 ## Önbellek v14
 
 - **Otomatik güncelleme** — açık bırakılan uygulama sunucudaki sayfanın değişip

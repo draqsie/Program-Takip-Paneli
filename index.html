@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TYT Takip Paneli</title>
+<title>YKS Takip Paneli</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="TYT Panel">
+<meta name="apple-mobile-web-app-title" content="YKS Panel">
 <meta name="theme-color" content="#0C1310">
 <meta name="format-detection" content="telephone=no">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -15,7 +15,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <style>
 /* ============ TOKENS ============ */
 :root{
@@ -27,9 +27,9 @@
   --ok-wash:#DFF1E8; --warn-wash:#F5E9CE; --bad-wash:#F7E0DC;
   --s1:#BC4233; --s2:#0F7A58; --s3:#8E6210; --s4:#1B6F84; --s5:#5E45A0;
   --hero:#0C1310; --hero-2:#111A16; --hero-ink:#EAF1EB; --hero-dim:#8EA299; --hero-hair:#21302A;
-  --fh:Archivo,"Segoe UI",system-ui,sans-serif;
-  --fb:Karla,"Segoe UI",system-ui,sans-serif;
-  --fm:"JetBrains Mono",Consolas,"Courier New",monospace;
+  --fh:Inter,-apple-system,"Segoe UI",system-ui,sans-serif;
+  --fb:Inter,-apple-system,"Segoe UI",system-ui,sans-serif;
+  --fm:Inter,-apple-system,"Segoe UI",system-ui,sans-serif;   /* rakamlar tabular-nums ile hizalanır */
   --sh:0 1px 2px rgba(13,20,17,.04),0 8px 24px -16px rgba(13,20,17,.22);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -99,9 +99,7 @@ a{color:var(--brand-ink)}
   padding-left:max(24px,env(safe-area-inset-left));padding-right:max(24px,env(safe-area-inset-right))}
 .hide{display:none!important}
 /* sağ kenardaki sabit "Yapılacaklar" sekmesi içeriğin üstüne binmesin */
-@media (max-width:1460px) and (min-width:901px){
-  .wrap{padding-right:calc(max(24px,env(safe-area-inset-right)) + 52px)}
-}
+
 
 /* ---- ana ekrana eklenince: durum çubuğu ve alt çizgi payı ---- */
 @media (display-mode:standalone),(display-mode:fullscreen){
@@ -168,7 +166,7 @@ a{color:var(--brand-ink)}
 .cd .lbl{color:var(--hero-dim)}
 .cd .big{font-family:var(--fm);font-size:62px;font-weight:700;line-height:.9;letter-spacing:-.045em;
   color:#fff;font-variant-numeric:tabular-nums;margin-top:8px;display:flex;align-items:baseline;gap:9px}
-.cd .big span{font-family:var(--fh);font-size:15px;font-weight:500;color:var(--hero-dim);letter-spacing:0}
+.cd .big span+span{font-family:var(--fh);font-size:15px;font-weight:500;color:var(--hero-dim);letter-spacing:0}
 .cd .when{font-size:13px;color:var(--hero-dim);margin-top:7px}
 .cd .when b{color:var(--hero-ink);font-weight:700}
 
@@ -442,23 +440,6 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 .bkup .bx:hover{color:var(--ink)}
 
 /* ============ YAPILACAKLAR ÇEKMECESİ ============ */
-/* ekranin tam kenari iOS-ta sistem kaydirma bolgesi — sekmeyi iceri aliyoruz */
-.tdtab{position:fixed;top:50%;transform:translateY(-50%);z-index:55;
-  right:calc(max(12px,env(safe-area-inset-right)));
-  background:var(--hero);color:var(--hero-ink);border:1px solid var(--hero-hair);
-  border-radius:12px;padding:0;cursor:pointer;box-shadow:0 8px 26px -12px rgba(0,0,0,.6);
-  transition:right .18s,background .18s}
-.tdtab:active{right:calc(max(12px,env(safe-area-inset-right)) + 2px)}
-.tdtab:hover{background:var(--hero-2)}
-.tdtab-in{display:block;writing-mode:vertical-rl;transform:rotate(180deg);
-  padding:19px 11px;font-family:var(--fm);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
-.tdtab em.gec{background:var(--bad);color:#fff}
-.tdtab em{font-style:normal;display:inline-block;margin-top:9px;background:var(--brand);color:#06110C;
-  font-size:10px;font-weight:700;padding:2px 6px;border-radius:99px;letter-spacing:0}
-.tdtab em:empty{display:none}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .tdtab em{color:#fff}}
-:root[data-theme="light"] .tdtab em{color:#fff}
-
 .tdveil{position:fixed;inset:0;background:rgba(6,11,9,.5);opacity:0;pointer-events:none;
   transition:opacity .22s;z-index:56;backdrop-filter:blur(2px)}
 .tdveil.on{opacity:1;pointer-events:auto}
@@ -709,12 +690,137 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   .panel,.ders{break-inside:avoid;box-shadow:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* =====================================================================
+   GÖRÜNÜM KATMANI — tek yazı ailesi (Inter), sakin başlıklar, tutarlı
+   aralıklar. Alttaki kuralların üzerine yazar; renk jetonları aynı.
+   ===================================================================== */
+body{font-size:14.5px;font-variant-numeric:tabular-nums;letter-spacing:-.005em}
+h1,h2,h3,h4{letter-spacing:-.02em}
+.lbl{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--dim)}
+.n{font-feature-settings:"tnum" 1,"cv11" 1}
+
+/* üst çubuk */
+.topbar{background:color-mix(in srgb,var(--panel) 88%,transparent);
+  backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px)}
+.topbar .wrap{height:60px}
+.mark .sq{width:30px;height:30px;border-radius:9px;font-size:10px;font-weight:800;letter-spacing:.04em}
+.mark b{font-size:16px;font-weight:700;letter-spacing:-.025em}
+.mark em{font-style:normal;font-size:11px;font-weight:600;color:var(--dim);border:1px solid var(--hair);
+  border-radius:99px;padding:1px 8px}
+.seg{border-radius:10px;padding:4px}
+.seg button{font-size:13.5px;padding:7px 16px;border-radius:7px}
+.gh{font-size:12.5px;font-weight:500;padding:7px 13px;border-radius:8px;color:var(--ink-2)}
+.gh.todo{display:inline-flex;align-items:center;gap:7px;border-color:var(--hair-2);color:var(--ink)}
+.gh.todo em{font-style:normal;font-size:11px;font-weight:700;min-width:19px;text-align:center;
+  background:var(--brand);color:#fff;padding:1px 6px;border-radius:99px}
+.gh.todo em:empty{display:none}
+.gh.todo em.gec{background:var(--bad)}
+:root[data-theme="dark"] .gh.todo em,:root:not([data-theme="light"]) .gh.todo em{color:#06110C}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .gh.todo em{color:#fff}}
+.gh.todo em.gec{color:#fff!important}
+.pulse{font-size:12px}
+@media (max-width:900px){.mark em{display:none}.acts .gh:not(.todo){padding:7px 10px}}
+@media (max-width:640px){#prt{display:none}}
+
+/* kahraman alanı */
+.hero .wrap{padding-top:30px}
+.cd .big{font-size:64px;font-weight:800;letter-spacing:-.05em;margin-top:6px}
+.cd .big span+span{font-size:16px;font-weight:500}
+.cd .when{font-size:13.5px}
+.gauge .lbl{font-size:10.5px;letter-spacing:.05em}
+.gauge .v{font-size:28px;font-weight:700;letter-spacing:-.03em}
+.gauge .v small{font-size:13px;font-weight:500}
+.gsub{font-size:11.5px;font-weight:600;color:var(--hero-dim);margin-top:6px;min-height:1px}
+.trajhead .lbl{font-size:11px}
+.trajhead .verdict{font-size:12px;font-weight:600}
+.trajkey{font-size:12px}
+
+/* paneller */
+main{padding-top:30px}
+.stack{gap:24px}
+.panel{border-radius:16px}
+.phead{padding:16px 22px 15px;gap:14px}
+.phead h3{font-size:16.5px;font-weight:650;letter-spacing:-.02em}
+.phead .sub{font-size:12.5px;color:var(--dim);letter-spacing:0}
+.pbody{padding:20px 22px}
+.pfoot{padding:13px 22px;font-size:13px;border-radius:0 0 15px 15px;line-height:1.6}
+.chip{font-size:12.5px;font-weight:500;padding:6px 12px;border-radius:8px;letter-spacing:0}
+.dnav input[type=date]{font-size:13px}
+.dnav .day{font-size:12.5px;font-weight:500;letter-spacing:0}
+
+/* sayfa başlığı */
+.pagebar{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:-4px}
+.pagebar>div:first-child{flex:1;min-width:240px}
+.pagebar h2{font-size:24px;font-weight:700;letter-spacing:-.03em}
+.pagebar p{font-size:13.5px;color:var(--dim);margin-top:4px}
+.seg-lg{background:var(--panel);box-shadow:var(--sh)}
+.seg-lg button{padding:9px 20px;font-size:14px}
+@media (max-width:900px){.seg-lg{order:0;width:auto}.seg-lg button{flex:1 1 auto}}
+
+/* soru kutuları ve özet karoları */
+.qgrid{gap:12px}
+.qf{border-radius:12px}
+.qf label{font-size:11px;font-weight:600;letter-spacing:.03em}
+.qf input{font-size:18px;font-weight:600;border-radius:8px}
+.qf .tgt{font-size:11px}
+.tiles{border-radius:12px;margin-top:18px}
+.tile{padding:13px 17px}
+.tile .v{font-size:24px;font-weight:700}
+.tile .lbl{font-size:10.5px}
+
+/* tablolar */
+table{font-size:13.5px}
+thead th{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--dim)}
+th,td{padding:11px 16px}
+td.dn{font-weight:500;white-space:normal;min-width:150px}
+.xbtn{font-size:12px;font-weight:500;padding:4px 11px;border-radius:7px}
+
+/* deneme formu */
+.sec{border-radius:12px}
+.sec .sh b{font-size:14px;font-weight:650}
+.sec .sh em{font-size:11px;font-weight:500;letter-spacing:0}
+.sec .dy label{font-size:10.5px;font-weight:600;letter-spacing:.04em}
+.sec .dy input{font-size:17px;font-weight:600;border-radius:8px;padding:8px 3px}
+.sec .nt span{font-size:10.5px;font-weight:600;letter-spacing:.05em}
+.sec .nt b{font-size:18px;font-weight:700}
+.tot .v{font-size:34px;font-weight:800}
+.btn{font-weight:650;border-radius:9px}
+.fld input{border-radius:9px;padding:9px 12px}
+
+/* grafik ipuçları ve açıklamalar */
+.tip{font-size:12px;border-radius:10px;padding:10px 13px}
+.tip b{font-size:12.5px}
+.key{font-size:12.5px}
+
+/* konu listesi */
+.ders{border-radius:14px}
+.ders>header h4{font-size:15.5px;font-weight:650}
+.ders>header .wt{font-size:10.5px;font-weight:600;letter-spacing:.03em}
+.ders>header .cnt{font-size:13px;font-weight:500}
+.tema .gr{font-size:10px;font-weight:600;letter-spacing:.04em}
+.tema b{font-size:13.5px}
+.kim .tx{font-size:13.5px}
+.srcline{font-size:11.5px}
+.sv-tyt,.sv-ayt{font-size:10px;letter-spacing:.06em}
+.kbar{border-radius:14px}
+.kbar .num{font-weight:800}
+.klegend{font-size:12px}
+
+/* kronometre, çekmece, alt bilgi */
+.tmr .big{font-weight:800}
+.tmr .sess,.tmr .tf span{letter-spacing:.06em}
+.dwtabs em{font-size:10.5px}
+.build{font-size:11px;letter-spacing:.04em;text-transform:none}
+/* ikincil düğme koyu temada da okunsun (ana düğmenin koyu yazı rengi buna da geçiyordu) */
+.btn.q,:root .btn.q{color:var(--ink-2)!important}
+.btn.q:hover{color:var(--ink)!important}
 </style>
 </head>
 <body>
 
 <div class="topbar"><div class="wrap">
-  <div class="mark"><span class="sq">TYT</span><b>Takip Paneli</b></div>
+  <div class="mark"><span class="sq">YKS</span><b>Takip Paneli</b><em>2028</em></div>
   <div class="seg" id="tabs">
     <button data-t="soru" aria-selected="true">Soru Takibi</button>
     <button data-t="deneme" aria-selected="false">Denemeler</button>
@@ -723,6 +829,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   </div>
   <div class="acts">
     <span class="pulse" id="pulse">&#9679; kaydedildi</span>
+    <button class="gh todo" id="tdTab" type="button" aria-label="Yapılacaklar listesini aç">Yapılacaklar<em id="tdBadge"></em></button>
     <button class="gh" id="exp">Yedekle</button>
     <button class="gh" id="imp">Geri yükle</button>
     <button class="gh" id="prt">Yazdır</button>
@@ -753,7 +860,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
       <div class="gauge"><p class="lbl">Müfredat</p><p class="v" id="gKonu">0<small>%</small></p>
         <span class="meter"><i id="gKonuBar"></i></span></div>
       <div class="gauge"><p class="lbl">Son TYT net</p><p class="v" id="gNet">—</p>
-        <span class="meter"><i id="gNetBar"></i></span></div>
+        <span class="meter"><i id="gNetBar"></i></span><p class="gsub" id="gNetAyt"></p></div>
       <div class="gauge"><p class="lbl">Kalan sayfa</p><p class="v" id="gBook">—</p>
         <span class="meter"><i id="gBookBar" style="background:var(--s4)"></i></span></div>
       <div class="gauge"><p class="lbl">Bugün çalışma</p><p class="v" id="gStudy">0dk</p>
@@ -878,8 +985,18 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
 
 <!-- ======== DENEME ======== -->
 <div id="p-deneme" class="stack hide">
+  <div class="pagebar">
+    <div>
+      <h2>Denemeler</h2>
+      <p>TYT ve sayısal AYT denemelerini ayrı ayrı takip et. 11. sınıf genel denemeleri AYT altında tutulur.</p>
+    </div>
+    <div class="seg seg-lg" id="dTur" role="tablist">
+      <button data-t="TYT" aria-selected="true" type="button">TYT</button>
+      <button data-t="AYT" aria-selected="false" type="button">AYT · 11. sınıf</button>
+    </div>
+  </div>
   <section class="panel">
-    <div class="phead"><h3>Yeni Deneme</h3><span class="sub">net = doğru &minus; yanlış / 4</span></div>
+    <div class="phead"><h3 id="dFormT">Yeni TYT Denemesi</h3><span class="sub">net = doğru &minus; yanlış / 4</span></div>
     <div class="pbody">
       <div class="frow">
         <div class="fld"><label class="lbl">Tarih</label><input type="date" id="dDate"></div>
@@ -890,7 +1007,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
         <button class="btn" id="dAdd">Kaydet</button>
         <button class="btn q" id="dClear">Temizle</button>
         <span class="warnmsg" id="dErr"></span>
-        <div class="tot"><p class="v" id="dTot">0,00</p><p class="lbl">Toplam net / 120</p></div>
+        <div class="tot"><p class="v" id="dTot">0,00</p><p class="lbl" id="dTotLbl">Toplam net / 120</p></div>
       </div>
     </div>
   </section>
@@ -898,14 +1015,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   <section class="panel">
     <div class="phead">
       <h3>Net Gelişimi</h3>
-      <div class="right"><div class="chips" id="dMode">
-        <button class="chip" data-m="tot" aria-pressed="true">Toplam</button>
-        <button class="chip" data-m="tur" aria-pressed="false">Türkçe</button>
-        <button class="chip" data-m="mat" aria-pressed="false">Matematik</button>
-        <button class="chip" data-m="sos" aria-pressed="false">Sosyal</button>
-        <button class="chip" data-m="fen" aria-pressed="false">Fen</button>
-        <button class="chip" data-m="cmp" aria-pressed="false">Karşılaştır %</button>
-      </div></div>
+      <div class="right"><div class="chips" id="dMode"></div></div>
     </div>
     <div class="pbody">
       <div class="cbox" id="dBox"><canvas id="dCan"></canvas><div class="tip" id="dTip"></div></div>
@@ -916,8 +1026,7 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   <section class="panel">
     <div class="phead"><h3>Deneme Kayıtları</h3><span class="sub" id="dCount"></span></div>
     <div class="tw"><table id="dTbl">
-      <thead><tr><th>Tarih</th><th>Deneme</th><th class="r">Türkçe</th><th class="r">Mat</th>
-        <th class="r">Sosyal</th><th class="r">Fen</th><th class="r">Toplam net</th><th></th></tr></thead>
+      <thead><tr></tr></thead>
       <tbody></tbody>
     </table></div>
     <p class="pfoot" id="dStats"></p>
@@ -1037,9 +1146,6 @@ td.ok{color:var(--ok);font-weight:600} td.warn{color:var(--warn);font-weight:600
   <p class="build">sürüm <span id="bld">yerel kopya</span></p>
 </div></main>
 
-<button class="tdtab" id="tdTab" type="button" aria-label="Yapılacaklar listesini aç">
-  <span class="tdtab-in">Yapılacaklar<em id="tdBadge"></em></span>
-</button>
 <div class="tdveil" id="tdVeil"></div>
 <aside class="tddrawer" id="tdDrawer" aria-label="Bugün yapılacaklar">
   <header>
@@ -1362,7 +1468,7 @@ function axes(g,max,labels,pad,opt){
   opt=opt||{};
   var L=pad.l,R=g.w-pad.r,T=pad.t,B=g.h-pad.b;
   var tk=ticks(max),hair=css(opt.hair||"--hair"),dim=css(opt.dim||"--faint");
-  g.c.font="9.5px "+'"JetBrains Mono",Consolas,monospace';
+  g.c.font="500 10.5px Inter,-apple-system,system-ui,sans-serif";
   g.c.strokeStyle=hair;g.c.fillStyle=dim;g.c.lineWidth=1;
   g.c.textAlign="right";g.c.textBaseline="middle";
   for(var v=0;v<=tk.m+1e-9;v+=tk.st){
@@ -1391,7 +1497,7 @@ function bars(cv,data){
     g.c.save();g.c.setLineDash([6,4]);g.c.strokeStyle=col;g.c.lineWidth=1.4;
     g.c.beginPath();g.c.moveTo(f.L,ty);g.c.lineTo(f.R,ty);g.c.stroke();g.c.setLineDash([]);
     g.c.fillStyle=col;g.c.textAlign="left";g.c.textBaseline="bottom";
-    g.c.font="9.5px "+'"JetBrains Mono",monospace';g.c.fillText(t.n,f.L+7,ty-4);g.c.restore();
+    g.c.font="600 10.5px Inter,-apple-system,system-ui,sans-serif";g.c.fillText(t.n,f.L+7,ty-4);g.c.restore();
   });
   for(var i=0;i<data.labels.length;i++){
     var x=Math.round(f.L+f.step*(i+0.5)-bw/2),acc=0;
@@ -1419,7 +1525,7 @@ function lines(cv,data){
     g.c.beginPath();g.c.moveTo(f.L,ty);g.c.lineTo(f.R,ty);g.c.stroke();
     g.c.setLineDash([]);g.c.globalAlpha=1;g.c.fillStyle=col;
     g.c.textAlign="left";g.c.textBaseline="bottom";
-    g.c.font="9.5px "+'"JetBrains Mono",monospace';g.c.fillText(t.n,f.L+7,ty-4);
+    g.c.font="600 10.5px Inter,-apple-system,system-ui,sans-serif";g.c.fillText(t.n,f.L+7,ty-4);
     g.c.restore();
   });
   data.series.forEach(function(se){
@@ -1653,23 +1759,56 @@ function qTable(){
   tf.appendChild(tr2);
 }
 
-/* ================== DENEMELER ================== */
-var dMode="tot",dF=null,dD=null;
+/* ================== DENEMELER ==================
+   İki tür: TYT (120 soru) ve sayısal AYT — 11. sınıf genel denemeleri de
+   buraya girilir (80 soru). Eski kayıtlarda tür alanı yok → TYT sayılır.
+   Sayfadaki her şey (form, grafik, tablo, özet) seçili türe göre çalışır. */
+var DTUR="TYT",dMode="tot",dF=null,dD=null,dList=[];
+var DTURLER={
+ TYT:{ad:"TYT",max:120,ornek:"örn. 3D Yayınları TYT-4",
+   hedef:[{v:HEDEF_NET,n:"15 Aralık · "+HEDEF_NET,c:"--brand"},{v:112,n:"nihai · 112",c:"--faint",soft:true}]},
+ AYT:{ad:"AYT · 11. sınıf",max:80,ornek:"örn. 11. Sınıf Genel Deneme-2",hedef:[]}
+};
+var SECS={TYT:SEC,
+ AYT:[{k:"mat",n:"Matematik",s:40,c:"--s2"},{k:"fiz",n:"Fizik",s:14,c:"--s4"},
+      {k:"kim",n:"Kimya",s:13,c:"--s3"},{k:"biy",n:"Biyoloji",s:13,c:"--s1"}]};
+function dTurOf(r){return r&&r.tur==="AYT"?"AYT":"TYT";}
+function dSec(t){return SECS[t||DTUR];}
+function dKayit(t){t=t||DTUR;return DB.d.filter(function(r){return dTurOf(r)===t;});}
 function buildD(){
   var h=$("dSecs");h.textContent="";
-  SEC.forEach(function(s){
+  dSec().forEach(function(s){
     var w=document.createElement("div");w.className="sec";w.style.setProperty("--c","var("+s.c+")");
-    w.innerHTML='<div class="sh"><b>'+s.n+'</b><em>'+s.s+' SORU</em></div>'+
-      '<div class="dy"><div><label>Doğru</label><input type="number" min="0" max="'+s.s+'" id="fd-'+s.k+'" placeholder="0"></div>'+
-      '<div><label>Yanlış</label><input type="number" min="0" max="'+s.s+'" id="fy-'+s.k+'" placeholder="0"></div></div>'+
+    w.innerHTML='<div class="sh"><b>'+s.n+'</b><em>'+s.s+' soru</em></div>'+
+      '<div class="dy"><div><label>Doğru</label><input type="number" min="0" max="'+s.s+'" id="fd-'+s.k+'" placeholder="0" inputmode="numeric"></div>'+
+      '<div><label>Yanlış</label><input type="number" min="0" max="'+s.s+'" id="fy-'+s.k+'" placeholder="0" inputmode="numeric"></div></div>'+
       '<div class="nt"><span>Net</span><b id="fn-'+s.k+'">0,00</b></div>';
     h.appendChild(w);
   });
-  SEC.forEach(function(s){$("fd-"+s.k).oninput=dCalc;$("fy-"+s.k).oninput=dCalc;});
+  dSec().forEach(function(s){$("fd-"+s.k).oninput=dCalc;$("fy-"+s.k).oninput=dCalc;});
+  var T0=DTURLER[DTUR];
+  $("dName").placeholder=T0.ornek;
+  $("dTotLbl").textContent="Toplam net / "+T0.max;
+  $("dFormT").textContent=DTUR==="AYT"?"Yeni AYT Denemesi":"Yeni TYT Denemesi";
+  /* grafik düğmeleri */
+  var M=$("dMode");M.textContent="";
+  [{k:"tot",n:"Toplam"}].concat(dSec().map(function(s){return {k:s.k,n:s.n};}),[{k:"cmp",n:"Karşılaştır %"}])
+    .forEach(function(x){var c=document.createElement("button");c.className="chip";c.type="button";
+      c.dataset.m=x.k;c.textContent=x.n;c.setAttribute("aria-pressed",x.k===dMode?"true":"false");M.appendChild(c);});
+  /* tablo başlığı */
+  var hr=$("dTbl").querySelector("thead tr");
+  hr.innerHTML='<th>Tarih</th><th>Deneme</th>'+dSec().map(function(s){return '<th class="r">'+s.n+'</th>';}).join("")+
+    '<th class="r">Toplam net</th><th></th>';
+}
+function dTurSec(t){
+  if(t===DTUR)return;
+  DTUR=t;dMode="tot";
+  $("dTur").querySelectorAll("button").forEach(function(x){x.setAttribute("aria-selected",x.dataset.t===t?"true":"false");});
+  buildD();dReset();dRefresh();
 }
 function dCalc(){
   var tot=0,err="";
-  SEC.forEach(function(s){
+  dSec().forEach(function(s){
     var d=Math.max(0,+$("fd-"+s.k).value||0),y=Math.max(0,+$("fy-"+s.k).value||0);
     if(d+y>s.s)err=s.n+": doğru + yanlış "+s.s+"'ı aşamaz.";
     var n=net(d,y);tot+=n;$("fn-"+s.k).textContent=nf(n);
@@ -1677,36 +1816,42 @@ function dCalc(){
   $("dTot").textContent=nf(tot);$("dErr").textContent=err;
   return {tot:tot,err:err};
 }
-function dReset(){SEC.forEach(function(s){$("fd-"+s.k).value="";$("fy-"+s.k).value="";});
+function dReset(){dSec().forEach(function(s){$("fd-"+s.k).value="";$("fy-"+s.k).value="";});
   $("dName").value="";$("dDate").value=iso(new Date());dCalc();}
 function dAdd(){
   var r=dCalc();if(r.err)return;
-  var any=SEC.some(function(s){return (+$("fd-"+s.k).value||0)+(+$("fy-"+s.k).value||0)>0;});
+  var any=dSec().some(function(s){return (+$("fd-"+s.k).value||0)+(+$("fy-"+s.k).value||0)>0;});
   if(!any){$("dErr").textContent="En az bir bölüme doğru/yanlış gir.";return;}
-  var rec={id:Date.now(),date:$("dDate").value||iso(new Date()),
-    name:($("dName").value||"").trim()||"İsimsiz deneme",s:{}};
-  SEC.forEach(function(s){rec.s[s.k]={d:Math.max(0,+$("fd-"+s.k).value||0),y:Math.max(0,+$("fy-"+s.k).value||0)};});
+  var rec={id:Date.now(),date:$("dDate").value||iso(new Date()),tur:DTUR,
+    name:($("dName").value||"").trim()||(DTUR==="AYT"?"İsimsiz AYT denemesi":"İsimsiz deneme"),s:{}};
+  dSec().forEach(function(s){rec.s[s.k]={d:Math.max(0,+$("fd-"+s.k).value||0),y:Math.max(0,+$("fy-"+s.k).value||0)};});
   DB.d.push(rec);
   DB.d.sort(function(a,b){return a.date===b.date?a.id-b.id:(a.date<b.date?-1:1);});
   save();dReset();dRefresh();
 }
-function dTotal(r){var t=0;SEC.forEach(function(s){var v=r.s[s.k]||{d:0,y:0};t+=net(v.d,v.y);});return t;}
+function dTotal(r){var t=0;dSec(dTurOf(r)).forEach(function(s){var v=r.s[s.k]||{d:0,y:0};t+=net(v.d,v.y);});return t;}
+function esc(x){return String(x).replace(/[<>&"]/g,"");}
 function dRefresh(){
+  dList=dKayit();
   var tb=$("dTbl").querySelector("tbody");tb.textContent="";
-  if(!DB.d.length){
+  var sec=dSec(),kol=sec.length+4;
+  if(!dList.length){
     var tr0=document.createElement("tr");
-    tr0.innerHTML='<td colspan="8"><p class="empty">Henüz deneme yok. Yukarıdaki formdan ilkini ekle.</p></td>';
+    tr0.innerHTML='<td colspan="'+kol+'"><p class="empty">Henüz '+(DTUR==="AYT"?"AYT / 11. sınıf genel":"TYT")+
+      ' denemesi yok. Yukarıdaki formdan ilkini ekle.</p></td>';
     tb.appendChild(tr0);
   }
-  DB.d.slice().reverse().forEach(function(r){
+  var enIyi=dList.length?Math.max.apply(null,dList.map(dTotal)):null;
+  dList.slice().reverse().forEach(function(r){
     var tr=document.createElement("tr"),cells="";
-    SEC.forEach(function(s){var v=r.s[s.k]||{d:0,y:0};
+    sec.forEach(function(s){var v=r.s[s.k]||{d:0,y:0};
       cells+='<td class="r" title="'+v.d+' doğru · '+v.y+' yanlış">'+nf(net(v.d,v.y))+'</td>';});
     var t=dTotal(r),dt=parse(r.date);
-    tr.innerHTML='<td class="r">'+dt.getDate()+" "+AYK[dt.getMonth()]+'</td><td>'+
-      r.name.replace(/[<>&]/g,"")+'</td>'+cells+
-      '<td class="r '+(t>=HEDEF_NET?"ok":"")+'"><b>'+nf(t)+'</b></td>'+
-      '<td><button class="xbtn" data-id="'+r.id+'">sil</button></td>';
+    var iyi=DTUR==="TYT"?t>=HEDEF_NET:(dList.length>1&&t===enIyi);
+    tr.innerHTML='<td>'+dt.getDate()+" "+AYK[dt.getMonth()]+" "+String(dt.getFullYear()).slice(2)+'</td><td class="dn">'+
+      esc(r.name)+'</td>'+cells+
+      '<td class="r '+(iyi?"ok":"")+'"><b>'+nf(t)+'</b></td>'+
+      '<td class="r"><button class="xbtn" type="button" data-id="'+r.id+'">Sil</button></td>';
     tb.appendChild(tr);
   });
   tb.querySelectorAll(".xbtn").forEach(function(b){
@@ -1715,44 +1860,48 @@ function dRefresh(){
       DB.d=DB.d.filter(function(x){return String(x.id)!==b.dataset.id;});save();dRefresh();head();
     };
   });
-  $("dCount").textContent=DB.d.length?DB.d.length+" kayıt":"";
-  var tots=DB.d.map(dTotal);
+  $("dCount").textContent=dList.length?dList.length+" kayıt":"";
+  var tots=dList.map(dTotal),T0=DTURLER[DTUR];
   if(tots.length){
     var mx=Math.max.apply(null,tots),av=tots.reduce(function(a,b){return a+b;},0)/tots.length;
     var fark=tots[tots.length-1]-tots[0];
     $("dStats").innerHTML="En yüksek <b>"+nf(mx)+"</b> &nbsp;·&nbsp; Ortalama <b>"+nf(av)+
       "</b> &nbsp;·&nbsp; İlk denemeden bu yana <b style=\"color:var("+(fark>=0?"--ok":"--bad")+")\">"+
-      (fark>=0?"+":"")+nf(fark)+"</b> net &nbsp;·&nbsp; 15 Aralık hedefi <b>90</b> · nihai <b>112</b>";
-  }else $("dStats").innerHTML="15 Aralık hedefin <b>90 net</b>. Nihai hedef <b>112</b>.";
+      (fark>=0?"+":"")+nf(fark)+"</b> net"+
+      (DTUR==="TYT"?" &nbsp;·&nbsp; 15 Aralık hedefi <b>90</b> · nihai <b>112</b>":" &nbsp;·&nbsp; "+T0.max+" soru üzerinden");
+  }else $("dStats").innerHTML=DTUR==="TYT"
+    ?"15 Aralık hedefin <b>90 net</b>. Nihai hedef <b>112</b>."
+    :"Sayısal AYT: Matematik 40 · Fizik 14 · Kimya 13 · Biyoloji 13. Okuldaki 11. sınıf genel denemelerini de buraya gir.";
   dChart();head();
 }
 function dChart(){
-  var labels=DB.d.map(function(r){var d=parse(r.date);return d.getDate()+" "+AYK[d.getMonth()];});
+  var L=dList,sec=dSec(),T0=DTURLER[DTUR];
+  var labels=L.map(function(r){var d=parse(r.date);return d.getDate()+" "+AYK[d.getMonth()];});
   var conf;
   if(dMode==="cmp"){
-    conf={labels:labels,max:100,series:SEC.map(function(s){return {n:s.n,c:s.c,
-      data:DB.d.map(function(r){var v=r.s[s.k]||{d:0,y:0};return Math.max(0,net(v.d,v.y)/s.s*100);})};})};
+    conf={labels:labels,max:100,series:sec.map(function(s){return {n:s.n,c:s.c,
+      data:L.map(function(r){var v=r.s[s.k]||{d:0,y:0};return Math.max(0,net(v.d,v.y)/s.s*100);})};})};
   }else if(dMode==="tot"){
-    conf={labels:labels,max:120,
-      targets:[{v:HEDEF_NET,n:"15 Aralık · "+HEDEF_NET,c:"--brand"},{v:112,n:"nihai · 112",c:"--faint",soft:true}],
-      series:[{n:"Toplam net",c:"--s2",data:DB.d.map(function(r){return Math.max(0,dTotal(r));})}]};
+    conf={labels:labels,max:T0.max,targets:T0.hedef,
+      series:[{n:"Toplam net",c:"--s2",data:L.map(function(r){return Math.max(0,dTotal(r));})}]};
   }else{
-    var s0=SEC.filter(function(x){return x.k===dMode;})[0];
+    var s0=sec.filter(function(x){return x.k===dMode;})[0]||sec[0];
     conf={labels:labels,max:s0.s,series:[{n:s0.n,c:s0.c,
-      data:DB.d.map(function(r){var v=r.s[s0.k]||{d:0,y:0};return Math.max(0,net(v.d,v.y));})}]};
+      data:L.map(function(r){var v=r.s[s0.k]||{d:0,y:0};return Math.max(0,net(v.d,v.y));})}]};
   }
   dD=conf;
   var res=lines($("dCan"),conf);dF=res?res.f:null;
   var K=$("dKey");K.textContent="";
   conf.series.forEach(function(s){var e=document.createElement("span");
     e.innerHTML='<i style="background:var('+s.c+')"></i>'+s.n+(dMode==="cmp"?" (%)":"");K.appendChild(e);});
-  if(!DB.d.length){var e2=document.createElement("span");
+  if(!L.length){var e2=document.createElement("span");
     e2.innerHTML='<em>Deneme ekledikçe eğri çizilir.</em>';K.appendChild(e2);}
 }
 hover($("dBox"),$("dTip"),function(){return dF;},function(i){
-  if(!dD||i>=dD.labels.length||!DB.d[i])return null;
-  var r=DB.d[i],out="<b>"+String(r.name).replace(/[<>&]/g,"")+" · "+dD.labels[i]+"</b>";
-  SEC.forEach(function(s){var v=r.s[s.k]||{d:0,y:0};
+  var r=dList[i];
+  if(!dD||i>=dD.labels.length||!r)return null;
+  var out="<b>"+esc(r.name)+" · "+dD.labels[i]+"</b>";
+  dSec(dTurOf(r)).forEach(function(s){var v=r.s[s.k]||{d:0,y:0};
     out+='<i style="background:'+css(s.c)+'"></i>'+s.n+" &nbsp;"+nf(net(v.d,v.y))+
       ' <u>('+v.d+"D "+v.y+"Y)</u><br>";});
   return out+"<u>TOPLAM NET &nbsp;"+nf(dTotal(r))+"</u>";
@@ -2326,8 +2475,10 @@ function head(){
   var s=kScore("hepsi"),kp=s.s/s.tot*100;   /* başlık, Konu sekmesindeki süzgeçten bağımsız */
   $("gKonu").innerHTML=Math.round(kp)+'<small>%</small>';
   $("gKonuBar").style.width=clamp(kp,0,100)+"%";
-  if(DB.d.length){
-    var t=dTotal(DB.d[DB.d.length-1]);
+  var tytL=dKayit("TYT"),aytL=dKayit("AYT");
+  $("gNetAyt").textContent=aytL.length?"AYT "+nf(dTotal(aytL[aytL.length-1])):"";
+  if(tytL.length){
+    var t=dTotal(tytL[tytL.length-1]);
     $("gNet").textContent=nf(t);
     $("gNetBar").style.width=clamp(t/HEDEF_NET*100,0,100)+"%";
     $("gNetBar").className=t>=HEDEF_NET?"":t>=HEDEF_NET*.75?"w":"b";
@@ -2372,6 +2523,7 @@ $("qMode").onclick=function(e){var b=e.target.closest(".chip");if(!b)return;qMod
 $("dMode").onclick=function(e){var b=e.target.closest(".chip");if(!b)return;dMode=b.dataset.m;
   $("dMode").querySelectorAll(".chip").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});dChart();};
 $("dAdd").onclick=dAdd;
+$("dTur").onclick=function(e){var b=e.target.closest("button");if(b)dTurSec(b.dataset.t);};
 $("dClear").onclick=dReset;
 $("kFilter").onclick=function(){kOnly=!kOnly;this.setAttribute("aria-pressed",kOnly?"true":"false");
   this.textContent=kOnly?"Tümünü göster":"Sadece bitmeyenler";kApply();};

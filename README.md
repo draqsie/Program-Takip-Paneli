@@ -1,4 +1,4 @@
-# TYT Takip Paneli
+# YKS Takip Paneli
 
 **YKS 2028 hazırlığı için tek dosyalık, bağımlılıksız, çevrimdışı çalışan takip paneli.**
 Günlük soru girişi, deneme net gelişimi, kronometreyle çalışma süresi, kitap sayacı ve
@@ -30,7 +30,7 @@ altında o dersin günlük hedefi ve doluluk çubuğu vardır. Gün / hafta / ay
 yığılı çubuk grafiği, altında ders bazında hedef–gerçekleşen tablosu.
 
 ### Deneme takibi
-Dört bölüm için doğru–yanlış girilir, **net anında hesaplanır** (D − Y/4). Net gelişimi
+TYT ve sayısal AYT (11. sınıf genel denemeleri dahil) ayrı ayrı tutulur. Her bölüm için doğru–yanlış girilir, **net anında hesaplanır** (D − Y/4). Net gelişimi
 grafiğinde hedef çizgileri çizilidir; bölümleri kendi maksimumuna oranlayan
 **Karşılaştır %** görünümü hangi dersin geride kaldığını tek bakışta gösterir.
 
@@ -52,7 +52,7 @@ Fizik, Kimya, Biyoloji programlarına göre 62 maddelik sayısal AYT listesi. Ü
 yarım → bitti*; yüzde hesabında yarım konular 0,5 sayılır.
 
 ### Yapılacaklar
-Sağ kenardan açılan çekmece. Güne bağlıdır, tarih gezinmesiyle ortaktır.
+Üst çubuktaki **Yapılacaklar** düğmesiyle açılan çekmece. Güne bağlıdır, tarih gezinmesiyle ortaktır.
 
 > [!WARNING]
 > **Konu listesi hakkında.** Tema ve ünite adları MEB'in resmî öğretim programlarından
