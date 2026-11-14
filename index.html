@@ -812,6 +812,62 @@ td.dn{font-weight:500;white-space:normal;min-width:150px}
 .tmr .sess,.tmr .tf span{letter-spacing:.06em}
 .dwtabs em{font-size:10.5px}
 .build{font-size:11px;letter-spacing:.04em;text-transform:none}
+/* ---- dar ekran / iPad dikey düzeltmeleri ---- */
+/* üst çubuk 60px'e sabitlenmişti; dar ekranda iki satıra inince sekmeler
+   alttaki geri sayımın üstüne biniyordu */
+@media (max-width:900px){
+  .topbar .wrap{height:auto;min-height:56px;row-gap:10px}
+  .seg{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible}
+  .seg button{padding:8px 4px;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .gh{white-space:nowrap}
+  .hero .wrap{padding-top:22px}
+}
+@media (max-width:640px){
+  .acts{gap:6px;position:relative}
+  /* "kaydedildi" etiketi görünmezken de yer kaplıyor, düğmeleri alt satıra itiyordu */
+  .pulse{position:absolute;right:0;top:100%;margin-top:3px;pointer-events:none}
+  .gh{padding:7px 9px;font-size:12px}
+  .seg button{font-size:12.5px;padding:8px 2px}
+  .cd .big{font-size:56px}
+  /* göstergeler iki düzenli sütun */
+  .gauges{display:grid;grid-template-columns:1fr 1fr;row-gap:16px;padding-top:16px}
+  .gauge,.gauge:first-child{padding:0 14px;border-right:none;min-width:0}
+  .gauge:nth-child(odd){padding-left:0;border-right:1px solid var(--hero-hair)}
+  .gauge .v{font-size:24px}
+  /* özet karoları: iki sütun, satır çizgileri, tek kalan tam genişlik */
+  .tiles{grid-template-columns:1fr 1fr}
+  .tile{border-bottom:1px solid var(--hair)}
+  .tile:nth-child(even){border-right:none}
+  .tile:last-child:nth-child(odd){grid-column:1/-1;border-right:none}
+  .tile:last-child,.tile:nth-last-child(2):nth-child(odd){border-bottom:none}
+  .phead{padding:14px 16px 13px}
+  .pbody{padding:16px}
+  .pfoot{padding:12px 16px}
+  .pagebar h2{font-size:21px}
+  .seg-lg{width:100%;display:grid;grid-template-columns:1fr 1fr}
+  /* sözlük: anlam harf harf dikine kırılıyordu */
+  .szrw{display:grid;grid-template-columns:19px minmax(0,1fr) auto;column-gap:12px;row-gap:3px;align-items:start}
+  .szrw .ck{grid-row:1/3}
+  .szrw .kl{width:auto;grid-column:2;grid-row:1}
+  .szrw .an{grid-column:2;grid-row:2}
+  .szrw .rm{grid-column:3;grid-row:1/3}
+  .ktadd #ktAd{flex:1 1 100%}
+  .ktadd #ktSy{flex:1}
+  .szadd #szK{flex:1 1 100%;width:auto}
+}
+/* iPad dikey (820px): göstergeler üç sütun, eşit aralık */
+@media (min-width:641px) and (max-width:900px){
+  .gauges{display:grid;grid-template-columns:repeat(3,1fr);row-gap:18px;padding-top:16px}
+  .gauge,.gauge:first-child{padding:0 16px;border-right:1px solid var(--hero-hair)}
+  .gauge:nth-child(3n+1){padding-left:0}
+  .gauge:nth-child(3n){border-right:none}
+}
+/* kronometre balonu açık çekmecenin üstüne binmesin */
+.tdveil{z-index:61}
+.tddrawer{z-index:62}
+/* sayfa sonu: sabit kronometre balonu son satırı örtmesin */
+main{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+.wordbar .wl{font-size:10.5px;font-weight:600;letter-spacing:.05em}
 /* ikincil düğme koyu temada da okunsun (ana düğmenin koyu yazı rengi buna da geçiyordu) */
 .btn.q,:root .btn.q{color:var(--ink-2)!important}
 .btn.q:hover{color:var(--ink)!important}
@@ -895,7 +951,7 @@ td.dn{font-weight:500;white-space:normal;min-width:150px}
   <section class="panel">
     <div class="phead">
       <h3>Günlük Soru Girişi</h3>
-      <span class="sub">rakamlar hafta içi günlük hedef</span>
+      <span class="sub" id="qSub">kutudaki rakam seçili günün hedefi</span>
       <div class="right dnav">
         <button class="ic" id="qPrev" title="Önceki gün">&#9664;</button>
         <input type="date" id="qDate">
@@ -1051,7 +1107,7 @@ td.dn{font-weight:500;white-space:normal;min-width:150px}
       <div class="book">
         <div class="bin">
           <label class="lbl" for="rIn">Bu gün okunan sayfa</label>
-          <input type="number" min="0" id="rIn" placeholder="0">
+          <input type="number" min="0" id="rIn" placeholder="0" inputmode="numeric">
           <p class="bneed" id="rNeed"></p>
         </div>
         <div>
@@ -1069,7 +1125,7 @@ td.dn{font-weight:500;white-space:normal;min-width:150px}
         <div class="tile"><p class="v" id="rEta">—</p><p class="lbl">Bu hızla biter</p></div>
       </div>
       <div class="bset">
-        <div class="fld"><label class="lbl" for="rTotal">Toplam sayfa</label><input type="number" min="1" id="rTotal"></div>
+        <div class="fld"><label class="lbl" for="rTotal">Toplam sayfa</label><input type="number" min="1" id="rTotal" inputmode="numeric"></div>
         <div class="fld"><label class="lbl" for="rTarget">Bitirme hedefi · isteğe bağlı</label><input type="date" id="rTarget"></div>
         <p class="bhint" id="rHint"></p>
       </div>
@@ -1226,6 +1282,10 @@ var DERS=[
 ];
 var HW_TOPLAM=0,HD_TOPLAM=0;
 DERS.forEach(function(d){HW_TOPLAM+=d.hw;HD_TOPLAM+=d.hd;});
+/* Plan: hafta içi ~128, Cumartesi ~218, Pazar ~220 soru → hafta sonu katsayısı */
+var HS_KAT={6:218/128,0:220/128};
+function gunKat(dt){return HS_KAT[dt.getDay()]||1;}
+function gunHedef(d,dt){return Math.round(d.hd*gunKat(dt));}
 var PLAN_BAS=Date.UTC(2026,8,21);
 var HEDEF_TARIH=Date.UTC(2026,11,15);
 var HEDEF_NET=90;
@@ -1480,7 +1540,7 @@ function axes(g,max,labels,pad,opt){
   var step=(R-L)/labels.length;
   var skip=Math.max(1,Math.ceil(labels.length/Math.max(2,Math.floor(g.w/62))));
   for(var i=0;i<labels.length;i++){
-    if(i%skip&&i!==labels.length-1)continue;
+    if((labels.length-1-i)%skip)continue;     /* sondan say: son etiket hep görünür, komşusuyla çakışmaz */
     g.c.fillText(labels[i],clamp(L+step*(i+0.5),L+16,R-16),B+8);
   }
   return {L:L,R:R,T:T,B:B,max:tk.m,step:step};
@@ -1567,14 +1627,23 @@ function hover(box,tip,getF,info){
   }
   cv.addEventListener("mousemove",function(e){show(e.clientX,e.clientY,false);});
   cv.addEventListener("mouseleave",function(){tip.classList.remove("on");});
-  function touch(e){
-    if(!e.touches||!e.touches.length)return;
-    e.preventDefault();                       /* sürüklerken sayfa kaymasın */
-    clearTimeout(hideT);
-    show(e.touches[0].clientX,e.touches[0].clientY,true);
-  }
-  cv.addEventListener("touchstart",touch,{passive:false});
-  cv.addEventListener("touchmove",touch,{passive:false});
+  /* Dokunuş: grafiğe değmek ipucunu gösterir; parmak dikey kayarsa sayfa
+     kaydırılır (eskiden grafik üzerinden sayfa hiç kaydırılamıyordu),
+     yatay kayarsa ipucu parmağı izler. */
+  var t0=null,yon=null;
+  cv.addEventListener("touchstart",function(e){
+    if(!e.touches||e.touches.length!==1)return;
+    var t=e.touches[0];t0={x:t.clientX,y:t.clientY};yon=null;
+    clearTimeout(hideT);show(t.clientX,t.clientY,true);
+  },{passive:true});
+  cv.addEventListener("touchmove",function(e){
+    if(!t0||!e.touches||e.touches.length!==1)return;
+    var t=e.touches[0],dx=Math.abs(t.clientX-t0.x),dy=Math.abs(t.clientY-t0.y);
+    if(!yon&&(dx>6||dy>6))yon=dx>dy?"x":"y";
+    if(yon==="y"){tip.classList.remove("on");return;}
+    if(yon==="x")e.preventDefault();
+    clearTimeout(hideT);show(t.clientX,t.clientY,true);
+  },{passive:false});
   cv.addEventListener("touchend",function(){
     clearTimeout(hideT);hideT=setTimeout(function(){tip.classList.remove("on");},2600);
   });
@@ -1656,11 +1725,11 @@ function buildQ(){
     var l=document.createElement("label");l.htmlFor="qi-"+d.k;
     if(d.sub){var pr=document.createElement("span");pr.className="pre";pr.textContent="↳";l.appendChild(pr);}
     l.appendChild(document.createTextNode(d.n));
-    var i=document.createElement("input");i.type="number";i.min="0";i.id="qi-"+d.k;i.placeholder="0";
+    var i=document.createElement("input");i.type="number";i.min="0";i.id="qi-"+d.k;i.placeholder="0";i.inputMode="numeric";
     inner.appendChild(l);inner.appendChild(i);
     var t=document.createElement("div");t.className="tgt";t.id="qt-"+d.k;
     t.innerHTML='<b>'+d.hd+'</b><span class="bar"><i id="qb-'+d.k+'"></i></span>';
-    t.title="Hafta içi günlük hedef "+d.hd+" · haftalık "+d.hw;
+    t.title="Günlük hedef (hafta sonu ~1,7 katı) · haftalık "+d.hw;
     i.oninput=function(){
       var k=iso(qCur);if(!DB.q[k])DB.q[k]={};
       var v=i.value===""?0:Math.max(0,+i.value||0);
@@ -1675,11 +1744,13 @@ function qRefresh(){
   var k=iso(qCur),r=DB.q[k]||{};
   $("qDate").value=k;
   $("qDay2").textContent=GUN[qCur.getDay()]+" · "+qCur.getDate()+" "+AY[qCur.getMonth()];
+  $("qSub").textContent=gunKat(qCur)>1?"hafta sonu hedefi · hafta içinin ~1,7 katı":"kutudaki rakam seçili günün hedefi";
   DERS.forEach(function(d){
     var el=$("qi-"+d.k);if(el)el.value=r[d.k]||"";
-    var v=+r[d.k]||0,p=clamp(Math.round(v/d.hd*100),0,100);
+    var hg=gunHedef(d,qCur),v=+r[d.k]||0,p=clamp(Math.round(v/hg*100),0,100);
     $("qb-"+d.k).style.width=p+"%";
-    $("qf-"+d.k).classList.toggle("done",v>=d.hd);
+    $("qf-"+d.k).classList.toggle("done",v>=hg);
+    $("qt-"+d.k).querySelector("b").textContent=hg;
   });
   var m=monday(qCur),wa=utc(m),wb=wa+6*864e5;
   var ma=Date.UTC(qCur.getFullYear(),qCur.getMonth(),1),mb=Date.UTC(qCur.getFullYear(),qCur.getMonth()+1,0);
@@ -1744,7 +1815,7 @@ function qTable(){
     var tr=document.createElement("tr");
     tr.innerHTML='<td'+(d.sub?' class="sub"':'')+'><span class="nm"><span class="dot" style="background:var('+
       gcol(d.g)+')"></span>'+d.n+'</span></td>'+
-      '<td class="r g">'+d.hd+'</td><td class="r">'+(a||"—")+'</td>'+
+      '<td class="r g">'+gunHedef(d,qCur)+'</td><td class="r">'+(a||"—")+'</td>'+
       '<td class="r g">'+d.hw+'</td><td class="r">'+(b||"—")+'</td>'+
       '<td class="r '+cls+'">'+p+'%<span class="mini"><i class="'+bc+'" style="width:'+clamp(p,0,100)+'%"></i></span></td>'+
       '<td class="r">'+(c||"—")+'</td><td class="r"><b>'+(e?tn(e):"—")+'</b></td>'+
@@ -1753,7 +1824,7 @@ function qTable(){
   });
   var pw=Math.round(sw/HW_TOPLAM*100),cw=pw>=100?"ok":pw>=70?"warn":"bad";
   var tr2=document.createElement("tr");
-  tr2.innerHTML='<td>TOPLAM</td><td class="r g">'+HD_TOPLAM+'</td><td class="r">'+sd+'</td>'+
+  tr2.innerHTML='<td>TOPLAM</td><td class="r g">'+DERS.reduce(function(a,d){return a+gunHedef(d,qCur);},0)+'</td><td class="r">'+sd+'</td>'+
     '<td class="r g">'+tn(HW_TOPLAM)+'</td><td class="r">'+tn(sw)+'</td>'+
     '<td class="r '+cw+'">'+pw+'%</td><td class="r">'+tn(sm)+'</td><td class="r">'+tn(tot)+'</td><td class="r">100%</td>';
   tf.appendChild(tr2);
@@ -2175,7 +2246,9 @@ function rozetCiz(){
 function tdOpen(v){
   $("tdDrawer").classList.toggle("on",v);
   $("tdVeil").classList.toggle("on",v);
-  if(v)setTimeout(function(){$("tdIn").focus();},280);
+  /* yalnızca fareli cihazda odakla — tablette her açılışta klavye fırlamasın */
+  if(v&&window.matchMedia&&matchMedia("(hover:hover) and (pointer:fine)").matches)
+    setTimeout(function(){$("tdIn").focus();},280);
 }
 $("tdTab").onclick=function(){tdOpen(!$("tdDrawer").classList.contains("on"));};
 $("tdClose").onclick=function(){tdOpen(false);};
@@ -2676,7 +2749,7 @@ $("bld").textContent=window.BUILD||"yerel kopya";
 })();
 </script>
 <script>
-window.BUILD="2026-10-08 · 0344dec";
+window.BUILD="çevrimdışı kopya";
 try{document.getElementById("bld").textContent=window.BUILD;}catch(e){}
 if("serviceWorker" in navigator){
   var swReg=null,swReloaded=false;
@@ -2693,48 +2766,60 @@ if("serviceWorker" in navigator){
   });
 }
 /* ---------- yeni sürüm denetimi ----------
-   Servis çalışanı yalnızca sw.js değişince güncellenir; tablette açık
-   bırakılan uygulama yeni index.html'i ancak yeniden açılınca görürdü.
-   Burada sayfanın kendisi düzenli aralıkla sunucudaki kopyanın imzasını
-   (ETag / Last-Modified, yoksa içerik özeti) yoklar; değişmişse veriyi
-   kaydedip kendini yeniler. Kronometre yenilemeden sonra kaldığı yerden
-   sürer. Yazı yazılırken yenilemez, uygulamaya dönülünce yeniler.      */
+   Sayfa, kendi içindeki kodun (script + style) özetini sunucudaki
+   index.html'in özetiyle karşılaştırır. Farklıysa yeni sürüm yayındadır:
+   veriyi kaydedip kendini yeniler. Özet sayfanın kendisinden hesaplandığı
+   için sayfa eski önbellekten açılmış olsa da fark yakalanır.
+   Ne zaman bakar: açılışta, uygulama öne geldiğinde (iPad'de ana ekrandan
+   dönüş dahil), pencere odaklanınca ve açık kaldıkça 5 dakikada bir.
+   Yazı yazılırken yenilemez; kutudan çıkınca yeniler. Kronometre
+   yenilemeden sonra kaldığı yerden sürer.                               */
 (function(){
   if(location.protocol!=="https:"&&location.protocol!=="http:")return;
-  var URL_=location.href.split("#")[0],ilk=null,bekleyen=false;
-  function imza(){
-    return fetch(URL_,{cache:"no-store"}).then(function(r){
-      if(!r.ok)return null;
-      var e=r.headers.get("etag"),m=r.headers.get("last-modified");
-      if(e||m)return {i:(e||"")+"|"+(m||""),m:m};
-      return r.text().then(function(t){var h=0;
-        for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))>>>0;return {i:"h"+h,m:null};});
-    }).catch(function(){return null;});
-  }
+  var URL_=location.href.split("#")[0].split("?")[0],bekleyen=false,mesgul=false,sonBak=0;
+  function ozet(t){var h=2166136261;t=t.replace(/\r/g,"");
+    for(var i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return h.toString(36)+"."+t.length;}
+  function kodUzak(html){var out="",m,re=/<(script|style)\b[^>]*>([\s\S]*?)<\/\1>/gi;
+    while((m=re.exec(html)))out+=m[2]+"\u0001";return out;}
+  function kodYerel(){var out="";
+    document.querySelectorAll("script:not([src]),style").forEach(function(e){out+=e.textContent+"\u0001";});return out;}
+  var YEREL=null;
+  function damga(m){if(!m)return;var d=new Date(m);if(isNaN(d))return;
+    try{document.getElementById("bld").textContent=d.getDate()+"."+String(d.getMonth()+1).padStart(2,"0")+"."+
+      d.getFullYear()+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");}catch(e){}}
   function yazarken(){var a=document.activeElement;
-    return a&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA")&&a.type!=="button";}
-  function yenile(){
-    if(!document.hidden&&yazarken()){bekleyen=true;return;}
+    return a&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA")&&a.type!=="button"&&a.type!=="file";}
+  function yenile(uzak){
+    if(!document.hidden&&yazarken()){bekleyen=uzak;return;}
+    /* aynı sürüm için döngüye girme: bir dakika içinde ikinci kez yenileme */
+    try{var k="tyt-surum-yenile",o=JSON.parse(sessionStorage.getItem(k)||"null");
+      if(o&&o.u===uzak&&Date.now()-o.t<60000)return;
+      sessionStorage.setItem(k,JSON.stringify({u:uzak,t:Date.now()}));}catch(e){}
     try{if(typeof tFlush==="function")tFlush();if(typeof save==="function")save();}catch(e){}
     location.reload();
   }
   function denetle(){
-    if(bekleyen){yenile();return;}
-    imza().then(function(s){
-      if(!s)return;
-      if(ilk===null){ilk=s.i;
-        if(s.m){var d=new Date(s.m);
-          if(!isNaN(d))try{document.getElementById("bld").textContent=
-            d.getDate()+"."+String(d.getMonth()+1).padStart(2,"0")+"."+d.getFullYear()+" "+
-            String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");}catch(e){}}
-        return;}
-      if(s.i!==ilk)yenile();
-    });
+    if(bekleyen){var u=bekleyen;bekleyen=false;yenile(u);return;}
+    if(mesgul||Date.now()-sonBak<15000)return;
+    mesgul=true;sonBak=Date.now();
+    fetch(URL_+"?v="+Date.now(),{cache:"no-store"}).then(function(r){
+      if(!r.ok)return;
+      damga(r.headers.get("last-modified"));
+      return r.text().then(function(t){
+        if(t.indexOf("window.BUILD=")<0)return;           /* hata sayfası vb. */
+        var uzak=ozet(kodUzak(t));
+        if(YEREL===null)YEREL=ozet(kodYerel());
+        if(uzak!==YEREL)yenile(uzak);
+      });
+    }).catch(function(){}).then(function(){mesgul=false;});
   }
-  addEventListener("load",denetle);
+  if(document.readyState==="complete")setTimeout(denetle,1500);else addEventListener("load",function(){setTimeout(denetle,1500);});
   document.addEventListener("visibilitychange",function(){if(!document.hidden)denetle();});
+  addEventListener("pageshow",function(e){if(e.persisted)denetle();});
+  addEventListener("focus",denetle);
+  addEventListener("online",denetle);
   addEventListener("focusout",function(){if(bekleyen)setTimeout(denetle,800);});
-  setInterval(function(){if(!document.hidden)denetle();},10*60*1000);
+  setInterval(function(){if(!document.hidden)denetle();},5*60*1000);
 })();
 </script>
 </body>

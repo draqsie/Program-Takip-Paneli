@@ -5,6 +5,23 @@ Sayfanın en altındaki damga, yüklü kopyanın tarihini ve içerik özetini g�
 
 ---
 
+## Önbellek v16
+
+- **Güncelleme daha sağlam** — sayfa artık kendi kodunu sunucudaki kodla karşılaştırıyor;
+  tablet uygulamayı eski önbellekten açsa da yeni sürüm yakalanıp kendini yeniliyor.
+  Denetim açılışta, ana ekrandan dönüşte, odaklanınca, internet gelince ve 5 dakikada bir
+- **iPad / telefon** — dar ekranda üst çubuk sekmeleri geri sayımın üstüne biniyordu;
+  "Konu Listesi" sekmesi kesiliyordu; göstergeler iPad dikeyde 3, telefonda 2 düzenli sütun;
+  özet karoları telefonda iki sütun
+- **Düzeltme** — telefonda Sözlük'teki anlam metni harf harf dikine kırılıyordu
+- **Düzeltme** — dokunmatikte parmak grafiğin üstündeyken sayfa kaydırılamıyordu;
+  artık dikey sürükleme kaydırır, yatay sürükleme ipucunu gösterir
+- **Düzeltme** — grafiklerde son iki tarih etiketi üst üste biniyordu
+- **Düzeltme** — soru kutularındaki günlük hedef hafta sonu da hafta içi rakamını
+  gösteriyordu; artık Cumartesi/Pazar ~1,7 katı hedef gösteriliyor
+- Kronometre balonu Yapılacaklar çekmecesinin üstüne biniyordu; çekmece tablette her
+  açılışta klavyeyi açıyordu; sayı alanlarında sayısal klavye açılıyor
+
 ## Önbellek v15
 
 - **AYT denemesi** — Denemeler sayfasına TYT / AYT · 11. sınıf seçici eklendi. Sayısal AYT
